@@ -6,7 +6,7 @@ function createWaypointContentTemplate(waypoint, offers, destination) {
   const { basePrice, type, favorite, dateFrom, dateTo } = waypoint;
   const { name } = destination;
 
-  const createOffersTemplate = (offers) => offers.map((offer) =>
+  const createOffersTemplate = (offersArray) => offersArray.map((offer) =>
     `
       <li class="event__offer">
         <span class="event__offer-title">${offer.title}</span>

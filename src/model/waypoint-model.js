@@ -17,13 +17,12 @@ export default class WaypointModel {
   }
 
   getOffersByType(type) {
-    const allOffers = this.getOffers();
-    return allOffers.find((offer) => offer.type === type);
+    return this.getOffers().find((offer) => offer.type === type);
   }
 
   getOffersById(type, itemsId) {
     const offersType = this.getOffersByType(type);
-    return offersType.offers.filter((item) => itemsId.find((id) => item.id === id));
+    return offersType.offers.filter((item) => itemsId.includes(item.id));
   }
 
   getDestinations() {
@@ -31,7 +30,6 @@ export default class WaypointModel {
   }
 
   getDestinationsById(id) {
-    const allDestination = this.getDestinations();
-    return allDestination.find((item) => item.id === id);
+    return this.getDestinations().find((item) => item.id === id);
   }
 }
