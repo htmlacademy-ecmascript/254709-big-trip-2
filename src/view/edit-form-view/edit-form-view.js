@@ -5,7 +5,7 @@ import { editFormTemplate } from './edit-form-view-template.js';
 
 const createClassName = (title) => title.toLowerCase().replace(/ /g, '-');
 
-const createEditFormTemplate = (waypoint, offers, destination, offersType, destinationsAll) => {
+const createEditFormTemplate = (waypoint, offers, destination, offerType, destinationsAll) => {
   const idWaypoints = offers.map((item) => item.id);
   const { type, dateFrom, dateTo, basePrice, id } = waypoint;
   const { name: namePoint, description, pictures } = destination;
@@ -21,7 +21,7 @@ const createEditFormTemplate = (waypoint, offers, destination, offersType, desti
     pictures,
     POINT_TYPES,
     idWaypoints,
-    offersType,
+    offerType,
     destinationsAll,
     createClassName,
     humanizeTaskDueDate,
@@ -30,16 +30,16 @@ const createEditFormTemplate = (waypoint, offers, destination, offersType, desti
 
 };
 export default class EditFormView {
-  constructor({ waypoint, offers, destination, offersType, destinationsAll }) {
+  constructor({ waypoint, offers, destination, offerType, destinationsAll }) {
     this.waypoint = waypoint;
     this.offers = offers;
     this.description = destination;
-    this.offersType = offersType;
+    this.offerType = offerType;
     this.destinationsAll = destinationsAll;
   }
 
   getTemplate() {
-    return createEditFormTemplate(this.waypoint, this.offers, this.description, this.offersType, this.destinationsAll);
+    return createEditFormTemplate(this.waypoint, this.offers, this.description, this.offerType, this.destinationsAll);
   }
 
   getElement() {

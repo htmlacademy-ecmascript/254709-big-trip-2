@@ -9,23 +9,25 @@ import EditFormView from '../view/edit-form-view/edit-form-view.js';
 export default class ListPresenter {
   waypointListElement = new WaypointListView();
 
-  constructor({ listContainer, waypointModel }) {
+  constructor({ listContainer, waypointsModel, offersModel, destinationsModel }) {
     this.listContainer = listContainer;
-    this.waypointModel = waypointModel;
+    this.waypointsModel = waypointsModel;
+    this.offersModel = offersModel;
+    this.destinationsModel = destinationsModel;
   }
 
   init() {
-    this.waypoints = [...this.waypointModel.getWaypoints()];
+    this.waypoints = [...this.waypointsModel.getWaypoints()];
 
     render(new SortListView(), this.listContainer);
     render(this.waypointListElement, this.listContainer);
 
     const editFormView = new EditFormView({
       waypoint: this.waypoints[0],
-      offersType: this.waypointModel.getOfferByType(this.waypoints[0].type),
-      offers: [...this.waypointModel.getOffersById(this.waypoints[0].type, this.waypoints[0].offersId)],
-      destination: this.waypointModel.getDestinationById(this.waypoints[0].destination),
-      destinationsAll: this.waypointModel.getDestinations(),
+      offerType: this.offersModel.getOfferByType(this.waypoints[0].type),
+      offers: [...this.offersModel.getOffersById(this.waypoints[0].type, this.waypoints[0].offersId)],
+      destination: this.destinationsModel.getDestinationById(this.waypoints[0].destination),
+      destinationsAll: this.destinationsModel.getDestinations(),
     });
     render(editFormView, this.waypointListElement.getElement());
 
@@ -38,8 +40,8 @@ export default class ListPresenter {
   }
 
   renderWaypoint(waypoint) {
-    const offers = this.waypointModel.getOffersById(waypoint.type, waypoint.offersId);
-    const destination = this.waypointModel.getDestinationById(waypoint.destination);
+    const offers = this.offersModel.getOffersById(waypoint.type, waypoint.offersId);
+    const destination = this.destinationsModel.getDestinationById(waypoint.destination);
 
     const waypointComponent = new WaypointContentView(waypoint, offers, destination);
 

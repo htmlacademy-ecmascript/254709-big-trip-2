@@ -9,7 +9,7 @@ export const editFormTemplate = ({
   pictures,
   POINT_TYPES,
   idWaypoints,
-  offersType,
+  offerType,
   destinationsAll,
   createClassName,
   humanizeTaskDueDate,
@@ -67,11 +67,11 @@ export const editFormTemplate = ({
       </button>
     </header>
     <section class="event__details">
-      ${offersType.offers.length ? `
+      ${offerType.offers.length ? `
         <section class="event__section  event__section--offers">
           <h3 class="event__section-title  event__section-title--offers">Offers</h3>
           <div class="event__available-offers">
-            ${offersType.offers.map(({ title, id: offerId, price }) => `
+            ${offerType.offers.map(({ title, id: offerId, price }) => `
               <div class="event__offer-selector">
                 <input class="event__offer-checkbox  visually-hidden"
                   id="event-offer-${createClassName(title)}-${offerId}"
