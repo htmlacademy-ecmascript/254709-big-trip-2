@@ -27,7 +27,7 @@ export const editFormTemplate = ({
           <fieldset class="event__type-group">
             <legend class="visually-hidden">Event type</legend>
             ${POINT_TYPES.map((item) => `<div class="event__type-item">
-              <input id="event-type-${item}-${id}" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${item}" ${type === item ? 'checked' : ''}>
+              <input id="event-type-${item}-${id}" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${item}" ${type === item && 'checked'}>
               <label class="event__type-label  event__type-label--${item}" for="event-type-${item}-${id}">${item}</label>
             </div>`).join('')}
           </fieldset>
@@ -67,7 +67,7 @@ export const editFormTemplate = ({
       </button>
     </header>
     <section class="event__details">
-      ${offerType.offers.length ? `
+      ${offerType.offers.length && `
         <section class="event__section  event__section--offers">
           <h3 class="event__section-title  event__section-title--offers">Offers</h3>
           <div class="event__available-offers">
@@ -77,7 +77,7 @@ export const editFormTemplate = ({
                   id="event-offer-${createClassName(title)}-${offerId}"
                   type="checkbox"
                   name="event-offer-${createClassName(title)}"
-                  ${idWaypoints.includes(offerId) ? 'checked' : ''}>
+                  ${idWaypoints.includes(offerId) && 'checked'}>
                 <label class="event__offer-label" for="event-offer-${createClassName(title)}-${offerId}">
                   <span class="event__offer-title">${title}</span>
                   &plus;&euro;&nbsp;
@@ -85,7 +85,7 @@ export const editFormTemplate = ({
                 </label>
               </div>`).join('')}
           </div>
-        </section>` : ''}
+        </section>`}
 
       <section class="event__section  event__section--destination">
         <h3 class="event__section-title  event__section-title--destination">Destination</h3>
