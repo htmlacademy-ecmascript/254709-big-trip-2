@@ -22,9 +22,9 @@ export default class ListPresenter {
 
     const editFormView = new EditFormView({
       waypoint: this.waypoints[0],
-      offersType: this.waypointModel.getOffersByType(this.waypoints[0].type),
+      offersType: this.waypointModel.getOfferByType(this.waypoints[0].type),
       offers: [...this.waypointModel.getOffersById(this.waypoints[0].type, this.waypoints[0].offersId)],
-      destination: this.waypointModel.getDestinationsById(this.waypoints[0].destination),
+      destination: this.waypointModel.getDestinationById(this.waypoints[0].destination),
       destinationsAll: this.waypointModel.getDestinations(),
     });
     render(editFormView, this.waypointListElement.getElement());
@@ -39,7 +39,7 @@ export default class ListPresenter {
 
   renderWaypoint(waypoint) {
     const offers = this.waypointModel.getOffersById(waypoint.type, waypoint.offersId);
-    const destination = this.waypointModel.getDestinationsById(waypoint.destination);
+    const destination = this.waypointModel.getDestinationById(waypoint.destination);
 
     const waypointComponent = new WaypointContentView(waypoint, offers, destination);
 

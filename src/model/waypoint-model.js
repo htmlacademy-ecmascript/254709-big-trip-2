@@ -16,12 +16,12 @@ export default class WaypointModel {
     return this.offers;
   }
 
-  getOffersByType(type) {
+  getOfferByType(type) {
     return this.getOffers().find((offer) => offer.type === type);
   }
 
   getOffersById(type, itemsId) {
-    const offersType = this.getOffersByType(type);
+    const offersType = this.getOfferByType(type);
     return offersType.offers.filter((item) => itemsId.includes(item.id));
   }
 
@@ -29,7 +29,7 @@ export default class WaypointModel {
     return this.destinations;
   }
 
-  getDestinationsById(id) {
+  getDestinationById(id) {
     return this.getDestinations().find((item) => item.id === id);
   }
 }
