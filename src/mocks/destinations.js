@@ -8,10 +8,10 @@ const PhotoIdRange = {
   MAX: 100,
 };
 
-const getMockDestination = (array) => {
-  const destinationMocks = [];
+const getMockDestinations = (array) => {
+  const destinationsMocks = [];
 
-  const getRandomPhoto = () => ({
+  const getRandomPhotos = () => ({
     src: `${PHOTO}${getRandomInt(PhotoIdRange.MIN, PhotoIdRange.MAX)}`,
     description: getRandomArrayElement(DESCRIPTION),
   });
@@ -21,13 +21,13 @@ const getMockDestination = (array) => {
       id: uuidv4(),
       description: getRandomArrayElement(DESCRIPTION),
       name: array[i],
-      pictures: Array.from({ length: getRandomInt(0, MAX_PHOTO_QTY) }, getRandomPhoto),
+      pictures: Array.from({ length: getRandomInt(0, MAX_PHOTO_QTY) }, getRandomPhotos),
     };
 
-    destinationMocks.push(arr);
+    destinationsMocks.push(arr);
   }
-  return destinationMocks;
+  return destinationsMocks;
 };
 
-export { getMockDestination };
+export { getMockDestinations };
 

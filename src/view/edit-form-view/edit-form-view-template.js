@@ -1,15 +1,20 @@
-import { createElement } from '../render.js';
-import { POINT_TYPES } from '../const.js';
-import { humanizeTaskDueDate, DATE_FORMAT } from '../util.js';
-
-const createClassName = (title) => title.toLowerCase().replace(/ /g, '-');
-
-function createEditFormTemplate(waypoint, offers, destination, offersType, destinationAll) {
-  const idWaypoints = offers.map((item) => item.id);
-  const { type, dateFrom, dateTo, basePrice, id } = waypoint;
-  const { name: namePoint, description, pictures } = destination;
-
-  return (`<form class="event event--edit" action="#" method="post">
+export const editFormTemplate = ({
+  id,
+  type,
+  dateFrom,
+  dateTo,
+  basePrice,
+  namePoint,
+  description,
+  pictures,
+  POINT_TYPES,
+  idWaypoints,
+  offersType,
+  destinationsAll,
+  createClassName,
+  humanizeTaskDueDate,
+  DATE_FORMAT
+}) => (`<li class="trip-events__item"><form class="event event--edit" action="#" method="post">
     <header class="event__header">
       <div class="event__type-wrapper">
         <label class="event__type  event__type-btn" for="event-type-toggle-${id}">
@@ -35,7 +40,7 @@ function createEditFormTemplate(waypoint, offers, destination, offersType, desti
         </label>
         <input class="event__input  event__input--destination" id="event-destination-${id}" type="text" name="event-destination" value="${namePoint}" list="destination-list-${id}">
         <datalist id="destination-list-${id}">
-        ${destinationAll.map(({ name: nameDestination }) => `<option value="${nameDestination}"></option>`).join('')}
+        ${destinationsAll.map(({ name: nameDestination }) => `<option value="${nameDestination}"></option>`).join('')}
         </datalist>
       </div>
 
@@ -94,29 +99,4 @@ function createEditFormTemplate(waypoint, offers, destination, offersType, desti
           </div>` : ''}
       </section>
     </section>
-  </form>`);
-}
-export default class EditFormView {
-  constructor({ waypoint, offers, destination, offersType, destinationAll }) {
-    this.waypoint = waypoint;
-    this.offers = offers;
-    this.description = destination;
-    this.offersType = offersType;
-    this.destinationAll = destinationAll;
-  }
-
-  getTemplate() {
-    return createEditFormTemplate(this.waypoint, this.offers, this.description, this.offersType, this.destinationAll);
-  }
-
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
-    return this.element;
-  }
-
-  removeElement() {
-    this.element = null;
-  }
-}
+  </form></li>`);

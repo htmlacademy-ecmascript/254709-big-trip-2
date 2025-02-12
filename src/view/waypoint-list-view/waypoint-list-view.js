@@ -1,10 +1,7 @@
-import { createElement } from '../render.js';
+import { createElement } from '../../render.js';
+import { waypointListTemplate } from './waypoint-list-view-template.js';
 
-function createWaypointListTemplate() {
-
-  return `<ul class='trip-events__list'>
-  </ul>`;
-}
+const createWaypointListTemplate = () => waypointListTemplate;
 
 export default class WaypointListView {
   getTemplate() {

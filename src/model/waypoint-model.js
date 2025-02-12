@@ -1,4 +1,4 @@
-import { getRandomWaypoint, mockOffersArray, mockDestinationArray } from '../mocks/waypoints';
+import { getRandomWaypoint, mockOffersArray, mockDestinationsArray } from '../mocks/waypoints';
 
 
 const WAYPOINT_QTY = 3;
@@ -6,7 +6,7 @@ const WAYPOINT_QTY = 3;
 export default class WaypointModel {
   waypoints = Array.from({ length: WAYPOINT_QTY }, getRandomWaypoint);
   offers = mockOffersArray;
-  destination = mockDestinationArray;
+  destinations = mockDestinationsArray;
 
   getWaypoints() {
     return this.waypoints;
@@ -26,7 +26,7 @@ export default class WaypointModel {
   }
 
   getDestinations() {
-    return this.destination;
+    return this.destinations;
   }
 
   getDestinationsById(id) {
