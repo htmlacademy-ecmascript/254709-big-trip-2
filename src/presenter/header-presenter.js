@@ -1,4 +1,4 @@
-import { render, RenderPosition } from '../render.js';
+import { render, RenderPosition } from '../../src/framework/render.js';
 import TripInfoView from '../view/trip-info-view/trip-info-view.js';
 import FilterListView from '../view/filter-list-view/filter-list-view.js';
 export default class HeaderPresenter {

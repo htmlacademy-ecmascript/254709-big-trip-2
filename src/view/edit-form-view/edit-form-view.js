@@ -1,4 +1,4 @@
-import { createElement } from '../../render.js';
+import AbstractView from '../../framework/view/abstract-view.js';
 import { POINT_TYPES } from '../../const.js';
 import { humanizeTaskDueDate, DATE_FORMAT } from '../../util.js';
 import { editFormTemplate } from './edit-form-view-template.js';
@@ -29,8 +29,9 @@ const createEditFormTemplate = (waypoint, offers, destination, offerType, destin
   });
 
 };
-export default class EditFormView {
+export default class EditFormView extends AbstractView {
   constructor({ waypoint, offers, destination, offerType, destinationsAll }) {
+    super();
     this.waypoint = waypoint;
     this.offers = offers;
     this.description = destination;
@@ -38,18 +39,7 @@ export default class EditFormView {
     this.destinationsAll = destinationsAll;
   }
 
-  getTemplate() {
+  get template() {
     return createEditFormTemplate(this.waypoint, this.offers, this.description, this.offerType, this.destinationsAll);
-  }
-
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
-    return this.element;
-  }
-
-  removeElement() {
-    this.element = null;
   }
 }

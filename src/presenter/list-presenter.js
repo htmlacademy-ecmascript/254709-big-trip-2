@@ -1,4 +1,4 @@
-import { render } from '../render.js';
+import { render } from '../../src/framework/render.js';
 import SortListView from '../view/sort-list-view/sort-list-view.js';
 import WaypointListView from '../view/waypoint-list-view/waypoint-list-view.js';
 import WaypointItemView from '../view/waypoint-item-view/waypoint-item-view.js';
@@ -30,7 +30,7 @@ export default class ListPresenter {
       destination: this.destinationsModel.getDestinationById(this.waypoints[0].destination),
       destinationsAll: this.destinationsModel.getDestinations(),
     });
-    render(editFormView, this.waypointListElement.getElement());
+    render(editFormView, this.waypointListElement.element);
 
     // render(this.addFormElement, this.waypointListElement.getElement());
     // render(new AddFormView(), this.addFormElement.getElement());
@@ -46,6 +46,6 @@ export default class ListPresenter {
 
     const waypointComponent = new WaypointItemView(waypoint, offers, destination);
 
-    render(waypointComponent, this.waypointListElement.getElement());
+    render(waypointComponent, this.waypointListElement.element);
   }
 }
