@@ -1,5 +1,5 @@
 import AbstractView from '../../framework/view/abstract-view.js';
-import { humanizeTaskDueDate, humanizeTaskDueTime, getDuration } from '../../util.js';
+import { humanizeTaskDueDate, humanizeTaskDueTime, getDuration } from '../../utils/waypoints.js';
 import { waypointItemTemplate } from './waypoint-item-view-template.js';
 
 const createWaypointItemTemplate = (waypoint, offers, destination) => {

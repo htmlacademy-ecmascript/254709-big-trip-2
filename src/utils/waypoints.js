@@ -5,12 +5,6 @@ dayjs.extend(durationPlugin);
 const DATE_FORMAT = 'D MMMM';
 const TIME_FORMAT = 'HH:mm';
 
-const getRandomArrayElement = (items) => items[Math.floor(Math.random() * items.length)];
-
-const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
-
-const getRandomBoolean = () => Math.random() < 0.5;
-
 const humanizeTaskDueDate = (dueDate) => dueDate ? dayjs(dueDate).format(DATE_FORMAT) : '';
 const humanizeTaskDueTime = (dueDate) => dueDate ? dayjs(dueDate).format(TIME_FORMAT) : '';
 
@@ -26,4 +20,4 @@ const getDuration = (start, end) => {
   return duration.format('mm[m]');
 };
 
-export { getRandomArrayElement, getRandomInt, getRandomBoolean, humanizeTaskDueDate, humanizeTaskDueTime, getDuration, DATE_FORMAT };
+export { humanizeTaskDueDate, humanizeTaskDueTime, getDuration, DATE_FORMAT };

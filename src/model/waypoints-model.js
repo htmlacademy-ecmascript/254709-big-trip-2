@@ -1,4 +1,4 @@
-import { getRandomWaypoint } from '../mocks/waypoints';
+import { getRandomWaypoint } from '../mocks/waypoints.js';
 
 
 const WAYPOINT_QTY = 3;

@@ -1,6 +1,6 @@
-import { getRandomInt, getRandomBoolean, getRandomArrayElement } from '../util';
+import { getRandomInt, getRandomBoolean, getRandomArrayElement } from '../../src/utils/common.js';
 import { v4 as uuidv4 } from 'uuid';
-import { POINT_TYPES, CITIES } from '../const';
+import { POINT_TYPES, CITIES } from '../const.js';
 import { getMockOffers } from './offers.js';
 import { getMockDestinations } from './destinations.js';
 

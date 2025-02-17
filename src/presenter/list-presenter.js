@@ -24,7 +24,10 @@ export default class ListPresenter {
 
   init() {
     this.#waypoints = [...this.#waypointsModel.waypoints];
+    this.#renderAllWaypoints();
+  }
 
+  #renderAllWaypoints() {
     render(this.#sortListComponent, this.#listContainer);
     render(this.#waypointListElement, this.#listContainer);
     this.#waypoints.forEach((waypoint) => {
