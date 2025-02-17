@@ -1,21 +1,10 @@
-import { createElement } from '../../render.js';
+import AbstractView from '../../framework/view/abstract-view.js';
 import { sortListTemplate } from './sort-list-view-template.js';
 
 const createSortListTemplate = () => sortListTemplate;
 
-export default class SortListView {
-  getTemplate() {
+export default class SortListView extends AbstractView {
+  get template() {
     return createSortListTemplate();
-  }
-
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
-    return this.element;
-  }
-
-  removeElement() {
-    this.element = null;
   }
 }

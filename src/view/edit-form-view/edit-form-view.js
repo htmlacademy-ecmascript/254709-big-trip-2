@@ -1,6 +1,6 @@
-import { createElement } from '../../render.js';
+import AbstractView from '../../framework/view/abstract-view.js';
 import { POINT_TYPES } from '../../const.js';
-import { humanizeTaskDueDate, DATE_FORMAT } from '../../util.js';
+import { humanizeEditFormDate, DATE_FORMAT_EDIT_FORM } from '../../utils/waypoints.js';
 import { editFormTemplate } from './edit-form-view-template.js';
 
 const createClassName = (title) => title.toLowerCase().replace(/ /g, '-');
@@ -24,32 +24,45 @@ const createEditFormTemplate = (waypoint, offers, destination, offerType, destin
     offerType,
     destinationsAll,
     createClassName,
-    humanizeTaskDueDate,
-    DATE_FORMAT
+    humanizeEditFormDate,
+    DATE_FORMAT_EDIT_FORM
   });
 
 };
-export default class EditFormView {
-  constructor({ waypoint, offers, destination, offerType, destinationsAll }) {
-    this.waypoint = waypoint;
-    this.offers = offers;
-    this.description = destination;
-    this.offerType = offerType;
-    this.destinationsAll = destinationsAll;
+export default class EditFormView extends AbstractView {
+  #waypoint = null;
+  #offers = null;
+  #description = null;
+  #offerType = null;
+  #destinationsAll = null;
+  #onFormSubmit = null;
+  #onEditClick = null;
+
+
+  constructor({ waypoint, offers, destination, offerType, destinationsAll, onFormSubmit, onEditClick }) {
+    super();
+    this.#waypoint = waypoint;
+    this.#offers = offers;
+    this.#description = destination;
+    this.#offerType = offerType;
+    this.#destinationsAll = destinationsAll;
+    this.#onFormSubmit = onFormSubmit;
+    this.#onEditClick = onEditClick;
+    this.element.querySelector('.event--edit').addEventListener('submit', this.#submitClickHandler);
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#editClickHandler);
   }
 
-  getTemplate() {
-    return createEditFormTemplate(this.waypoint, this.offers, this.description, this.offerType, this.destinationsAll);
+  get template() {
+    return createEditFormTemplate(this.#waypoint, this.#offers, this.#description, this.#offerType, this.#destinationsAll);
   }
 
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
-    return this.element;
-  }
+  #submitClickHandler = (evt) => {
+    evt.preventDefault();
+    this.#onFormSubmit();
+  };
 
-  removeElement() {
-    this.element = null;
-  }
+  #editClickHandler = (evt) => {
+    evt.preventDefault();
+    this.#onEditClick();
+  };
 }

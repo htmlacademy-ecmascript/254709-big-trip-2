@@ -1,4 +1,4 @@
-import { getRandomInt } from '../util';
+import { getRandomInt } from '../../src/utils/common.js';
 import { v4 as uuidv4 } from 'uuid';
 
 const PriceRange = {

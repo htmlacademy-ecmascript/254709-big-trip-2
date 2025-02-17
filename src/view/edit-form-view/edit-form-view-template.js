@@ -12,8 +12,8 @@ export const editFormTemplate = ({
   offerType,
   destinationsAll,
   createClassName,
-  humanizeTaskDueDate,
-  DATE_FORMAT
+  humanizeEditFormDate,
+  DATE_FORMAT_EDIT_FORM
 }) => (`<li class="trip-events__item"><form class="event event--edit" action="#" method="post">
     <header class="event__header">
       <div class="event__type-wrapper">
@@ -27,7 +27,7 @@ export const editFormTemplate = ({
           <fieldset class="event__type-group">
             <legend class="visually-hidden">Event type</legend>
             ${POINT_TYPES.map((item) => `<div class="event__type-item">
-              <input id="event-type-${item}-${id}" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${item}" ${type === item ? 'checked' : ''}>
+              <input id="event-type-${item}-${id}" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${item}" ${type === item && 'checked'}>
               <label class="event__type-label  event__type-label--${item}" for="event-type-${item}-${id}">${item}</label>
             </div>`).join('')}
           </fieldset>
@@ -46,10 +46,10 @@ export const editFormTemplate = ({
 
       <div class="event__field-group  event__field-group--time">
         <label class="visually-hidden" for="event-start-time-${id}">From</label>
-        <input class="event__input  event__input--time" id="event-start-time-${id}" type="text" name="event-start-time" value="${humanizeTaskDueDate(dateFrom, DATE_FORMAT.year)}">
+        <input class="event__input  event__input--time" id="event-start-time-${id}" type="text" name="event-start-time" value="${humanizeEditFormDate(dateFrom, DATE_FORMAT_EDIT_FORM)}">
         &mdash;
         <label class="visually-hidden" for="event-end-time-${id}">To</label>
-        <input class="event__input  event__input--time" id="event-end-time-${id}" type="text" name="event-end-time" value="${humanizeTaskDueDate(dateTo, DATE_FORMAT.year)}">
+        <input class="event__input  event__input--time" id="event-end-time-${id}" type="text" name="event-end-time" value="${humanizeEditFormDate(dateTo, DATE_FORMAT_EDIT_FORM)}">
       </div>
 
       <div class="event__field-group  event__field-group--price">
@@ -67,7 +67,7 @@ export const editFormTemplate = ({
       </button>
     </header>
     <section class="event__details">
-      ${offerType.offers.length ? `
+      ${offerType.offers.length > 0 ? `
         <section class="event__section  event__section--offers">
           <h3 class="event__section-title  event__section-title--offers">Offers</h3>
           <div class="event__available-offers">
@@ -77,7 +77,7 @@ export const editFormTemplate = ({
                   id="event-offer-${createClassName(title)}-${offerId}"
                   type="checkbox"
                   name="event-offer-${createClassName(title)}"
-                  ${idWaypoints.includes(offerId) ? 'checked' : ''}>
+                  ${idWaypoints.includes(offerId) && 'checked'}>
                 <label class="event__offer-label" for="event-offer-${createClassName(title)}-${offerId}">
                   <span class="event__offer-title">${title}</span>
                   &plus;&euro;&nbsp;

@@ -1,6 +1,6 @@
-import { getRandomInt, getRandomArrayElement } from '../util';
+import { getRandomInt, getRandomArrayElement } from '../../src/utils/common.js';
 import { v4 as uuidv4 } from 'uuid';
-import { DESCRIPTION, PHOTO } from '../const';
+import { DESCRIPTION, PHOTO } from '../const.js';
 
 const MAX_PHOTO_QTY = 5;
 const PhotoIdRange = {
