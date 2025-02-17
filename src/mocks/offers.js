@@ -6,7 +6,7 @@ const PriceRange = {
   MAX: 5000,
 };
 
-const MAX_OFFERS_QTY = 3;
+const MAX_OFFERS_QTY = 12;
 
 const getMockOffers = (pointsArr) => {
   const offersMocks = [];
