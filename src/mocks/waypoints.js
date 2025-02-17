@@ -12,18 +12,24 @@ const PriceRange = {
   MAX: 5000
 };
 
+const getRandomYear = () => getRandomInt(2021, 2025);
+const getRandomMonth = () => getRandomInt(1, 7);
+
 const getRandomWaypoint = () => {
   const offersElement = getRandomArrayElement(mockOffers);
   const destinationElement = getRandomArrayElement(mockDestinations);
   const { type, offers } = offersElement;
   const offersIdType = offers.map((item) => item.id);
   const offersId = offersIdType.slice(0, getRandomInt(0, offers.length));
-
+  const randomYearFrom = getRandomYear();
+  const randomYearTo = randomYearFrom + getRandomInt(0, 2);
+  const randomMonthFrom = getRandomMonth();
+  const randomMontTo = randomMonthFrom + getRandomInt(0, 1);
   return {
     id: uuidv4(),
     basePrice: getRandomInt(PriceRange.MIN, PriceRange.MAX),
-    dateFrom: '2024-02-02T21:42:04.116Z',
-    dateTo: '2024-03-02T21:42:04.116Z',
+    dateFrom: `${randomYearFrom}-0${randomMonthFrom}-02T21:42:04.116Z`,
+    dateTo: `${randomYearTo}-0${randomMontTo}-10T21:42:04.116Z`,
     destination: destinationElement.id,
     favorite: getRandomBoolean(),
     offersId,
