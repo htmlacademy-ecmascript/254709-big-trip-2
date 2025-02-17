@@ -1,7 +1,7 @@
-import { mockDestinationsArray } from '../mocks/waypoints.js';
+import { mockDestinations } from '../mocks/waypoints.js';
 
 export default class DestinationsModel {
-  #allDestinations = mockDestinationsArray;
+  #allDestinations = mockDestinations;
 
   get allDestinations() {
     return this.#allDestinations;

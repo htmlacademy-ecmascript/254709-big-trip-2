@@ -4,8 +4,8 @@ import { POINT_TYPES, CITIES } from '../const.js';
 import { getMockOffers } from './offers.js';
 import { getMockDestinations } from './destinations.js';
 
-const mockOffersArray = getMockOffers(POINT_TYPES);
-const mockDestinationsArray = getMockDestinations(CITIES);
+const mockOffers = getMockOffers(POINT_TYPES);
+const mockDestinations = getMockDestinations(CITIES);
 
 const PriceRange = {
   MIN: 100,
@@ -13,8 +13,8 @@ const PriceRange = {
 };
 
 const getRandomWaypoint = () => {
-  const offersElement = getRandomArrayElement(mockOffersArray);
-  const destinationElement = getRandomArrayElement(mockDestinationsArray);
+  const offersElement = getRandomArrayElement(mockOffers);
+  const destinationElement = getRandomArrayElement(mockDestinations);
   const { type, offers } = offersElement;
   const offersIdType = offers.map((item) => item.id);
   const offersId = offersIdType.slice(0, getRandomInt(0, offers.length));
@@ -31,5 +31,5 @@ const getRandomWaypoint = () => {
   };
 };
 
-export { getRandomWaypoint, mockOffersArray, mockDestinationsArray };
+export { getRandomWaypoint, mockOffers, mockDestinations };
 

@@ -19,6 +19,5 @@ export default class HeaderPresenter {
   #renderHeader() {
     render(this.#tripInfoView, this.#tripInfoContainer, RenderPosition.AFTERBEGIN);
     render(this.#filterListView, this.#filterListContainer);
-  };
-
+  }
 }

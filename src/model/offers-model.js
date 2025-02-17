@@ -1,7 +1,7 @@
-import { mockOffersArray } from '../mocks/waypoints.js';
+import { mockOffers } from '../mocks/waypoints.js';
 
 export default class OffersModel {
-  #allOffers = mockOffersArray;
+  #allOffers = mockOffers;
 
   get allOffers() {
     return this.#allOffers;
