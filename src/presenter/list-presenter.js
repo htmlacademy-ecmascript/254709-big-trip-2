@@ -56,7 +56,8 @@ export default class ListPresenter {
       onEditClick: () => {
         replaceWaypointToForm();
         document.addEventListener('keydown', escKeyDownHandler);
-      }});
+      },
+    });
 
     const editFormComponent = new EditFormView({
       waypoint,

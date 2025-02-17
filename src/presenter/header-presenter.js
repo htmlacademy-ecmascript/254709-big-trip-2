@@ -6,13 +6,19 @@ export default class HeaderPresenter {
   #filterListContainer = null;
   #tripInfoView = new TripInfoView();
   #filterListView = new FilterListView();
+
   constructor({ tripInfoContainer, filterListContainer }) {
     this.#tripInfoContainer = tripInfoContainer;
     this.#filterListContainer = filterListContainer;
   }
 
   init() {
+    this.#renderHeader();
+  }
+
+  #renderHeader() {
     render(this.#tripInfoView, this.#tripInfoContainer, RenderPosition.AFTERBEGIN);
     render(this.#filterListView, this.#filterListContainer);
-  }
+  };
+
 }
