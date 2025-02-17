@@ -1,14 +1,14 @@
 import { mockOffersArray } from '../mocks/waypoints';
 
 export default class OffersModel {
-  offers = mockOffersArray;
+  #allOffers = mockOffersArray;
 
-  getOffers() {
-    return this.offers;
+  get allOffers() {
+    return this.#allOffers;
   }
 
   getOfferByType(type) {
-    return this.getOffers().find((offer) => offer.type === type);
+    return this.allOffers.find((offer) => offer.type === type);
   }
 
   getOffersById(type, itemsId) {

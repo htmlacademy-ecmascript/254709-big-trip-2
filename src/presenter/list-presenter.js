@@ -7,45 +7,51 @@ import EditFormView from '../view/edit-form-view/edit-form-view.js';
 // import AddFormView from '../view/add-form-view.js';
 
 export default class ListPresenter {
+  #listContainer = null;
+  #waypointsModel = null;
+  #offersModel = null;
+  #destinationsModel = null;
+  #waypoints = null;
+  #waypointListElement = new WaypointListView();
+  #sortListComponent = new SortListView();
+  #editFormView = null;
+
   constructor({ listContainer, waypointsModel, offersModel, destinationsModel }) {
-    this.listContainer = listContainer;
-    this.waypointsModel = waypointsModel;
-    this.offersModel = offersModel;
-    this.destinationsModel = destinationsModel;
+    this.#listContainer = listContainer;
+    this.#waypointsModel = waypointsModel;
+    this.#offersModel = offersModel;
+    this.#destinationsModel = destinationsModel;
   }
 
-  waypoints = null;
-  waypointListElement = new WaypointListView();
-
   init() {
-    this.waypoints = [...this.waypointsModel.getWaypoints()];
+    this.#waypoints = [...this.#waypointsModel.waypoints];
 
-    render(new SortListView(), this.listContainer);
-    render(this.waypointListElement, this.listContainer);
+    render(this.#sortListComponent, this.#listContainer);
+    render(this.#waypointListElement, this.#listContainer);
 
-    const editFormView = new EditFormView({
-      waypoint: this.waypoints[0],
-      offerType: this.offersModel.getOfferByType(this.waypoints[0].type),
-      offers: [...this.offersModel.getOffersById(this.waypoints[0].type, this.waypoints[0].offersId)],
-      destination: this.destinationsModel.getDestinationById(this.waypoints[0].destination),
-      destinationsAll: this.destinationsModel.getDestinations(),
+    this.#editFormView = new EditFormView({
+      waypoint: this.#waypoints[0],
+      offerType: this.#offersModel.getOfferByType(this.#waypoints[0].type),
+      offers: [...this.#offersModel.getOffersById(this.#waypoints[0].type, this.#waypoints[0].offersId)],
+      destination: this.#destinationsModel.getDestinationById(this.#waypoints[0].destination),
+      destinationsAll: this.#destinationsModel.allDestinations,
     });
-    render(editFormView, this.waypointListElement.element);
+    render(this.#editFormView, this.#waypointListElement.element);
 
     // render(this.addFormElement, this.waypointListElement.getElement());
     // render(new AddFormView(), this.addFormElement.getElement());
 
-    this.waypoints.forEach((waypoint) => {
+    this.#waypoints.forEach((waypoint) => {
       this.renderWaypoint(waypoint);
     });
   }
 
   renderWaypoint(waypoint) {
-    const offers = this.offersModel.getOffersById(waypoint.type, waypoint.offersId);
-    const destination = this.destinationsModel.getDestinationById(waypoint.destination);
+    const offers = this.#offersModel.getOffersById(waypoint.type, waypoint.offersId);
+    const destination = this.#destinationsModel.getDestinationById(waypoint.destination);
 
     const waypointComponent = new WaypointItemView(waypoint, offers, destination);
 
-    render(waypointComponent, this.waypointListElement.element);
+    render(waypointComponent, this.#waypointListElement.element);
   }
 }

@@ -2,13 +2,15 @@ import { render, RenderPosition } from '../../src/framework/render.js';
 import TripInfoView from '../view/trip-info-view/trip-info-view.js';
 import FilterListView from '../view/filter-list-view/filter-list-view.js';
 export default class HeaderPresenter {
+  #tripInfoContainer = null;
+  #filterListContainer = null;
   constructor({ tripInfoContainer, filterListContainer }) {
-    this.tripInfoContainer = tripInfoContainer;
-    this.filterListContainer = filterListContainer;
+    this.#tripInfoContainer = tripInfoContainer;
+    this.#filterListContainer = filterListContainer;
   }
 
   init() {
-    render(new TripInfoView(), this.tripInfoContainer, RenderPosition.AFTERBEGIN);
-    render(new FilterListView(), this.filterListContainer);
+    render(new TripInfoView(), this.#tripInfoContainer, RenderPosition.AFTERBEGIN);
+    render(new FilterListView(), this.#filterListContainer);
   }
 }

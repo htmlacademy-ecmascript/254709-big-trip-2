@@ -1,13 +1,13 @@
 import { mockDestinationsArray } from '../mocks/waypoints';
 
 export default class DestinationsModel {
-  destinations = mockDestinationsArray;
+  #allDestinations = mockDestinationsArray;
 
-  getDestinations() {
-    return this.destinations;
+  get allDestinations() {
+    return this.#allDestinations;
   }
 
   getDestinationById(id) {
-    return this.getDestinations().find((item) => item.id === id);
+    return this.allDestinations.find((item) => item.id === id);
   }
 }
