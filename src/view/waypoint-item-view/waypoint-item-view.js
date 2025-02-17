@@ -21,14 +21,27 @@ const createWaypointItemTemplate = (waypoint, offers, destination) => {
 };
 
 export default class WaypointContentView extends AbstractView {
-  constructor(waypoint, offers, destination) {
+  #waypoint = null;
+  #offers = null;
+  #destination = null;
+  #onEditClick = null;
+
+  constructor({ waypoint, offers, destination, onEditClick }) {
     super();
-    this.waypoint = waypoint;
-    this.offers = offers;
-    this.destination = destination;
+    this.#waypoint = waypoint;
+    this.#offers = offers;
+    this.#destination = destination;
+    this.#onEditClick = onEditClick;
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#editClickHandler);
   }
 
+
   get template() {
-    return createWaypointItemTemplate(this.waypoint, this.offers, this.destination);
+    return createWaypointItemTemplate(this.#waypoint, this.#offers, this.#destination);
   }
+
+  #editClickHandler = (evt) => {
+    evt.preventDefault();
+    this.#onEditClick();
+  };
 }

@@ -4,13 +4,15 @@ import FilterListView from '../view/filter-list-view/filter-list-view.js';
 export default class HeaderPresenter {
   #tripInfoContainer = null;
   #filterListContainer = null;
+  #tripInfoView = new TripInfoView();
+  #filterListView = new FilterListView();
   constructor({ tripInfoContainer, filterListContainer }) {
     this.#tripInfoContainer = tripInfoContainer;
     this.#filterListContainer = filterListContainer;
   }
 
   init() {
-    render(new TripInfoView(), this.#tripInfoContainer, RenderPosition.AFTERBEGIN);
-    render(new FilterListView(), this.#filterListContainer);
+    render(this.#tripInfoView, this.#tripInfoContainer, RenderPosition.AFTERBEGIN);
+    render(this.#filterListView, this.#filterListContainer);
   }
 }

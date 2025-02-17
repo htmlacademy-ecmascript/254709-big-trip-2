@@ -30,16 +30,39 @@ const createEditFormTemplate = (waypoint, offers, destination, offerType, destin
 
 };
 export default class EditFormView extends AbstractView {
-  constructor({ waypoint, offers, destination, offerType, destinationsAll }) {
+  #waypoint = null;
+  #offers = null;
+  #description = null;
+  #offerType = null;
+  #destinationsAll = null;
+  #onFormSubmit = null;
+  #onEditClick = null;
+
+
+  constructor({ waypoint, offers, destination, offerType, destinationsAll, onFormSubmit, onEditClick }) {
     super();
-    this.waypoint = waypoint;
-    this.offers = offers;
-    this.description = destination;
-    this.offerType = offerType;
-    this.destinationsAll = destinationsAll;
+    this.#waypoint = waypoint;
+    this.#offers = offers;
+    this.#description = destination;
+    this.#offerType = offerType;
+    this.#destinationsAll = destinationsAll;
+    this.#onFormSubmit = onFormSubmit;
+    this.#onEditClick = onEditClick;
+    this.element.querySelector('.event--edit').addEventListener('submit', this.#submitClickHandler);
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#editClickHandler);
   }
 
   get template() {
-    return createEditFormTemplate(this.waypoint, this.offers, this.description, this.offerType, this.destinationsAll);
+    return createEditFormTemplate(this.#waypoint, this.#offers, this.#description, this.#offerType, this.#destinationsAll);
   }
+
+  #submitClickHandler = (evt) => {
+    evt.preventDefault();
+    this.#onFormSubmit();
+  };
+
+  #editClickHandler = (evt) => {
+    evt.preventDefault();
+    this.#onEditClick();
+  };
 }

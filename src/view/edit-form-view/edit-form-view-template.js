@@ -67,7 +67,7 @@ export const editFormTemplate = ({
       </button>
     </header>
     <section class="event__details">
-      ${offerType.offers.length && `
+      ${offerType.offers.length > 0 ? `
         <section class="event__section  event__section--offers">
           <h3 class="event__section-title  event__section-title--offers">Offers</h3>
           <div class="event__available-offers">
@@ -85,7 +85,7 @@ export const editFormTemplate = ({
                 </label>
               </div>`).join('')}
           </div>
-        </section>`}
+        </section>` : ''}
 
       <section class="event__section  event__section--destination">
         <h3 class="event__section-title  event__section-title--destination">Destination</h3>
