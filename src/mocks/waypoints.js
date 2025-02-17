@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { POINT_TYPES, CITIES } from '../const.js';
 import { getMockOffers } from './offers.js';
 import { getMockDestinations } from './destinations.js';
+import dayjs from 'dayjs';
 
 const mockOffers = getMockOffers(POINT_TYPES);
 const mockDestinations = getMockDestinations(CITIES);
@@ -13,7 +14,10 @@ const PriceRange = {
 };
 
 const getRandomYear = () => getRandomInt(2021, 2025);
-const getRandomMonth = () => getRandomInt(1, 7);
+const getRandomMonth = () => getRandomInt(1, 4);
+// const currentDate = new Date();
+// const DATE_FORMAT = 'D M';
+// const humanizeCurrentDate = (date) => date ? dayjs(date).format(DATE_FORMAT) : '';
 
 const getRandomWaypoint = () => {
   const offersElement = getRandomArrayElement(mockOffers);
@@ -24,12 +28,12 @@ const getRandomWaypoint = () => {
   const randomYearFrom = getRandomYear();
   const randomYearTo = randomYearFrom + getRandomInt(0, 2);
   const randomMonthFrom = getRandomMonth();
-  const randomMontTo = randomMonthFrom + getRandomInt(0, 1);
+  const randomMonthTo = randomMonthFrom + getRandomInt(0, 5);
   return {
     id: uuidv4(),
     basePrice: getRandomInt(PriceRange.MIN, PriceRange.MAX),
     dateFrom: `${randomYearFrom}-0${randomMonthFrom}-02T21:42:04.116Z`,
-    dateTo: `${randomYearTo}-0${randomMontTo}-10T21:42:04.116Z`,
+    dateTo: `${randomYearTo}-0${randomMonthTo}-10T21:42:04.116Z`,
     destination: destinationElement.id,
     favorite: getRandomBoolean(),
     offersId,

@@ -3,10 +3,12 @@ import durationPlugin from 'dayjs/plugin/duration';
 dayjs.extend(durationPlugin);
 
 const DATE_FORMAT = 'D MMMM';
+const DATE_FORMAT_EDIT_FORM = 'DD/MM/YY HH:mm';
 const TIME_FORMAT = 'HH:mm';
 
 const humanizeTaskDueDate = (dueDate) => dueDate ? dayjs(dueDate).format(DATE_FORMAT) : '';
 const humanizeTaskDueTime = (dueDate) => dueDate ? dayjs(dueDate).format(TIME_FORMAT) : '';
+const humanizeEditFormDate = (formDate) => formDate ? dayjs(formDate).format(DATE_FORMAT_EDIT_FORM) : '';
 
 const getDuration = (start, end) => {
   const duration = dayjs.duration(dayjs(end).diff(dayjs(start)));
@@ -20,4 +22,4 @@ const getDuration = (start, end) => {
   return duration.format('mm[m]');
 };
 
-export { humanizeTaskDueDate, humanizeTaskDueTime, getDuration, DATE_FORMAT };
+export { humanizeTaskDueDate, humanizeTaskDueTime, humanizeEditFormDate, getDuration, DATE_FORMAT, DATE_FORMAT_EDIT_FORM };

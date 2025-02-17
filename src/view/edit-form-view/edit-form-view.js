@@ -1,6 +1,6 @@
 import AbstractView from '../../framework/view/abstract-view.js';
 import { POINT_TYPES } from '../../const.js';
-import { humanizeTaskDueDate, DATE_FORMAT } from '../../utils/waypoints.js';
+import { humanizeEditFormDate, DATE_FORMAT_EDIT_FORM } from '../../utils/waypoints.js';
 import { editFormTemplate } from './edit-form-view-template.js';
 
 const createClassName = (title) => title.toLowerCase().replace(/ /g, '-');
@@ -24,8 +24,8 @@ const createEditFormTemplate = (waypoint, offers, destination, offerType, destin
     offerType,
     destinationsAll,
     createClassName,
-    humanizeTaskDueDate,
-    DATE_FORMAT
+    humanizeEditFormDate,
+    DATE_FORMAT_EDIT_FORM
   });
 
 };
