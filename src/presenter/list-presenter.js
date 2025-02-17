@@ -3,8 +3,7 @@ import SortListView from '../view/sort-list-view/sort-list-view.js';
 import WaypointListView from '../view/waypoint-list-view/waypoint-list-view.js';
 import WaypointItemView from '../view/waypoint-item-view/waypoint-item-view.js';
 import EditFormView from '../view/edit-form-view/edit-form-view.js';
-// import { getRandomInt } from '../util.js';
-// import AddFormView from '../view/add-form-view.js';
+
 
 export default class ListPresenter {
   #listContainer = null;
