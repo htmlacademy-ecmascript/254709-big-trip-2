@@ -29,21 +29,21 @@ export default class ListPresenter {
   #renderAllWaypoints() {
     render(this.#sortListComponent, this.#listContainer);
     render(this.#waypointListElement, this.#listContainer);
+    const destinationsAll = this.#destinationsModel.allDestinations;
     this.#waypoints.forEach((waypoint) => {
-      this.#renderWaypoint(waypoint);
+      this.#renderWaypoint(waypoint, destinationsAll);
     });
   }
 
-  #renderWaypoint(waypoint) {
+  #renderWaypoint(waypoint, destinationsAll) {
     const offers = this.#offersModel.getOffersById(waypoint.type, waypoint.offersId);
     const destination = this.#destinationsModel.getDestinationById(waypoint.destination);
     const offerType = this.#offersModel.getOfferByType(waypoint.type);
-    const destinationsAll = this.#destinationsModel.allDestinations;
 
     const escKeyDownHandler = (evt) => {
       if (evt.key === 'Escape') {
         evt.preventDefault();
-        replaceFormToWaypoint();
+        toggleStateWaypoint();
         document.removeEventListener('keydown', escKeyDownHandler);
       }
     };
@@ -53,7 +53,7 @@ export default class ListPresenter {
       offers,
       destination,
       onEditClick: () => {
-        replaceWaypointToForm();
+        toggleStateWaypoint('Show edit Form');
         document.addEventListener('keydown', escKeyDownHandler);
       },
     });
@@ -65,21 +65,21 @@ export default class ListPresenter {
       offerType,
       destinationsAll,
       onFormSubmit: () => {
-        replaceFormToWaypoint();
+        toggleStateWaypoint();
         document.removeEventListener('keydown', escKeyDownHandler);
       },
       onEditClick: () => {
-        replaceFormToWaypoint();
+        toggleStateWaypoint();
         document.addEventListener('keydown', escKeyDownHandler);
       },
     });
 
-    function replaceWaypointToForm() {
-      replace(editFormComponent, waypointComponent);
-    }
-
-    function replaceFormToWaypoint() {
-      replace(waypointComponent, editFormComponent);
+    function toggleStateWaypoint (isView) {
+      if (isView) {
+        replace(editFormComponent, waypointComponent);
+      } else {
+        replace(waypointComponent, editFormComponent);
+      }
     }
 
     render(waypointComponent, this.#waypointListElement.element);
