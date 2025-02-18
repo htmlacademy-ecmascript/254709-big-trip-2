@@ -7,6 +7,9 @@ const createOffersTemplate = (offersArray) => offersArray.map((offer) =>
     </li>
   `).join('');
 
+export const waypointListTemplate = `<ul class='trip-events__list'>
+  </ul>`;
+
 export const waypointItemTemplate = ({
   dateFrom,
   dateTo,

@@ -1,6 +1,6 @@
 import { render, replace } from '../../src/framework/render.js';
 import SortListView from '../view/sort-list-view/sort-list-view.js';
-import WaypointListView from '../view/waypoint-list-view/waypoint-list-view.js';
+// import WaypointListView from '../view/waypoint-list-view/waypoint-list-view.js';
 import WaypointItemView from '../view/waypoint-item-view/waypoint-item-view.js';
 import WaypointEmptyView from '../view/waypoint-empty-view/waypoint-empty-view.js';
 import EditFormView from '../view/edit-form-view/edit-form-view.js';
@@ -12,7 +12,7 @@ export default class ListPresenter {
   #offersModel = null;
   #destinationsModel = null;
   #waypoints = null;
-  #waypointListElement = new WaypointListView();
+  #waypointListElement = new WaypointItemView({isListView: true});
   #waypointEmptyElement = new WaypointEmptyView();
   #sortListComponent = new SortListView();
 
