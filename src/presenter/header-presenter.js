@@ -1,6 +1,7 @@
-import { render, RenderPosition } from '../../src/framework/render.js';
+import { render, RenderPosition } from '../framework/render.js';
 import TripInfoView from '../view/trip-info-view/trip-info-view.js';
 import FilterContentView from '../view/filter-list-view/filter-list-view.js';
+import SortListView from '../view/sort-list-view/sort-list-view.js';
 
 export default class HeaderPresenter {
   #tripInfoContainer = null;
@@ -9,21 +10,24 @@ export default class HeaderPresenter {
   #filterListView = new FilterContentView({isViewList: true});
   #filterItemView = null;
   #filtersModel = null;
+  #sortListComponent = new SortListView();
+  #listContainer = null;
 
-  constructor({ tripInfoContainer, filtersListContainer, filtersModel }) {
+  constructor({ tripInfoContainer, filtersListContainer, filtersModel, listContainer }) {
     this.#tripInfoContainer = tripInfoContainer;
     this.#filtersListContainer = filtersListContainer;
     this.#filtersModel = filtersModel;
+    this.#listContainer = listContainer;
   }
 
   init() {
     this.#renderTripInfo();
     this.#renderAllFilters();
+    this.#renderSortList();
   }
 
   #renderTripInfo() {
     render(this.#tripInfoView, this.#tripInfoContainer, RenderPosition.AFTERBEGIN);
-
   }
 
   #renderAllFilters() {
@@ -44,5 +48,9 @@ export default class HeaderPresenter {
       checked,
       isViewList: false});
     render(this.#filterItemView, this.#filterListView.element);
+  }
+
+  #renderSortList() {
+    render(this.#sortListComponent, this.#listContainer);
   }
 }

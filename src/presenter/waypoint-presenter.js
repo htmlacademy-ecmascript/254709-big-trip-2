@@ -1,5 +1,4 @@
 import { render, replace } from '../framework/render.js';
-import SortListView from '../view/sort-list-view/sort-list-view.js';
 import WaypointItemView from '../view/waypoint-item-view/waypoint-item-view.js';
 import WaypointEmptyView from '../view/waypoint-empty-view/waypoint-empty-view.js';
 import EditFormView from '../view/edit-form-view/edit-form-view.js';
@@ -13,7 +12,6 @@ export default class WaypointPresenter {
   #waypoints = null;
   #waypointListElement = new WaypointItemView({isListView: true});
   #waypointEmptyElement = new WaypointEmptyView();
-  #sortListComponent = new SortListView();
 
   constructor({ listContainer, waypointsModel, offersModel, destinationsModel }) {
     this.#listContainer = listContainer;
@@ -40,7 +38,6 @@ export default class WaypointPresenter {
   }
 
   #renderAllWaypoints() {
-    render(this.#sortListComponent, this.#listContainer);
     render(this.#waypointListElement, this.#listContainer);
     const destinationsAll = this.#destinationsModel.allDestinations;
     this.#waypoints.forEach((waypoint) => {

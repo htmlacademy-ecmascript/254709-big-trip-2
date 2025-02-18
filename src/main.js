@@ -16,7 +16,7 @@ const offersModel = new OffersModel();
 const destinationsModel = new DestinationsModel();
 const filtersModel = new FiltersModel();
 
-const headerPresenter = new HeaderPresenter({ tripInfoContainer, filtersListContainer, filtersModel });
+const headerPresenter = new HeaderPresenter({ tripInfoContainer, filtersListContainer, filtersModel, listContainer });
 const waypointPresenter = new WaypointPresenter({ listContainer: listContainer, waypointsModel, offersModel, destinationsModel });
 headerPresenter.init();
 waypointPresenter.init();
