@@ -32,6 +32,10 @@ export default class WaypointContentView extends AbstractView {
     this.#offers = offers;
     this.#destination = destination;
     this.#onEditClick = onEditClick;
+    this.#registerEvents();
+  }
+
+  #registerEvents () {
     this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#editClickHandler);
   }
 
