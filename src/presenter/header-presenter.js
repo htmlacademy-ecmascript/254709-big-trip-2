@@ -37,7 +37,6 @@ export default class HeaderPresenter {
 
   #renderFilter(filter) {
     const { id, name, value, checked } = filter;
-    console.log(id, name, value, checked);
     this.#filterItemView = new FilterContentView({
       id,
       name,

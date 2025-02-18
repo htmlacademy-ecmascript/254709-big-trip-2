@@ -1,11 +1,11 @@
-import { render, replace } from '../../src/framework/render.js';
+import { render, replace } from '../framework/render.js';
 import SortListView from '../view/sort-list-view/sort-list-view.js';
 import WaypointItemView from '../view/waypoint-item-view/waypoint-item-view.js';
 import WaypointEmptyView from '../view/waypoint-empty-view/waypoint-empty-view.js';
 import EditFormView from '../view/edit-form-view/edit-form-view.js';
 
 
-export default class ListPresenter {
+export default class WaypointPresenter {
   #listContainer = null;
   #waypointsModel = null;
   #offersModel = null;

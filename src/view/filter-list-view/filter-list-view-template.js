@@ -1,7 +1,6 @@
-export const filterItemTemplate = `
-                <div class="trip-filters__filter">
-                  <input id="filter-past" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter" value="past">
-                  <label class="trip-filters__filter-label" for="filter-past">Past</label>
+export const createFilterItemTemplate = (id, name, value, checked) => `<div class="trip-filters__filter">
+                  <input id="${id}" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter" value="${value}" ${checked ? 'checked' : ''}>
+                  <label class="trip-filters__filter-label" for="${id}">${name}</label>
                 </div>`;
 
 export const filterListTemplate = `<form class="trip-filters" action="#" method="get">
