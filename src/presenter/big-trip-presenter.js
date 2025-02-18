@@ -1,79 +1,65 @@
-import HeaderPresenter from './header-presenter.js';
-import WaypointPresenter from './waypoint-presenter.js';
+import { render, RenderPosition } from '../framework/render.js';
+import TripInfoView from '../view/trip-info-view/trip-info-view.js';
+import FilterContentView from '../view/filter-list-view/filter-list-view.js';
+import SortListView from '../view/sort-list-view/sort-list-view.js';
+import WaypointListView from '../view/waypoint-list-view/waypoint-list-view.js';
+
 
 export default class BigTripPresenter {
-  #tripMainContainer = null;
-  #tripEventsContainer = null;
-
-  #waypointsModel = null;
-  #offersModel = null;
-  #destinationsModel = null;
+  #tripInfoContainer = null;
+  #filtersListContainer = null;
+  #tripInfoView = new TripInfoView();
+  #filterListView = new FilterContentView({isViewList: true});
+  #filterItemView = null;
   #filtersModel = null;
+  #sortListComponent = new SortListView();
+  #listContainer = null;
+  #waypointListView = null;
 
-  #headerPresenter = null;
-  #waypointPresenters = new Map();
-  #waypoints = [];
-
-  constructor({
-    tripMainContainer,
-    tripEventsContainer,
-    waypointsModel,
-    offersModel,
-    destinationsModel,
-    filtersModel
-  }) {
-    this.#tripMainContainer = tripMainContainer;
-    this.#tripEventsContainer = tripEventsContainer;
-
-    this.#waypointsModel = waypointsModel;
-    this.#offersModel = offersModel;
-    this.#destinationsModel = destinationsModel;
+  constructor({ tripInfoContainer, filtersListContainer, filtersModel, listContainer }) {
+    this.#tripInfoContainer = tripInfoContainer;
+    this.#filtersListContainer = filtersListContainer;
     this.#filtersModel = filtersModel;
+    this.#listContainer = listContainer;
   }
 
   init() {
-    this.#waypoints = [...this.#waypointsModel.waypoints];
-    this.#runApp();
+    this.#renderTripInfo();
+    this.#renderAllFilters();
+    this.#renderSortList();
+    this.#renderWaypointList();
   }
 
-  #runApp() {
-    this.#initHeaderPresenter();
-    this.#initWaypoints();
+  #renderTripInfo() {
+    render(this.#tripInfoView, this.#tripInfoContainer, RenderPosition.AFTERBEGIN);
   }
 
-  #initHeaderPresenter() {
-    const filtersListContainer = this.#tripMainContainer.querySelector('.trip-controls__filters');
+  #renderAllFilters() {
+    render(this.#filterListView, this.#filtersListContainer);
 
-    this.#headerPresenter = new HeaderPresenter({
-      tripInfoContainer: this.#tripMainContainer,
-      filtersListContainer: filtersListContainer,
-      filtersModel: this.#filtersModel,
-      listContainer: this.#tripEventsContainer
-    });
-
-    this.#headerPresenter.init();
-  }
-
-  #initWaypoints() {
-    this.#waypoints.forEach((waypoint) => {
-      this.#renderWaypoint(waypoint);
+    const allFilters = [...this.#filtersModel.allFilters];
+    allFilters.forEach((filter) => {
+      this.#renderFilter(filter);
     });
   }
 
-  #renderWaypoint(waypoint) {
-    const waypointPresenter = new WaypointPresenter({
-      listContainer: this.#tripEventsContainer,
-      waypointsModel: this.#waypointsModel,
-      offersModel: this.#offersModel,
-      destinationsModel: this.#destinationsModel
-    });
-
-    waypointPresenter.init(waypoint);
-    this.#waypointPresenters.set(waypoint.id, waypointPresenter);
+  #renderFilter(filter) {
+    const { id, name, value, checked } = filter;
+    this.#filterItemView = new FilterContentView({
+      id,
+      name,
+      value,
+      checked,
+      isViewList: false});
+    render(this.#filterItemView, this.#filterListView.element);
   }
 
-  destroy() {
-    this.#waypointPresenters.forEach((presenter) => presenter.destroy());
-    this.#waypointPresenters.clear();
+  #renderSortList() {
+    render(this.#sortListComponent, this.#listContainer);
+  }
+
+  #renderWaypointList() {
+    this.#waypointListView = new WaypointListView ();
+    render(this.#waypointListView, this.#listContainer);
   }
 }

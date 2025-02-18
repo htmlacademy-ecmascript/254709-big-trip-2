@@ -1,8 +1,7 @@
 import AbstractView from '../../framework/view/abstract-view.js';
 import { humanizeTaskDueDate, humanizeTaskDueTime, getDuration } from '../../utils/waypoints.js';
-import { waypointListTemplate, waypointItemTemplate } from './waypoint-item-view-template.js';
+import { waypointItemTemplate } from './waypoint-item-view-template.js';
 
-const createWaypointListTemplate = () => waypointListTemplate;
 
 const createWaypointItemTemplate = (waypoint, offers, destination) => {
   const { basePrice, type, favorite, dateFrom, dateTo } = waypoint;
@@ -22,24 +21,20 @@ const createWaypointItemTemplate = (waypoint, offers, destination) => {
   });
 };
 
-export default class WaypointContentView extends AbstractView {
+export default class WaypointItemView extends AbstractView {
   #waypoint = null;
   #offers = null;
   #destination = null;
   #onEditClick = null;
-  #isListView = null;
 
-  constructor({ waypoint, offers, destination, onEditClick, isListView = false }) {
+  constructor({ waypoint, offers, destination, onEditClick }) {
     super();
     this.#waypoint = waypoint;
     this.#offers = offers;
     this.#destination = destination;
     this.#onEditClick = onEditClick;
-    this.#isListView = isListView;
+    this.#registerEvents();
 
-    if (!this.#isListView) {
-      this.#registerEvents();
-    }
   }
 
   #registerEvents () {
@@ -47,9 +42,6 @@ export default class WaypointContentView extends AbstractView {
   }
 
   get template() {
-    if (this.#isListView) {
-      return createWaypointListTemplate();
-    }
     return createWaypointItemTemplate(this.#waypoint, this.#offers, this.#destination);
   }
 

@@ -1,4 +1,4 @@
-import BigTripPresenter from './presenter/big-trip-presenter.js';
+import MasterPresenter from './presenter/master-presenter.js';
 import WaypointsModel from './model/waypoints-model.js';
 import OffersModel from './model/offers-model.js';
 import DestinationsModel from './model/destinations-model.js';
@@ -12,7 +12,7 @@ const offersModel = new OffersModel();
 const destinationsModel = new DestinationsModel();
 const filtersModel = new FiltersModel();
 
-const bigTripPresenter = new BigTripPresenter({
+const masterPresenter = new MasterPresenter({
   tripMainContainer,
   tripEventsContainer,
   waypointsModel,
@@ -21,4 +21,4 @@ const bigTripPresenter = new BigTripPresenter({
   filtersModel
 });
 
-bigTripPresenter.init();
+masterPresenter.init();

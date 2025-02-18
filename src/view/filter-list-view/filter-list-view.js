@@ -25,7 +25,6 @@ export default class FilterContentView extends AbstractView {
     if (this.#isViewList) {
       return createFilterListTemplate();
     }
-    console.log(this.#checked);
     return createFilterItemTemplate(this.#id, this.#name, this.#value, this.#checked);
   }
 }
