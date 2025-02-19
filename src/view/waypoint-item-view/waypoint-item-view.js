@@ -4,7 +4,7 @@ import { waypointItemTemplate } from './waypoint-item-view-template.js';
 
 
 const createWaypointItemTemplate = (waypoint, offers, destination) => {
-  const { basePrice, type, favorite, dateFrom, dateTo } = waypoint;
+  const { basePrice, type, isFavorite , dateFrom, dateTo } = waypoint;
   const { name } = destination;
 
   return waypointItemTemplate({
@@ -13,7 +13,7 @@ const createWaypointItemTemplate = (waypoint, offers, destination) => {
     type,
     name,
     basePrice,
-    favorite,
+    isFavorite,
     offers,
     humanizeTaskDueDate,
     humanizeTaskDueTime,
@@ -26,19 +26,21 @@ export default class WaypointItemView extends AbstractView {
   #offers = null;
   #destination = null;
   #onEditClick = null;
+  #onFavoriteClick = null;
 
-  constructor({ waypoint, offers, destination, onEditClick }) {
+  constructor({ waypoint, offers, destination, onEditClick, onFavoriteClick }) {
     super();
     this.#waypoint = waypoint;
     this.#offers = offers;
     this.#destination = destination;
     this.#onEditClick = onEditClick;
+    this.#onFavoriteClick = onFavoriteClick;
     this.#registerEvents();
-
   }
 
   #registerEvents () {
     this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#editClickHandler);
+    this.element.querySelector('.event__favorite-btn').addEventListener('click', this.#favoriteClickHandler);
   }
 
   get template() {
@@ -48,5 +50,10 @@ export default class WaypointItemView extends AbstractView {
   #editClickHandler = (evt) => {
     evt.preventDefault();
     this.#onEditClick();
+  };
+
+  #favoriteClickHandler = (evt) => {
+    evt.preventDefault();
+    this.#onFavoriteClick();
   };
 }

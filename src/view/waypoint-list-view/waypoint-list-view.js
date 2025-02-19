@@ -1,5 +1,5 @@
 import AbstractView from '../../framework/view/abstract-view.js';
-import { waypointListTemplate } from '../waypoint-item-view/waypoint-item-view-template.js';
+import { waypointListTemplate } from './waypoint-list-view-template.js';
 
 const createWaypointListTemplate = () => waypointListTemplate;
 
