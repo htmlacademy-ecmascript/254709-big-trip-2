@@ -91,7 +91,6 @@ export default class WaypointPresenter {
     }
     remove(prevWaypointComponent);
     remove(prevEditFormComponent);
-
   }
 
   resetView() {
@@ -115,7 +114,7 @@ export default class WaypointPresenter {
     this.#handleFavoriteChange({...this.#waypoint, isFavorite: !this.#waypoint.isFavorite});
   };
 
-  destroy() {
+  clear() {
     if (this.#waypointComponent) {
       remove(this.#waypointComponent);
     }

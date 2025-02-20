@@ -2,17 +2,12 @@ import { render, RenderPosition } from '../framework/render.js';
 import SortListView from '../view/sort-list-view/sort-list-view.js';
 
 export default class SortListPresenter {
-
-  #sortListComponent = new SortListView({
-    onSortTypeChange: (dataset) => {
-      this.#handleSortTypeChange(dataset);
-    },
-  });
-
   #listContainer = null;
+  #handleSortTypeChange = null;
 
-  constructor({ listContainer }) {
+  constructor({ listContainer, onSortTypeChange }) {
     this.#listContainer = listContainer;
+    this.#handleSortTypeChange = onSortTypeChange;
   }
 
   init() {
@@ -23,8 +18,10 @@ export default class SortListPresenter {
     render(this.#sortListComponent, this.#listContainer, RenderPosition.AFTERBEGIN);
   }
 
-  #handleSortTypeChange = (dataset) => {
-
-  };
+  #sortListComponent = new SortListView({
+    onSortTypeChange: (dataset) => {
+      this.#handleSortTypeChange(dataset);
+    },
+  });
 
 }

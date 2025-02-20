@@ -3,6 +3,7 @@ import WaypointPresenter from './waypoint-presenter.js';
 import SortListPresenter from './sort-presenter.js';
 // import WaypointEmptyView from '../view/waypoint-empty-view/waypoint-empty-view.js';
 import { updateItem } from '../utils/common.js';
+import { getSortbyDefault, getSortbyTime, getSortbyPrice } from '../utils/sort.js';
 
 export default class MasterPresenter {
   #tripMainContainer = null;
@@ -18,6 +19,7 @@ export default class MasterPresenter {
   #waypointPresenters = new Map();
   // #waypointEmptyElement = new WaypointEmptyView();
   #waypoints = [];
+  #waypointsOrigin = [];
 
   constructor({
     tripMainContainer,
@@ -37,7 +39,8 @@ export default class MasterPresenter {
   }
 
   init() {
-    this.#waypoints = [...this.#waypointsModel.waypoints];
+    this.#waypoints = [...this.#waypointsModel.waypoints].sort(getSortbyDefault);
+    this.#waypointsOrigin = [...this.#waypoints];
     this.#runApp();
   }
 
@@ -62,11 +65,29 @@ export default class MasterPresenter {
 
   #initSortPresenter() {
     this.#sortPresenter = new SortListPresenter({
-      listContainer: this.#tripEventsContainer
+      listContainer: this.#tripEventsContainer,
+      onSortTypeChange: this.#handleSortChange,
     });
-
     this.#sortPresenter.init();
   }
+
+  #handleSortChange = (dataset) => {
+    const sortType = dataset.sortType;
+    this.destroy();
+    switch(sortType) {
+      case 'default':
+        this.#waypoints = this.#waypointsOrigin;
+        break;
+      case 'time':
+        this.#waypoints = this.#waypoints.sort(getSortbyTime);
+        break;
+      case 'price':
+        this.#waypoints = this.#waypoints.sort(getSortbyPrice);
+        break;
+    }
+
+    this.#initWaypoints();
+  };
 
   #initWaypoints() {
     this.#waypoints.forEach((waypoint) => {
@@ -100,7 +121,7 @@ export default class MasterPresenter {
   };
 
   destroy() {
-    this.#waypointPresenters.forEach((presenter) => presenter.destroy());
+    this.#waypointPresenters.forEach((presenter) => presenter.clear());
     this.#waypointPresenters.clear();
   }
 }
