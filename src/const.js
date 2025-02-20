@@ -16,4 +16,10 @@ export const DESCRIPTION = [
   'In rutrum ac purus sit amet tempus.'
 ];
 
+export const SortType = {
+  DEFAULT: 'default',
+  TIME: 'time',
+  PRICE: 'price',
+};
+
 export const PHOTO = 'https://loremflickr.com/248/152?random=';

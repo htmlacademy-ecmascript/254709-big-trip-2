@@ -1,7 +1,6 @@
 import { render, RenderPosition } from '../framework/render.js';
 import TripInfoView from '../view/trip-info-view/trip-info-view.js';
 import FilterContentView from '../view/filter-list-view/filter-list-view.js';
-import SortListView from '../view/sort-list-view/sort-list-view.js';
 import WaypointListView from '../view/waypoint-list-view/waypoint-list-view.js';
 
 
@@ -12,7 +11,6 @@ export default class BigTripPresenter {
   #filterListView = new FilterContentView({isViewList: true});
   #filterItemView = null;
   #filtersModel = null;
-  #sortListComponent = new SortListView();
   #listContainer = null;
   #waypointListView = null;
 
@@ -26,7 +24,6 @@ export default class BigTripPresenter {
   init() {
     this.#renderTripInfo();
     this.#renderAllFilters();
-    this.#renderSortList();
     this.#renderWaypointList();
   }
 
@@ -52,10 +49,6 @@ export default class BigTripPresenter {
       checked,
       isViewList: false});
     render(this.#filterItemView, this.#filterListView.element);
-  }
-
-  #renderSortList() {
-    render(this.#sortListComponent, this.#listContainer);
   }
 
   #renderWaypointList() {

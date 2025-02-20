@@ -1,5 +1,6 @@
 import BigTripPresenter from './big-trip-presenter.js';
 import WaypointPresenter from './waypoint-presenter.js';
+import SortListPresenter from './sort-presenter.js';
 // import WaypointEmptyView from '../view/waypoint-empty-view/waypoint-empty-view.js';
 import { updateItem } from '../utils/common.js';
 
@@ -13,6 +14,7 @@ export default class MasterPresenter {
   #filtersModel = null;
 
   #bigTripPresenter = null;
+  #sortPresenter = null;
   #waypointPresenters = new Map();
   // #waypointEmptyElement = new WaypointEmptyView();
   #waypoints = [];
@@ -41,6 +43,7 @@ export default class MasterPresenter {
 
   #runApp() {
     this.#initBigTripPresenter();
+    this.#initSortPresenter();
     this.#initWaypoints();
   }
 
@@ -55,6 +58,14 @@ export default class MasterPresenter {
     });
 
     this.#bigTripPresenter.init();
+  }
+
+  #initSortPresenter() {
+    this.#sortPresenter = new SortListPresenter({
+      listContainer: this.#tripEventsContainer
+    });
+
+    this.#sortPresenter.init();
   }
 
   #initWaypoints() {
