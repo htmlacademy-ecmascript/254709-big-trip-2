@@ -3,7 +3,7 @@ export const getSortbyPrice = (a, b) => b.basePrice - a.basePrice;
 export const getSortbyDefault = (a, b) => {
   const dateFromA = new Date(a.dateFrom);
   const dateFromB = new Date(b.dateFrom);
-  return dateFromB - dateFromA;
+  return dateFromA - dateFromB;
 };
 
 export const getSortbyTime = (a, b) => {

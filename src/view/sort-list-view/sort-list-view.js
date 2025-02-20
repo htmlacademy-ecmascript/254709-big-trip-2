@@ -22,19 +22,18 @@ export default class SortListView extends AbstractView {
     }
 
     evt.preventDefault();
-    this.#setSortCheckedStatus(evt.target);
-    this.#handleSortTypeChange(evt.target.dataset);
-  };
 
-  #setSortCheckedStatus(label) {
-    const inputId = label.getAttribute('for');
+    const inputId = evt.target.getAttribute('for');
     const currentInput = this.element.querySelector(`#${inputId}`);
-    if (currentInput && !currentInput.hasAttribute('disabled')) {
+
+    if (currentInput && !currentInput.hasAttribute('disabled') && !currentInput.hasAttribute('checked')) {
       const activeInputs = this.element.querySelectorAll('.trip-sort__input:not([disabled])');
       activeInputs.forEach((input) => {
         input.removeAttribute('checked', '');
       });
       currentInput.setAttribute('checked', '');
+      this.#handleSortTypeChange(evt.target.dataset);
     }
-  }
+  };
+
 }
