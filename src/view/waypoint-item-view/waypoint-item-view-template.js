@@ -29,7 +29,7 @@ export const waypointItemTemplate = ({
       <p class="event__time">
         <time class="event__start-time" datetime="${dateFrom}">${humanizeTaskDueTime(dateFrom)}</time>
         &mdash;
-        <time class="event__end-time" datetime="${dateTo}">${humanizeTaskDueTime(dateFrom)}</time>
+        <time class="event__end-time" datetime="${dateTo}">${humanizeTaskDueTime(dateTo)}</time>
       </p>
       <p class="event__duration">${getDuration(dateFrom, dateTo)}</p>
     </div>

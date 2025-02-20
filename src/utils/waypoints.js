@@ -2,7 +2,7 @@ import dayjs from 'dayjs';
 import durationPlugin from 'dayjs/plugin/duration';
 dayjs.extend(durationPlugin);
 
-const DATE_FORMAT = 'D MMMM';
+const DATE_FORMAT = 'D MMM';
 const DATE_FORMAT_EDIT_FORM = 'DD/MM/YY HH:mm';
 const TIME_FORMAT = 'HH:mm';
 
