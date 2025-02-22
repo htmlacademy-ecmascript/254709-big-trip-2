@@ -35,6 +35,7 @@ export default class WaypointPresenter {
 
   #renderWaypoint(waypoint, destinationsAll) {
     const offers = this.#offersModel.getOffersById(waypoint.type, waypoint.offersId);
+    const offersAll = this.#offersModel.allOffers;
     const destination = this.#destinationsModel.getDestinationById(waypoint.destination);
     const offerType = this.#offersModel.getOfferByType(waypoint.type);
 
@@ -66,6 +67,7 @@ export default class WaypointPresenter {
       waypoint,
       offers,
       destination,
+      offersAll,
       offerType,
       destinationsAll,
       onFormSubmit: () => {

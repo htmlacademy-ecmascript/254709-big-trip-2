@@ -22,7 +22,6 @@ export default class SortListView extends AbstractView {
     }
 
     evt.preventDefault();
-
     const inputId = evt.target.getAttribute('for');
     const currentInput = this.element.querySelector(`#${inputId}`);
 

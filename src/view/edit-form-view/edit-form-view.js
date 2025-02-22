@@ -1,4 +1,4 @@
-import AbstractView from '../../framework/view/abstract-view.js';
+import AbstractStatefulView from '../../framework/view/abstract-stateful-view.js';
 import { POINT_TYPES } from '../../const.js';
 import { humanizeEditFormDate, DATE_FORMAT_EDIT_FORM } from '../../utils/waypoints.js';
 import { editFormTemplate } from './edit-form-view-template.js';
@@ -27,46 +27,72 @@ const createEditFormTemplate = (waypoint, offers, destination, offerType, destin
     humanizeEditFormDate,
     DATE_FORMAT_EDIT_FORM
   });
-
 };
-export default class EditFormView extends AbstractView {
-  #waypoint = null;
-  #offers = null;
-  #description = null;
-  #offerType = null;
-  #destinationsAll = null;
+export default class EditFormView extends AbstractStatefulView {
   #onFormSubmit = null;
   #onEditClick = null;
 
 
-  constructor({ waypoint, offers, destination, offerType, destinationsAll, onFormSubmit, onEditClick }) {
+  constructor({ waypoint, offers, destination, offerType, offersAll, destinationsAll, onFormSubmit, onEditClick }) {
     super();
-    this.#waypoint = waypoint;
-    this.#offers = offers;
-    this.#description = destination;
-    this.#offerType = offerType;
-    this.#destinationsAll = destinationsAll;
+    this._state = {
+      waypoint: structuredClone(waypoint),
+      offers: structuredClone(offers),
+      offerType: structuredClone(offerType),
+      offersAll: structuredClone(offersAll),
+      destination: structuredClone(destination),
+      destinationsAll: structuredClone(destinationsAll),
+    };
+
     this.#onFormSubmit = onFormSubmit;
     this.#onEditClick = onEditClick;
-    this.#registerEvents();
+
+    this._restoreHandlers();
   }
 
-  #registerEvents () {
+  _restoreHandlers() {
     this.element.querySelector('.event--edit').addEventListener('submit', this.#submitClickHandler);
     this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#editClickHandler);
+    this.element.querySelector('.event__type-group').addEventListener('click', this.#typeChangeHandler);
   }
 
   get template() {
-    return createEditFormTemplate(this.#waypoint, this.#offers, this.#description, this.#offerType, this.#destinationsAll);
+    const {waypoint, offers, destination, offerType, destinationsAll} = this._state;
+    return createEditFormTemplate(waypoint, offers, destination, offerType, destinationsAll);
   }
 
   #submitClickHandler = (evt) => {
     evt.preventDefault();
-    this.#onFormSubmit();
+    this.#onFormSubmit(this._state);
   };
 
   #editClickHandler = (evt) => {
     evt.preventDefault();
     this.#onEditClick();
+  };
+
+  #typeChangeHandler = (evt) => {
+    if (evt.target.tagName !== 'LABEL') {
+      return;
+    }
+
+    evt.preventDefault();
+
+    const inputId = evt.target.getAttribute('for');
+    const currentInput = this.element.querySelector(`#${inputId}`);
+    const newType = currentInput.value;
+    const offersAll = this._state.offersAll;
+    const newOfferType = offersAll.find((type) => type.type === newType);
+    console.log(this._state.offerType);
+    console.log(newType);
+    console.log(offersAll);
+    console.log(newOfferType);
+    this.updateElement({
+      waypoint: {
+        ...this._state.waypoint,
+        type: newType,
+      },
+      offerType: newOfferType,
+    });
   };
 }
