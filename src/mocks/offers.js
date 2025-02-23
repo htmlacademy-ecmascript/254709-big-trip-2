@@ -13,7 +13,7 @@ const getMockOffers = (pointsArr) => {
   let counter = 1;
 
   const getRandomOffers = () => ({
-    title: `Offer's title ${counter++}`,
+    title: `Offer title ${counter++}`,
     price: getRandomInt(PriceRange.MIN, PriceRange.MAX),
     id: uuidv4(),
   });

@@ -45,6 +45,7 @@ export default class WaypointPresenter {
     const escKeyDownHandler = (evt) => {
       if (evt.key === 'Escape') {
         evt.preventDefault();
+        this.#editFormComponent.reset();
         this.#toggleStateWaypoint();
         document.removeEventListener('keydown', escKeyDownHandler);
       }
@@ -70,7 +71,9 @@ export default class WaypointPresenter {
       offersAll,
       offerType,
       destinationsAll,
-      onFormSubmit: () => {
+      onFormSubmit: (updatedData) => {
+        this.#waypoint = updatedData.waypoint;
+        this.#renderWaypoint(this.#waypoint, updatedData.destinationsAll);
         this.#toggleStateWaypoint();
         document.removeEventListener('keydown', escKeyDownHandler);
       },
@@ -97,6 +100,7 @@ export default class WaypointPresenter {
 
   resetView() {
     if (this.#mode !== Mode.DEFAULT) {
+      this.#editFormComponent.reset();
       this.#toggleStateWaypoint(false);
     }
   }
