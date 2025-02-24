@@ -35,6 +35,7 @@ export default class WaypointPresenter {
 
   #renderWaypoint(waypoint, destinationsAll) {
     const offers = this.#offersModel.getOffersById(waypoint.type, waypoint.offersId);
+    const offersAll = this.#offersModel.allOffers;
     const destination = this.#destinationsModel.getDestinationById(waypoint.destination);
     const offerType = this.#offersModel.getOfferByType(waypoint.type);
 
@@ -44,6 +45,7 @@ export default class WaypointPresenter {
     const escKeyDownHandler = (evt) => {
       if (evt.key === 'Escape') {
         evt.preventDefault();
+        this.#editFormComponent.reset();
         this.#toggleStateWaypoint();
         document.removeEventListener('keydown', escKeyDownHandler);
       }
@@ -66,9 +68,12 @@ export default class WaypointPresenter {
       waypoint,
       offers,
       destination,
+      offersAll,
       offerType,
       destinationsAll,
-      onFormSubmit: () => {
+      onFormSubmit: (updatedData) => {
+        this.#waypoint = updatedData.waypoint;
+        this.#renderWaypoint(this.#waypoint, updatedData.destinationsAll);
         this.#toggleStateWaypoint();
         document.removeEventListener('keydown', escKeyDownHandler);
       },
@@ -95,6 +100,7 @@ export default class WaypointPresenter {
 
   resetView() {
     if (this.#mode !== Mode.DEFAULT) {
+      this.#editFormComponent.reset();
       this.#toggleStateWaypoint(false);
     }
   }

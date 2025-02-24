@@ -75,6 +75,7 @@ export const editFormTemplate = ({
               <div class="event__offer-selector">
                 <input class="event__offer-checkbox  visually-hidden"
                   id="event-offer-${createClassName(title)}-${offerId}"
+                  data-offer-id="${offerId}"
                   type="checkbox"
                   name="event-offer-${createClassName(title)}"
                   ${idWaypoints.includes(offerId) && 'checked'}>
