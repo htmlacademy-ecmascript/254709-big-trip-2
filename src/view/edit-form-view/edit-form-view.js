@@ -154,6 +154,7 @@ export default class EditFormView extends AbstractStatefulView {
       this.element.querySelector('input[name="event-end-time"]'),
       {
         enableTime: true,
+        // eslint-disable-next-line camelcase
         time_24hr: true,
         dateFormat: 'd/m/y H:i',
         defaultDate: this._state.waypoint.dateTo,
