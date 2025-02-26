@@ -44,8 +44,8 @@ export default class EditFormView extends AbstractStatefulView {
   #onFormSubmit = null;
   #onEditClick = null;
   #initialState = null;
-  #datepickerStart = null;
-  #datepickerEnd = null;
+  #datepickerFrom = null;
+  #datepickerTo = null;
 
 
   constructor({ waypoint, offers, destination, offerType, offersAll, destinationsAll, onFormSubmit, onEditClick }) {
@@ -137,29 +137,31 @@ export default class EditFormView extends AbstractStatefulView {
   };
 
   #setDatepickers = () => {
-    this.#datepickerStart = flatpickr(
-      this.element.querySelector('input[name="event-start-time"]'),
+    const [dateFromElement, dateToElement] = this.element.querySelectorAll('.event__input--time');
+    const commonConfig = {
+      enableTime: true,
+      'time_24hr': true,
+      dateFormat: 'd/m/y H:i',
+      locale: {firstDayOfWeek: 1},
+    };
+
+    this.#datepickerFrom = flatpickr(
+      dateFromElement,
       {
-        enableTime: true,
-        // eslint-disable-next-line camelcase
-        time_24hr: true,
-        dateFormat: 'd/m/y H:i',
+        ...commonConfig,
         defaultDate: this._state.waypoint.dateFrom,
-        onChange: this.#onDateFromChangeHandler,
-        onRender: this.#onDateFromChangeHandler,
+        maxDate: this._state.waypoint.dateTo,
+        onClose: this.#onDateFromChangeHandler,
       }
     );
 
-    this.#datepickerEnd = flatpickr(
-      this.element.querySelector('input[name="event-end-time"]'),
+    this.#datepickerTo = flatpickr(
+      dateToElement,
       {
-        enableTime: true,
-        // eslint-disable-next-line camelcase
-        time_24hr: true,
-        dateFormat: 'd/m/y H:i',
+        ...commonConfig,
         defaultDate: this._state.waypoint.dateTo,
         minDate: this._state.waypoint.dateFrom,
-        onChange: this.#onDateToChangeHandler,
+        onClose: this.#onDateToChangeHandler,
       }
     );
   };
@@ -176,23 +178,16 @@ export default class EditFormView extends AbstractStatefulView {
   };
 
   #onDateFromChangeHandler = ([userDate]) => {
-    if ([userDate] > this._state.waypoint.dateTo) {
-      this.#onDateToChangeHandler([userDate]);
-    }
-
-    this.updateElement({
+    this._setState({
       waypoint: {
         ...this._state.waypoint,
         dateFrom: userDate,
       }
     });
-    if (userDate > this._state.waypoint.dateTo) {
-      this.#onDateToChangeHandler([userDate]);
-    }
   };
 
   #onDateToChangeHandler = ([userDate]) => {
-    this.updateElement({
+    this._setState({
       waypoint: {
         ...this._state.waypoint,
         dateTo: userDate,
@@ -202,13 +197,13 @@ export default class EditFormView extends AbstractStatefulView {
 
   removeElement() {
     super.removeElement();
-    if (this.#datepickerStart) {
-      this.#datepickerStart.destroy();
-      this.#datepickerStart = null;
+    if (this.#datepickerFrom) {
+      this.#datepickerFrom.destroy();
+      this.#datepickerFrom = null;
     }
-    if (this.#datepickerEnd) {
-      this.#datepickerEnd.destroy();
-      this.#datepickerEnd = null;
+    if (this.#datepickerTo) {
+      this.#datepickerTo.destroy();
+      this.#datepickerTo = null;
     }
   }
 
