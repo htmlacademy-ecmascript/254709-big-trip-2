@@ -2,6 +2,8 @@ import AbstractStatefulView from '../../framework/view/abstract-stateful-view.js
 import { POINT_TYPES } from '../../const.js';
 import { humanizeEditFormDate, DATE_FORMAT_EDIT_FORM } from '../../utils/waypoints.js';
 import { editFormTemplate } from './edit-form-view-template.js';
+import flatpickr from 'flatpickr';
+import 'flatpickr/dist/flatpickr.min.css';
 
 const createClassName = (title) => title.toLowerCase().replace(/ /g, '-');
 
@@ -42,6 +44,8 @@ export default class EditFormView extends AbstractStatefulView {
   #onFormSubmit = null;
   #onEditClick = null;
   #initialState = null;
+  #datepickerStart = null;
+  #datepickerEnd = null;
 
 
   constructor({ waypoint, offers, destination, offerType, offersAll, destinationsAll, onFormSubmit, onEditClick }) {
@@ -65,15 +69,13 @@ export default class EditFormView extends AbstractStatefulView {
     }
 
     this.element.querySelector('.event__input').addEventListener('change', this.#destinationChangeHandler);
+
+    this.#setDatepickers();
   }
 
   get template() {
     const {waypoint, offers, destination, offerType, destinationsAll} = this._state;
     return createEditFormTemplate(waypoint, offers, destination, offerType, destinationsAll);
-  }
-
-  reset() {
-    this.updateElement(this.#initialState);
   }
 
   #submitClickHandler = (evt) => {
@@ -134,6 +136,32 @@ export default class EditFormView extends AbstractStatefulView {
     });
   };
 
+  #setDatepickers = () => {
+    this.#datepickerStart = flatpickr(
+      this.element.querySelector('input[name="event-start-time"]'),
+      {
+        enableTime: true,
+        time_24hr: true,
+        dateFormat: 'd/m/y H:i',
+        defaultDate: this._state.waypoint.dateFrom,
+        onChange: this.#onDateFromChangeHandler,
+        onRender: this.#onDateFromChangeHandler,
+      }
+    );
+
+    this.#datepickerEnd = flatpickr(
+      this.element.querySelector('input[name="event-end-time"]'),
+      {
+        enableTime: true,
+        time_24hr: true,
+        dateFormat: 'd/m/y H:i',
+        defaultDate: this._state.waypoint.dateTo,
+        minDate: this._state.waypoint.dateFrom,
+        onChange: this.#onDateToChangeHandler,
+      }
+    );
+  };
+
   #destinationChangeHandler = (evt) => {
     evt.preventDefault();
 
@@ -145,28 +173,65 @@ export default class EditFormView extends AbstractStatefulView {
     });
   };
 
-  static parseDataToState(waypoint, offers, offerType, offersAll, destination, destinationsAll) {
-    return {
-      waypoint: {...waypoint},
-      offers: offers,
-      offerType: offerType,
-      offersAll: offersAll,
-      destination: destination,
-      destinationsAll: destinationsAll
-    };
+  #onDateFromChangeHandler = ([userDate]) => {
+    if ([userDate] > this._state.waypoint.dateTo) {
+      this.#onDateToChangeHandler([userDate]);
+    }
+
+    this.updateElement({
+      waypoint: {
+        ...this._state.waypoint,
+        dateFrom: userDate,
+      }
+    });
+    if (userDate > this._state.waypoint.dateTo) {
+      this.#onDateToChangeHandler([userDate]);
+    }
+  };
+
+  #onDateToChangeHandler = ([userDate]) => {
+    this.updateElement({
+      waypoint: {
+        ...this._state.waypoint,
+        dateTo: userDate,
+      }
+    });
+  };
+
+  removeElement() {
+    super.removeElement();
+    if (this.#datepickerStart) {
+      this.#datepickerStart.destroy();
+      this.#datepickerStart = null;
+    }
+    if (this.#datepickerEnd) {
+      this.#datepickerEnd.destroy();
+      this.#datepickerEnd = null;
+    }
   }
 
-  static parseStateToData(state) {
-    return {
-      waypoint: {
-        ...state.waypoint,
-        offersId: state.offers.map((offer) => offer.id),
-        destination: state.destination.id
-      },
-      offers: state.offers,
-      destination: state.destination,
-      offerType: state.offerType,
-      destinationsAll: state.destinationsAll
-    };
+  reset() {
+    this.updateElement(this.#initialState);
   }
+
+  static parseDataToState = (waypoint, offers, offerType, offersAll, destination, destinationsAll) => ({
+    waypoint: {...waypoint},
+    offers,
+    offerType,
+    offersAll,
+    destination,
+    destinationsAll
+  });
+
+  static parseStateToData = (state) => ({
+    waypoint: {
+      ...state.waypoint,
+      offersId: state.offers.map((offer) => offer.id),
+      destination: state.destination.id
+    },
+    offers: state.offers,
+    destination: state.destination,
+    offerType: state.offerType,
+    destinationsAll: state.destinationsAll
+  });
 }

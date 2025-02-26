@@ -14,14 +14,13 @@ export default class SortListPresenter {
     this.#renderSortList();
   }
 
-  #renderSortList() {
+  #renderSortList = () => {
     render(this.#sortListComponent, this.#listContainer, RenderPosition.AFTERBEGIN);
-  }
+  };
 
   #sortListComponent = new SortListView({
     onSortTypeChange: (dataset) => {
       this.#handleSortTypeChange(dataset);
     },
   });
-
 }

@@ -44,13 +44,13 @@ export default class MasterPresenter {
     this.#runApp();
   }
 
-  #runApp() {
+  #runApp = () => {
     this.#initBigTripPresenter();
     this.#initSortPresenter();
     this.#initWaypoints();
-  }
+  };
 
-  #initBigTripPresenter() {
+  #initBigTripPresenter = () => {
     const filtersListContainer = this.#tripMainContainer.querySelector('.trip-controls__filters');
 
     this.#bigTripPresenter = new BigTripPresenter({
@@ -61,15 +61,34 @@ export default class MasterPresenter {
     });
 
     this.#bigTripPresenter.init();
-  }
+  };
 
-  #initSortPresenter() {
+  #initSortPresenter = () => {
     this.#sortPresenter = new SortListPresenter({
       listContainer: this.#tripEventsContainer,
       onSortTypeChange: this.#handleSortChange,
     });
     this.#sortPresenter.init();
-  }
+  };
+
+  #initWaypoints = () => {
+    this.#waypoints.forEach((waypoint) => {
+      this.#renderWaypoint(waypoint);
+    });
+  };
+
+  #renderWaypoint = (waypoint) => {
+    const waypointPresenter = new WaypointPresenter({
+      listContainer: this.#tripEventsContainer,
+      offersModel: this.#offersModel,
+      destinationsModel: this.#destinationsModel,
+      onDataChange: this.#handleWaypointChange,
+      onModeChange: this.#handleModeChange,
+    });
+
+    waypointPresenter.init(waypoint);
+    this.#waypointPresenters.set(waypoint.id, waypointPresenter);
+  };
 
   #handleSortChange = (dataset) => {
     const sortType = dataset.sortType;
@@ -89,28 +108,10 @@ export default class MasterPresenter {
     this.#initWaypoints();
   };
 
-  #initWaypoints() {
-    this.#waypoints.forEach((waypoint) => {
-      this.#renderWaypoint(waypoint);
-    });
-  }
-
-  #renderWaypoint(waypoint) {
-    const waypointPresenter = new WaypointPresenter({
-      listContainer: this.#tripEventsContainer,
-      offersModel: this.#offersModel,
-      destinationsModel: this.#destinationsModel,
-      onDataChange: this.#handleWaypointChange,
-      onModeChange: this.#handleModeChange,
-    });
-
-    waypointPresenter.init(waypoint);
-    this.#waypointPresenters.set(waypoint.id, waypointPresenter);
-  }
-
   // #renderWaypointEmpty() {
   //   render(this.#waypointEmptyElement, this.#tripEventsContainer);
   // }
+
   #handleWaypointChange = (updatedWaypoint) => {
     this.#waypoints = updateItem(this.#waypoints, updatedWaypoint);
     this.#waypointPresenters.get(updatedWaypoint.id).init(updatedWaypoint);

@@ -27,20 +27,20 @@ export default class BigTripPresenter {
     this.#renderWaypointList();
   }
 
-  #renderTripInfo() {
+  #renderTripInfo = () => {
     render(this.#tripInfoView, this.#tripInfoContainer, RenderPosition.AFTERBEGIN);
-  }
+  };
 
-  #renderAllFilters() {
+  #renderAllFilters = () => {
     render(this.#filterListView, this.#filtersListContainer);
 
     const allFilters = [...this.#filtersModel.allFilters];
     allFilters.forEach((filter) => {
       this.#renderFilter(filter);
     });
-  }
+  };
 
-  #renderFilter(filter) {
+  #renderFilter = (filter) => {
     const { id, name, value, checked } = filter;
     this.#filterItemView = new FilterContentView({
       id,
@@ -49,10 +49,10 @@ export default class BigTripPresenter {
       checked,
       isViewList: false});
     render(this.#filterItemView, this.#filterListView.element);
-  }
+  };
 
-  #renderWaypointList() {
+  #renderWaypointList = () => {
     this.#waypointListView = new WaypointListView ();
     render(this.#waypointListView, this.#listContainer);
-  }
+  };
 }
