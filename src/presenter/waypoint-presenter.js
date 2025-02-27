@@ -33,7 +33,7 @@ export default class WaypointPresenter {
     this.#renderWaypoint(this.#waypoint, destinationsAll);
   }
 
-  #renderWaypoint(waypoint, destinationsAll) {
+  #renderWaypoint = (waypoint, destinationsAll) => {
     const offers = this.#offersModel.getOffersById(waypoint.type, waypoint.offersId);
     const offersAll = this.#offersModel.allOffers;
     const destination = this.#destinationsModel.getDestinationById(waypoint.destination);
@@ -96,14 +96,7 @@ export default class WaypointPresenter {
     }
     remove(prevWaypointComponent);
     remove(prevEditFormComponent);
-  }
-
-  resetView() {
-    if (this.#mode !== Mode.DEFAULT) {
-      this.#editFormComponent.reset();
-      this.#toggleStateWaypoint(false);
-    }
-  }
+  };
 
   #toggleStateWaypoint = (isView) => {
     if (isView) {
@@ -119,6 +112,13 @@ export default class WaypointPresenter {
   #toggleStateFavorite = () => {
     this.#handleFavoriteChange({...this.#waypoint, isFavorite: !this.#waypoint.isFavorite});
   };
+
+  resetView() {
+    if (this.#mode !== Mode.DEFAULT) {
+      this.#editFormComponent.reset();
+      this.#toggleStateWaypoint(false);
+    }
+  }
 
   clear() {
     if (this.#waypointComponent) {

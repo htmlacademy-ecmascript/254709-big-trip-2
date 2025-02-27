@@ -38,13 +38,13 @@ export default class WaypointItemView extends AbstractView {
     this.#registerEvents();
   }
 
-  #registerEvents () {
-    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#editClickHandler);
-    this.element.querySelector('.event__favorite-btn').addEventListener('click', this.#favoriteClickHandler);
-  }
-
   get template() {
     return createWaypointItemTemplate(this.#waypoint, this.#offers, this.#destination);
+  }
+
+  #registerEvents() {
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#editClickHandler);
+    this.element.querySelector('.event__favorite-btn').addEventListener('click', this.#favoriteClickHandler);
   }
 
   #editClickHandler = (evt) => {
