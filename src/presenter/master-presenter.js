@@ -19,7 +19,7 @@ export default class MasterPresenter {
   #sortPresenter = null;
   #waypointPresenters = new Map();
 
-  #currentSortType = 'DEFAULT';
+  #currentSortType = SortType.DEFAULT;
   // #waypointEmptyElement = new WaypointEmptyView();
 
   constructor({
@@ -43,11 +43,11 @@ export default class MasterPresenter {
 
   get waypoints() {
     switch(this.#currentSortType) {
-      case 'DEFAULT':
+      case SortType.DEFAULT:
         return [...this.#waypointsModel.waypoints].sort(getSortbyDefault);
-      case 'TIME':
+      case SortType.TIME:
         return [...this.#waypointsModel.waypoints].sort(getSortbyTime);
-      case 'PRICE':
+      case SortType.PRICE:
         return [...this.#waypointsModel.waypoints].sort(getSortbyPrice);
     }
     return this.#waypointsModel.waypoints;
@@ -113,7 +113,6 @@ export default class MasterPresenter {
   #handleViewAction = (userAction, updateType, updatedWaypoint) => {
     switch (userAction) {
       case UserAction.UPDATE_WAYPOINT:
-        this.#sortPresenter.resetSortType();
         this.#waypointsModel.updateWaypoint(updateType, updatedWaypoint);
         break;
       case UserAction.ADD_WAYPOINT:
@@ -127,22 +126,26 @@ export default class MasterPresenter {
 
   // Дергается при изменении модели
   #handleModelEvent = (updateType, updatedWaypoint) => {
-    console.log(this.#currentSortType);
     switch (updateType) {
       case UpdateType.PATCH:
         this.#waypointPresenters.get(updatedWaypoint.id).init(updatedWaypoint);
         break;
       case UpdateType.MINOR:
-        this.#handleSortChange({ sortType: this.#currentSortType });
+        this.#reload();
         break;
       case UpdateType.MAJOR:
-        this.#handleSortChange({ sortType: 'DAY' });
+        this.#sortPresenter.resetSortType();
+        this.#reload();
         break;
     }
   };
 
   #handleSortChange = (dataset) => {
     this.#currentSortType = dataset.sortType;
+    this.#reload();
+  };
+
+  #reload = () => {
     this.destroy();
     this.#initWaypoints();
   };
