@@ -43,24 +43,27 @@ const createEditFormTemplate = (waypoint, offers, destination, offerType, destin
 export default class EditFormView extends AbstractStatefulView {
   #onFormSubmit = null;
   #onEditClick = null;
+  #onDeleteClick = null;
   #initialState = null;
   #datepickerFrom = null;
   #datepickerTo = null;
 
 
-  constructor({ waypoint, offers, destination, offerType, offersAll, destinationsAll, onFormSubmit, onEditClick }) {
+  constructor({ waypoint, offers, destination, offerType, offersAll, destinationsAll, onFormSubmit, onEditClick, onDeleteClick }) {
     super();
     this.#initialState = EditFormView.parseDataToState(waypoint, offers, offerType, offersAll, destination, destinationsAll);
     this._setState(this.#initialState);
 
     this.#onFormSubmit = onFormSubmit;
     this.#onEditClick = onEditClick;
+    this.#onDeleteClick = onDeleteClick;
 
     this._restoreHandlers();
   }
 
   _restoreHandlers() {
     this.element.querySelector('.event--edit').addEventListener('submit', this.#submitClickHandler);
+    this.element.querySelector('.event__reset-btn').addEventListener('click', this.#deleteClickHandler);
     this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#editClickHandler);
     this.element.querySelector('.event__type-group').addEventListener('click', this.#typeChangeHandler);
 
@@ -77,6 +80,10 @@ export default class EditFormView extends AbstractStatefulView {
     const {waypoint, offers, destination, offerType, destinationsAll} = this._state;
     return createEditFormTemplate(waypoint, offers, destination, offerType, destinationsAll);
   }
+
+  #deleteClickHandler = () => {
+    this.#onDeleteClick(EditFormView.parseStateToData(this._state));
+  };
 
   #submitClickHandler = (evt) => {
     evt.preventDefault();

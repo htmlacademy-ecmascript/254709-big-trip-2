@@ -17,9 +17,26 @@ export const DESCRIPTION = [
 ];
 
 export const SortType = {
-  DEFAULT: 'default',
-  TIME: 'time',
-  PRICE: 'price',
+  DEFAULT: 'DEFAULT',
+  TIME: 'TIME',
+  PRICE: 'PRICE',
+};
+
+export const Mode = {
+  VIEW: 'VIEW',
+  EDITING: 'EDITING',
 };
 
 export const PHOTO = 'https://loremflickr.com/248/152?random=';
+
+export const UserAction = {
+  UPDATE_WAYPOINT: 'UPDATE_WAYPOINT',
+  ADD_WAYPOINT: 'ADD_WAYPOINT',
+  DELETE_WAYPOINT: 'DELETE_WAYPOINT',
+};
+
+export const UpdateType = {
+  PATCH: 'PATCH',
+  MINOR: 'MINOR',
+  MAJOR: 'MAJOR',
+};
