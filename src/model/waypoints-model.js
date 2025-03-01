@@ -2,7 +2,7 @@ import Observable from '../framework/observable.js';
 import { getRandomWaypoint } from '../mocks/waypoints.js';
 
 
-const WAYPOINT_QTY = 12;
+const WAYPOINT_QTY = 3;
 
 export default class WaypointsModel extends Observable {
   #waypoints = Array.from({ length: WAYPOINT_QTY }, getRandomWaypoint);
@@ -11,12 +11,16 @@ export default class WaypointsModel extends Observable {
     return this.#waypoints;
   }
 
-  updateWaypoint(updateType, update) {
-    const index = this.#waypoints.findIndex((waypoint) => waypoint.id === update.id);
-
+  #findWaypointIndex(waypointId) {
+    const index = this.#waypoints.findIndex((waypoint) => waypoint.id === waypointId);
     if (index === -1) {
-      throw new Error('Can\'t update waypoint');
+      throw new Error('Waypoint not found');
     }
+    return index;
+  }
+
+  updateWaypoint(updateType, update) {
+    const index = this.#findWaypointIndex(update.id);
 
     this.#waypoints = [
       ...this.#waypoints.slice(0, index),
@@ -29,15 +33,11 @@ export default class WaypointsModel extends Observable {
 
   addWaypoint(updateType, update) {
     this.#waypoints = [update, ...this.#waypoints];
-
     this._notify(updateType, update);
   }
 
   deleteWaypoint(updateType, update) {
-    const index = this.#waypoints.findIndex((waypoint) => waypoint.id === update.id);
-    if (index === -1) {
-      throw new Error('Can\'t delete waypoint');
-    }
+    const index = this.#findWaypointIndex(update.id);
 
     this.#waypoints = [
       ...this.#waypoints.slice(0, index),

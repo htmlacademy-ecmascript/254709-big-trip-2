@@ -27,7 +27,6 @@ export default class WaypointPresenter {
   init(waypoint) {
     this.#waypoint = waypoint;
     const destinationsAll = this.#destinationsModel.allDestinations;
-
     this.#renderWaypoint(this.#waypoint, destinationsAll);
   }
 
@@ -121,7 +120,7 @@ export default class WaypointPresenter {
   };
 
   #toggleStateFavorite = () => {
-    this.#handleDataChange({...this.#waypoint, isFavorite: !this.#waypoint.isFavorite});
+    this.#handleDataChange(UserAction.UPDATE_WAYPOINT, UpdateType.PATCH, {...this.#waypoint, isFavorite: !this.#waypoint.isFavorite});
   };
 
   resetView() {

@@ -21,7 +21,6 @@ const createEditFormTemplate = (waypoint, offers, destination, offerType, destin
   const idWaypoints = offers.map((item) => item.id);
   const { type, dateFrom, dateTo, basePrice, id } = waypoint;
   const { name: namePoint, description, pictures } = destination;
-
   return editFormTemplate({
     id,
     type,
@@ -71,7 +70,8 @@ export default class EditFormView extends AbstractStatefulView {
       this.element.querySelector('.event__available-offers').addEventListener('click', this.#offersChangeHandler);
     }
 
-    this.element.querySelector('.event__input').addEventListener('change', this.#destinationChangeHandler);
+    this.element.querySelector('.event__input--destination').addEventListener('change', this.#destinationChangeHandler);
+    this.element.querySelector('.event__input--price').addEventListener('input', this.#priceChangeHandler);
 
     this.#setDatepickers();
   }
@@ -171,6 +171,22 @@ export default class EditFormView extends AbstractStatefulView {
         onClose: this.#onDateToChangeHandler,
       }
     );
+  };
+
+  #priceChangeHandler = (evt) => {
+    evt.preventDefault();
+    const price = parseInt(evt.target.value, 10);
+
+    if (isNaN(price) || price < 0) {
+      return;
+    }
+
+    this._setState({
+      waypoint: {
+        ...this._state.waypoint,
+        basePrice: price
+      }
+    });
   };
 
   #destinationChangeHandler = (evt) => {

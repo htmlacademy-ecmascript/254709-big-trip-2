@@ -3,6 +3,7 @@ import WaypointsModel from './model/waypoints-model.js';
 import OffersModel from './model/offers-model.js';
 import DestinationsModel from './model/destinations-model.js';
 import FiltersModel from './model/filters-model.js';
+import 'flatpickr/dist/flatpickr.min.css';
 
 const tripMainContainer = document.querySelector('.trip-main');
 const tripEventsContainer = document.querySelector('.trip-events');

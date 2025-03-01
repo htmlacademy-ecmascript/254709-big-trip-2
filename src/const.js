@@ -1,4 +1,4 @@
-export const POINT_TYPES = ['taxi', 'bus', 'train', 'ship', 'drive', 'check-in', 'sightseeing', 'restaurant'];
+export const POINT_TYPES = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
 
 export const CITIES = ['Amsterdam', 'Chamonix', 'Geneva', 'Paris', 'Berlin', 'Prague', 'Tokyo', 'Moscow', 'Saint-Petersburg'];
 

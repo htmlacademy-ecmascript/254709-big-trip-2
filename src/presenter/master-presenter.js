@@ -1,7 +1,7 @@
 import BigTripPresenter from './big-trip-presenter.js';
 import WaypointPresenter from './waypoint-presenter.js';
 import SortListPresenter from './sort-presenter.js';
-// import WaypointEmptyView from '../view/waypoint-empty-view/waypoint-empty-view.js';
+import NewWaypointPresenter from './new-waypoint-presenter.js';
 
 import { getSortbyDefault, getSortbyTime, getSortbyPrice } from '../utils/sort.js';
 import { UserAction, UpdateType, SortType } from '../const.js';
@@ -20,7 +20,6 @@ export default class MasterPresenter {
   #waypointPresenters = new Map();
 
   #currentSortType = SortType.DEFAULT;
-  // #waypointEmptyElement = new WaypointEmptyView();
 
   constructor({
     tripMainContainer,
@@ -61,12 +60,7 @@ export default class MasterPresenter {
     this.#initBigTripPresenter();
     this.#initSortPresenter();
     this.#initWaypoints();
-    document.querySelector('.trip-main__event-add-btn').addEventListener('click', this.#consolLog);
-  };
-
-  #consolLog = (evt) => {
-    evt.preventDefault();
-    console.log(this.waypoints);
+    this.#initNewWaypointsPresenter();
   };
 
   #initBigTripPresenter = () => {
@@ -88,6 +82,17 @@ export default class MasterPresenter {
       onSortTypeChange: this.#handleSortChange,
     });
     this.#sortPresenter.init();
+  };
+
+  #initNewWaypointsPresenter = () => {
+    this.newWaypointsPresenter = new NewWaypointPresenter({
+      listContainer: this.#tripEventsContainer,
+      offersModel: this.#offersModel,
+      destinationsModel: this.#destinationsModel,
+      onDataChange: this.#handleViewAction,
+      sortPresenter: this.#sortPresenter,
+    });
+    this.newWaypointsPresenter.init();
   };
 
   #initWaypoints = () => {
@@ -122,6 +127,7 @@ export default class MasterPresenter {
         this.#waypointsModel.deleteWaypoint(updateType, updatedWaypoint);
         break;
     }
+    console.log(this.#waypointsModel.waypoints);
   };
 
   // Дергается при изменении модели
@@ -149,10 +155,6 @@ export default class MasterPresenter {
     this.destroy();
     this.#initWaypoints();
   };
-
-  // #renderWaypointEmpty() {
-  //   render(this.#waypointEmptyElement, this.#tripEventsContainer);
-  // }
 
   #handleModeChange = () => {
     this.#waypointPresenters.forEach((presenter) => presenter.resetView());

@@ -16,11 +16,6 @@ export default class SortListPresenter {
     this.#renderSortList();
   }
 
-  resetSortType() {
-    this.#handleSortTypeChange({ sortType: `${SortType.DEFAULT}` });
-    this.#sortListComponent.reset();
-  }
-
   #renderSortList = () => {
     render(this.#sortListComponent, this.#listContainer, RenderPosition.AFTERBEGIN);
   };
@@ -30,4 +25,9 @@ export default class SortListPresenter {
       this.#handleSortTypeChange(dataset);
     },
   });
+
+  resetSortType() {
+    this.#handleSortTypeChange({ sortType: `${SortType.DEFAULT}` });
+    this.#sortListComponent.reset();
+  }
 }
