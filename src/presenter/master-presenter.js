@@ -119,9 +119,6 @@ export default class MasterPresenter {
     }
 
     const currentFilter = this.#filterPresenter.getCurrentFilter();
-    console.log(currentFilter);
-    console.log(EventsMsg[`${currentFilter.toUpperCase()}`]);
-    console.log(this.waypoints.length);
     if (this.waypoints.length === 0) {
       this.#sortPresenter.destroy();
       this.#sortPresenter = null;
