@@ -172,30 +172,9 @@ export default class MasterPresenter {
       case UpdateType.MINOR: {
         const currentFilter = this.#filterPresenter.getCurrentFilter();
 
+        // Применяем фильтр с типом уведомления NONE, чтоб не дергать модель и не запускать вечную рекурсию
         if (currentFilter !== 'everything') {
-          const now = new Date();
-          let filteredWaypoints = [];
-
-          switch(currentFilter) {
-            case 'future':
-              filteredWaypoints = this.#waypointsModel.originalWaypoints.filter(
-                (waypoint) => new Date(waypoint.dateFrom) > now
-              );
-              break;
-            case 'present':
-              filteredWaypoints = this.#waypointsModel.originalWaypoints.filter(
-                (waypoint) => (new Date(waypoint.dateFrom) <= now) &&
-                             (new Date(waypoint.dateTo) >= now)
-              );
-              break;
-            case 'past':
-              filteredWaypoints = this.#waypointsModel.originalWaypoints.filter(
-                (waypoint) => new Date(waypoint.dateTo) < now
-              );
-              break;
-          }
-
-          this.#waypointsModel.setWaypoints(UpdateType.NONE, filteredWaypoints);
+          this.#filterPresenter.applyCurrentFilter(currentFilter, UpdateType.NONE);
         }
         this.#reload();
         break;
@@ -204,6 +183,9 @@ export default class MasterPresenter {
         this.#filterPresenter.resetFilter();
         this.#sortPresenter.resetSortType();
         this.#reload();
+        break;
+      }
+      case UpdateType.NONE: {
         break;
       }
     }
