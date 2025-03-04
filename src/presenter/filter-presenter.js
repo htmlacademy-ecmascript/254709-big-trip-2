@@ -94,11 +94,15 @@ export default class FilterPresenter {
     });
 
     this.#currentFilter = filterValue;
+    this.applyCurrentFilter(this.#currentFilter);
+  };
+
+  applyCurrentFilter(currentFilter, updateType = UpdateType.MINOR) {
     let filteredWaypoints = null;
 
-    switch(filterValue) {
+    switch(currentFilter) {
       case 'everything':
-        return this.#waypointsModel.resetToOriginal(UpdateType.MINOR);
+        return this.#waypointsModel.resetToOriginal(updateType);
       case 'future':
         filteredWaypoints = this.#getFilteredWaypoints('FUTURE');
         break;
@@ -109,8 +113,8 @@ export default class FilterPresenter {
         filteredWaypoints = this.#getFilteredWaypoints('PAST');
         break;
     }
-    this.#waypointsModel.setWaypoints(UpdateType.MINOR, filteredWaypoints);
-  };
+    this.#waypointsModel.setWaypoints(updateType, filteredWaypoints);
+  }
 
   getCurrentFilter() {
     return this.#currentFilter;

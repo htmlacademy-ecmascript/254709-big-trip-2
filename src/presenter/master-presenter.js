@@ -107,9 +107,6 @@ export default class MasterPresenter {
 
   #initWaypoints = () => {
     this.#updateWaypointsUI();
-    this.waypoints.forEach((waypoint) => {
-      this.#renderWaypoint(waypoint);
-    });
   };
 
   #updateWaypointsUI = () => {
@@ -131,6 +128,9 @@ export default class MasterPresenter {
       this.#waypointEmptyComponent = new WaypointEmptyView(EventsMsg[`${currentFilter.toUpperCase()}`]);
       render(this.#waypointEmptyComponent, this.#tripEventsContainer);
     }
+    this.waypoints.forEach((waypoint) => {
+      this.#renderWaypoint(waypoint);
+    });
   };
 
   #renderWaypoint = (waypoint) => {
@@ -165,17 +165,47 @@ export default class MasterPresenter {
   // Дергается при изменении модели
   #handleModelEvent = (updateType, updatedWaypoint) => {
     switch (updateType) {
-      case UpdateType.PATCH:
+      case UpdateType.PATCH: {
         this.#waypointPresenters.get(updatedWaypoint.id).init(updatedWaypoint);
         break;
-      case UpdateType.MINOR:
+      }
+      case UpdateType.MINOR: {
+        const currentFilter = this.#filterPresenter.getCurrentFilter();
+
+        if (currentFilter !== 'everything') {
+          const now = new Date();
+          let filteredWaypoints = [];
+
+          switch(currentFilter) {
+            case 'future':
+              filteredWaypoints = this.#waypointsModel.originalWaypoints.filter(
+                (waypoint) => new Date(waypoint.dateFrom) > now
+              );
+              break;
+            case 'present':
+              filteredWaypoints = this.#waypointsModel.originalWaypoints.filter(
+                (waypoint) => (new Date(waypoint.dateFrom) <= now) &&
+                             (new Date(waypoint.dateTo) >= now)
+              );
+              break;
+            case 'past':
+              filteredWaypoints = this.#waypointsModel.originalWaypoints.filter(
+                (waypoint) => new Date(waypoint.dateTo) < now
+              );
+              break;
+          }
+
+          this.#waypointsModel.setWaypoints(UpdateType.NONE, filteredWaypoints);
+        }
         this.#reload();
         break;
-      case UpdateType.MAJOR:
+      }
+      case UpdateType.MAJOR: {
         this.#filterPresenter.resetFilter();
         this.#sortPresenter.resetSortType();
         this.#reload();
         break;
+      }
     }
   };
 

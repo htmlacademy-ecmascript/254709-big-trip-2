@@ -1,5 +1,6 @@
 import Observable from '../framework/observable.js';
 import { getRandomWaypoint } from '../mocks/waypoints.js';
+import { UpdateType } from '../const.js';
 
 
 const WAYPOINT_QTY = 3;
@@ -56,21 +57,26 @@ export default class WaypointsModel extends Observable {
   }
 
   deleteWaypoint(updateType, update) {
+    const originalIndex = this.#originalWaypoints.findIndex((waypoint) => waypoint.id === update.id);
+
+    if (originalIndex !== -1) {
+      this.#originalWaypoints = [
+        ...this.#originalWaypoints.slice(0, originalIndex),
+        ...this.#originalWaypoints.slice(originalIndex + 1),
+      ];
+    }
+
     this.#waypoints = [...this.#originalWaypoints];
-    const index = this.#findWaypointIndex(update.id);
 
-    this.#waypoints = [
-      ...this.#waypoints.slice(0, index),
-      ...this.#waypoints.slice(index + 1),
-    ];
-    this.#updateOriginalWaypoints();
-
-    this._notify(updateType);
+    this._notify(updateType, update);
   }
 
   setWaypoints(updateType, waypoints) {
     this.#waypoints = [...waypoints];
-    this._notify(updateType);
+
+    if (updateType !== UpdateType.NONE) {
+      this._notify(updateType);
+    }
   }
 
   resetToOriginal(updateType) {

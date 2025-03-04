@@ -56,6 +56,7 @@ export const UpdateType = {
   PATCH: 'PATCH',
   MINOR: 'MINOR',
   MAJOR: 'MAJOR',
+  NONE: 'NONE'
 };
 
 export const FilterName = {
