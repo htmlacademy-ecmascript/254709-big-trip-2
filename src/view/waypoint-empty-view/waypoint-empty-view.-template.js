@@ -1,1 +1,1 @@
-export const waypointEmptyTemplate = '<p class="trip-events__msg">Click New Event to create your first point</p>';
+export const waypointEmptyTemplate = (msg) =>`<p class="trip-events__msg">${msg}</p>`;

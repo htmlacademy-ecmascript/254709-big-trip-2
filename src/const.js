@@ -17,9 +17,26 @@ export const DESCRIPTION = [
 ];
 
 export const SortType = {
-  DEFAULT: 'DEFAULT',
-  TIME: 'TIME',
-  PRICE: 'PRICE',
+  DAY: {
+    NAME: 'DAY',
+    DISABLED: false,
+  },
+  EVENT: {
+    NAME: 'EVENT',
+    DISABLED: true,
+  },
+  TIME: {
+    NAME: 'TIME',
+    DISABLED: false,
+  },
+  PRICE: {
+    NAME: 'PRICE',
+    DISABLED: false,
+  },
+  OFFERS: {
+    NAME: 'OFFERS',
+    DISABLED: true,
+  },
 };
 
 export const Mode = {
@@ -39,4 +56,18 @@ export const UpdateType = {
   PATCH: 'PATCH',
   MINOR: 'MINOR',
   MAJOR: 'MAJOR',
+};
+
+export const FilterName = {
+  EVERYTHING: 'EVERYTHING',
+  FUTURE: 'FUTURE',
+  PRESENT: 'PRESENT',
+  PAST: 'PAST',
+};
+
+export const EventsMsg = {
+  EVERYTHING: 'Click New Event to create your first point',
+  FUTURE: 'There are no future events now',
+  PRESENT: 'There are no present events now',
+  PAST: 'There are no past events now',
 };

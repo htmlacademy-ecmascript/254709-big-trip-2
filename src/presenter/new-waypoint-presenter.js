@@ -11,14 +11,17 @@ export default class NewWaypointPresenter {
   #handleDataChange = null;
   #newWaypointBtn = null;
   #sortPresenter = null;
+  #filterPresenter = null;
 
-  constructor({ listContainer, offersModel, destinationsModel, onDataChange, sortPresenter }) {
+
+  constructor({ listContainer, offersModel, destinationsModel, onDataChange, sortPresenter, filterPresenter }) {
     this.#listContainer = listContainer;
     this.#offersModel = offersModel;
     this.#destinationsModel = destinationsModel;
     this.#formContainer = this.#listContainer.querySelector('.trip-events__list');
     this.#handleDataChange = onDataChange;
     this.#sortPresenter = sortPresenter;
+    this.#filterPresenter = filterPresenter;
   }
 
   init() {
@@ -29,6 +32,8 @@ export default class NewWaypointPresenter {
   #onNewWaypointClick = () => {
     this.#newWaypointBtn.setAttribute('disabled', '');
     this.#sortPresenter.resetSortType();
+    this.#filterPresenter.resetFilter();
+
     this.#addFormComponent = new AddFormView({
       offersModel: this.#offersModel,
       destinationsModel: this.#destinationsModel,
@@ -62,11 +67,7 @@ export default class NewWaypointPresenter {
     this.#newWaypointBtn.removeAttribute('disabled');
   };
 
-  destroy() {
+  destroyPresenter() {
     this.#destroyForm();
-
-    if (this.#newWaypointBtn) {
-      this.#newWaypointBtn.removeEventListener('click', this.#onNewWaypointClick);
-    }
   }
 }

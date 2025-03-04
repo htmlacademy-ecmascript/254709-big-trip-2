@@ -22,7 +22,7 @@ export default class SortListView extends AbstractView {
       if (filter.className.includes('trip-sort__item--day')) {
         filter.querySelector('input').setAttribute('checked', '');
       } else {
-        filter.querySelector('input').removeAttribute('checked', '');
+        filter.querySelector('input').removeAttribute('checked');
       }
     });
   }

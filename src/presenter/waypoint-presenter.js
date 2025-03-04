@@ -13,15 +13,17 @@ export default class WaypointPresenter {
   #waypointListElement = null;
   #handleDataChange = null;
   #handleModeChange = null;
+  #newWaypointsPresenter = null;
   #mode = Mode.VIEW;
 
-  constructor({ listContainer, offersModel, destinationsModel, onDataChange, onModeChange }) {
+  constructor({ listContainer, offersModel, destinationsModel, onDataChange, onModeChange, newWaypointPresenter }) {
     this.#listContainer = listContainer;
     this.#offersModel = offersModel;
     this.#destinationsModel = destinationsModel;
     this.#waypointListElement = this.#listContainer.querySelector('.trip-events__list');
     this.#handleDataChange = onDataChange;
     this.#handleModeChange = onModeChange;
+    this.#newWaypointsPresenter = newWaypointPresenter;
   }
 
   init(waypoint) {
@@ -54,6 +56,9 @@ export default class WaypointPresenter {
       destination,
       onEditClick: () => {
         this.#toggleStateWaypoint(true);
+        if (this.#newWaypointsPresenter) {
+          this.#newWaypointsPresenter.destroyPresenter();
+        }
         document.addEventListener('keydown', escKeyDownHandler);
       },
       onFavoriteClick: () => {

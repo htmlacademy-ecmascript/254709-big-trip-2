@@ -1,7 +1,6 @@
-import { render, RenderPosition } from '../framework/render.js';
+import { remove, render, RenderPosition } from '../framework/render.js';
 import { SortType } from '../const.js';
 import SortListView from '../view/sort-list-view/sort-list-view.js';
-
 
 export default class SortListPresenter {
   #listContainer = null;
@@ -27,7 +26,11 @@ export default class SortListPresenter {
   });
 
   resetSortType() {
-    this.#handleSortTypeChange({ sortType: `${SortType.DEFAULT}` });
+    this.#handleSortTypeChange({ sortType: `${SortType.DAY.NAME}` });
     this.#sortListComponent.reset();
+  }
+
+  destroy() {
+    remove(this.#sortListComponent);
   }
 }
