@@ -16,7 +16,6 @@ export default class FilterPresenter {
     this.#waypointsModel.addObserver(this.#updateFilterAvailability);
   }
 
-
   init() {
     this.#renderFilterList();
     this.#updateFilterAvailability();

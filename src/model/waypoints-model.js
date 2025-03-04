@@ -72,7 +72,11 @@ export default class WaypointsModel extends Observable {
   }
 
   setWaypoints(updateType, waypoints) {
-    this.#waypoints = [...waypoints];
+    if (!waypoints) {
+      this.#waypoints = [];
+    } else {
+      this.#waypoints = [...waypoints];
+    }
 
     if (updateType !== UpdateType.NONE) {
       this._notify(updateType);

@@ -170,13 +170,12 @@ export default class MasterPresenter {
         break;
       }
       case UpdateType.MINOR: {
-        const currentFilter = this.#filterPresenter.getCurrentFilter();
-
+        this.#reload();
         // Применяем фильтр с типом уведомления NONE, чтоб не дергать модель и не запускать вечную рекурсию
+        const currentFilter = this.#filterPresenter.getCurrentFilter();
         if (currentFilter !== 'everything') {
           this.#filterPresenter.applyCurrentFilter(currentFilter, UpdateType.NONE);
         }
-        this.#reload();
         break;
       }
       case UpdateType.MAJOR: {

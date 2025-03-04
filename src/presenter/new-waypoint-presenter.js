@@ -31,6 +31,7 @@ export default class NewWaypointPresenter {
 
   #onNewWaypointClick = () => {
     this.#newWaypointBtn.setAttribute('disabled', '');
+    document.addEventListener('keydown', this.#escKeyDownHandler);
     this.#sortPresenter.resetSortType();
     this.#filterPresenter.resetFilter();
 
@@ -45,7 +46,18 @@ export default class NewWaypointPresenter {
     this.#handleDataChange();
   };
 
+  #escKeyDownHandler = (evt) => {
+    if (evt.key === 'Escape') {
+      evt.preventDefault();
+      this.#destroyForm();
+      document.removeEventListener('keydown', this.#escKeyDownHandler);
+    }
+  };
+
+
   #handleFormSubmit = (formData) => {
+
+
     this.#handleDataChange(
       UserAction.ADD_WAYPOINT,
       UpdateType.MINOR,
