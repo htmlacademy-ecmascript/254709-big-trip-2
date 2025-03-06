@@ -43,7 +43,6 @@ export default class NewWaypointPresenter {
     });
 
     render(this.#addFormComponent, this.#formContainer, RenderPosition.AFTERBEGIN);
-    this.#handleDataChange();
   };
 
   #escKeyDownHandler = (evt) => {
@@ -56,7 +55,6 @@ export default class NewWaypointPresenter {
 
 
   #handleFormSubmit = (formData) => {
-
 
     this.#handleDataChange(
       UserAction.ADD_WAYPOINT,
