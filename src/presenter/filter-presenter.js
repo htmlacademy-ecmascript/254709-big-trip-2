@@ -120,7 +120,7 @@ export default class FilterPresenter {
   }
 
   resetFilter() {
-    this.#currentFilter = 'EVERYTHING';
+    this.#currentFilter = 'everything';
 
     // Сброс выбранного фильтра
     const filters = this.#filterListComponent.element.querySelectorAll('.trip-filters__filter-input');
