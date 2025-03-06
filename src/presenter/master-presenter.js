@@ -63,7 +63,7 @@ export default class MasterPresenter {
   #runApp = () => {
     this.#initBigTripPresenter();
     this.#initFilterPresenter();
-    this.#initWaypoints();
+    this.#updateWaypointsUI();
     this.#initNewWaypointsPresenter();
   };
 
@@ -103,10 +103,6 @@ export default class MasterPresenter {
       filterPresenter: this.#filterPresenter,
     });
     this.#newWaypointsPresenter.init();
-  };
-
-  #initWaypoints = () => {
-    this.#updateWaypointsUI();
   };
 
   #updateWaypointsUI = () => {
@@ -194,7 +190,7 @@ export default class MasterPresenter {
 
   #reload = () => {
     this.destroyPresenters();
-    this.#initWaypoints();
+    this.#updateWaypointsUI();
   };
 
   #handleModeChange = () => {
