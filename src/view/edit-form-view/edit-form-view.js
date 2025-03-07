@@ -21,7 +21,6 @@ const createEditFormTemplate = (waypoint, offers, destination, offerType, destin
   const idWaypoints = offers.map((item) => item.id);
   const { type, dateFrom, dateTo, basePrice, id } = waypoint;
   const { name: namePoint, description, pictures } = destination;
-
   return editFormTemplate({
     id,
     type,
@@ -43,24 +42,27 @@ const createEditFormTemplate = (waypoint, offers, destination, offerType, destin
 export default class EditFormView extends AbstractStatefulView {
   #onFormSubmit = null;
   #onEditClick = null;
+  #onDeleteClick = null;
   #initialState = null;
   #datepickerFrom = null;
   #datepickerTo = null;
 
 
-  constructor({ waypoint, offers, destination, offerType, offersAll, destinationsAll, onFormSubmit, onEditClick }) {
+  constructor({ waypoint, offers, destination, offerType, offersAll, destinationsAll, onFormSubmit, onEditClick, onDeleteClick }) {
     super();
     this.#initialState = EditFormView.parseDataToState(waypoint, offers, offerType, offersAll, destination, destinationsAll);
     this._setState(this.#initialState);
 
     this.#onFormSubmit = onFormSubmit;
     this.#onEditClick = onEditClick;
+    this.#onDeleteClick = onDeleteClick;
 
     this._restoreHandlers();
   }
 
   _restoreHandlers() {
     this.element.querySelector('.event--edit').addEventListener('submit', this.#submitClickHandler);
+    this.element.querySelector('.event__reset-btn').addEventListener('click', this.#deleteClickHandler);
     this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#editClickHandler);
     this.element.querySelector('.event__type-group').addEventListener('click', this.#typeChangeHandler);
 
@@ -68,7 +70,8 @@ export default class EditFormView extends AbstractStatefulView {
       this.element.querySelector('.event__available-offers').addEventListener('click', this.#offersChangeHandler);
     }
 
-    this.element.querySelector('.event__input').addEventListener('change', this.#destinationChangeHandler);
+    this.element.querySelector('.event__input--destination').addEventListener('change', this.#destinationChangeHandler);
+    this.element.querySelector('.event__input--price').addEventListener('input', this.#priceChangeHandler);
 
     this.#setDatepickers();
   }
@@ -77,6 +80,10 @@ export default class EditFormView extends AbstractStatefulView {
     const {waypoint, offers, destination, offerType, destinationsAll} = this._state;
     return createEditFormTemplate(waypoint, offers, destination, offerType, destinationsAll);
   }
+
+  #deleteClickHandler = () => {
+    this.#onDeleteClick(EditFormView.parseStateToData(this._state));
+  };
 
   #submitClickHandler = (evt) => {
     evt.preventDefault();
@@ -164,6 +171,22 @@ export default class EditFormView extends AbstractStatefulView {
         onClose: this.#onDateToChangeHandler,
       }
     );
+  };
+
+  #priceChangeHandler = (evt) => {
+    evt.preventDefault();
+    const price = parseInt(evt.target.value, 10);
+
+    if (isNaN(price) || price < 0) {
+      return;
+    }
+
+    this._setState({
+      waypoint: {
+        ...this._state.waypoint,
+        basePrice: price
+      }
+    });
   };
 
   #destinationChangeHandler = (evt) => {

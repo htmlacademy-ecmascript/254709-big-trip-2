@@ -1,4 +1,4 @@
-export const POINT_TYPES = ['taxi', 'bus', 'train', 'ship', 'drive', 'check-in', 'sightseeing', 'restaurant'];
+export const POINT_TYPES = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
 
 export const CITIES = ['Amsterdam', 'Chamonix', 'Geneva', 'Paris', 'Berlin', 'Prague', 'Tokyo', 'Moscow', 'Saint-Petersburg'];
 
@@ -17,9 +17,58 @@ export const DESCRIPTION = [
 ];
 
 export const SortType = {
-  DEFAULT: 'default',
-  TIME: 'time',
-  PRICE: 'price',
+  DAY: {
+    NAME: 'DAY',
+    DISABLED: false,
+  },
+  EVENT: {
+    NAME: 'EVENT',
+    DISABLED: true,
+  },
+  TIME: {
+    NAME: 'TIME',
+    DISABLED: false,
+  },
+  PRICE: {
+    NAME: 'PRICE',
+    DISABLED: false,
+  },
+  OFFERS: {
+    NAME: 'OFFERS',
+    DISABLED: true,
+  },
+};
+
+export const Mode = {
+  VIEW: 'VIEW',
+  EDITING: 'EDITING',
 };
 
 export const PHOTO = 'https://loremflickr.com/248/152?random=';
+
+export const UserAction = {
+  UPDATE_WAYPOINT: 'UPDATE_WAYPOINT',
+  ADD_WAYPOINT: 'ADD_WAYPOINT',
+  DELETE_WAYPOINT: 'DELETE_WAYPOINT',
+};
+
+export const UpdateType = {
+  PATCH: 'PATCH',
+  MINOR: 'MINOR',
+  MAJOR: 'MAJOR',
+  NONE: 'NONE'
+};
+
+export const FilterName = {
+  EVERYTHING: 'EVERYTHING',
+  FUTURE: 'FUTURE',
+  PRESENT: 'PRESENT',
+  PAST: 'PAST',
+};
+
+export const EventsMsg = {
+  EVERYTHING: 'Click New Event to create your first point',
+  FUTURE: 'There are no future events now',
+  PRESENT: 'There are no present events now',
+  PAST: 'There are no past events now',
+};

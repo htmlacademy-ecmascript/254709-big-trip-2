@@ -1,11 +1,8 @@
 import { render, replace, remove } from '../framework/render.js';
 import WaypointItemView from '../view/waypoint-item-view/waypoint-item-view.js';
 import EditFormView from '../view/edit-form-view/edit-form-view.js';
+import { Mode, UserAction, UpdateType } from '../const.js';
 
-const Mode = {
-  DEFAULT: 'DEFAULT',
-  EDITING: 'EDITING',
-};
 export default class WaypointPresenter {
   #listContainer = null;
   #offersModel = null;
@@ -14,17 +11,19 @@ export default class WaypointPresenter {
   #waypointComponent = null;
   #editFormComponent = null;
   #waypointListElement = null;
-  #handleFavoriteChange = null;
+  #handleDataChange = null;
   #handleModeChange = null;
-  #mode = Mode.DEFAULT;
+  #newWaypointsPresenter = null;
+  #mode = Mode.VIEW;
 
-  constructor({ listContainer, offersModel, destinationsModel, onDataChange, onModeChange }) {
+  constructor({ listContainer, offersModel, destinationsModel, onDataChange, onModeChange, newWaypointPresenter }) {
     this.#listContainer = listContainer;
     this.#offersModel = offersModel;
     this.#destinationsModel = destinationsModel;
     this.#waypointListElement = this.#listContainer.querySelector('.trip-events__list');
-    this.#handleFavoriteChange = onDataChange;
+    this.#handleDataChange = onDataChange;
     this.#handleModeChange = onModeChange;
+    this.#newWaypointsPresenter = newWaypointPresenter;
   }
 
   init(waypoint) {
@@ -46,7 +45,7 @@ export default class WaypointPresenter {
       if (evt.key === 'Escape') {
         evt.preventDefault();
         this.#editFormComponent.reset();
-        this.#toggleStateWaypoint();
+        this.#toggleStateWaypoint(false);
         document.removeEventListener('keydown', escKeyDownHandler);
       }
     };
@@ -57,6 +56,9 @@ export default class WaypointPresenter {
       destination,
       onEditClick: () => {
         this.#toggleStateWaypoint(true);
+        if (this.#newWaypointsPresenter) {
+          this.#newWaypointsPresenter.destroyPresenter();
+        }
         document.addEventListener('keydown', escKeyDownHandler);
       },
       onFavoriteClick: () => {
@@ -71,16 +73,17 @@ export default class WaypointPresenter {
       offersAll,
       offerType,
       destinationsAll,
-      onFormSubmit: (updatedData) => {
-        this.#waypoint = updatedData.waypoint;
-        this.#renderWaypoint(this.#waypoint, updatedData.destinationsAll);
-        this.#toggleStateWaypoint();
+      onFormSubmit: (updatedWaypoint) => {
+        this.#onFormSubmitChange(updatedWaypoint);
         document.removeEventListener('keydown', escKeyDownHandler);
       },
       onEditClick: () => {
-        this.#toggleStateWaypoint();
+        this.#toggleStateWaypoint(false);
         document.addEventListener('keydown', escKeyDownHandler);
       },
+      onDeleteClick: (deletedWaypoint) => {
+        this.#deleteWaypoint(deletedWaypoint);
+      }
     });
 
     if (prevWaypointComponent === null || prevEditFormComponent === null) {
@@ -88,7 +91,7 @@ export default class WaypointPresenter {
       return;
     }
 
-    if (this.#mode === Mode.DEFAULT) {
+    if (this.#mode === Mode.VIEW) {
       replace(this.#waypointComponent, prevWaypointComponent);
     }
     if (this.#mode === Mode.EDITING) {
@@ -105,16 +108,28 @@ export default class WaypointPresenter {
       this.#mode = Mode.EDITING;
     } else {
       replace(this.#waypointComponent, this.#editFormComponent);
-      this.#mode = Mode.DEFAULT;
+      this.#mode = Mode.VIEW;
     }
   };
 
+  #onFormSubmitChange = (updatedWaypoint) => {
+    this.#waypoint = updatedWaypoint.waypoint;
+    this.#handleDataChange(UserAction.UPDATE_WAYPOINT, UpdateType.PATCH, {...this.#waypoint});
+    this.#toggleStateWaypoint(false);
+  };
+
+  #deleteWaypoint = (deletedWaypoint) => {
+    this.#waypoint = deletedWaypoint.waypoint;
+    this.#handleDataChange(UserAction.DELETE_WAYPOINT, UpdateType.MINOR, {...this.#waypoint});
+    this.#toggleStateWaypoint(false);
+  };
+
   #toggleStateFavorite = () => {
-    this.#handleFavoriteChange({...this.#waypoint, isFavorite: !this.#waypoint.isFavorite});
+    this.#handleDataChange(UserAction.UPDATE_WAYPOINT, UpdateType.PATCH, {...this.#waypoint, isFavorite: !this.#waypoint.isFavorite});
   };
 
   resetView() {
-    if (this.#mode !== Mode.DEFAULT) {
+    if (this.#mode !== Mode.VIEW) {
       this.#editFormComponent.reset();
       this.#toggleStateWaypoint(false);
     }
