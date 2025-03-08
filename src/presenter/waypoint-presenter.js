@@ -120,7 +120,7 @@ export default class WaypointPresenter {
 
   #deleteWaypoint = (deletedWaypoint) => {
     this.#waypoint = deletedWaypoint.waypoint;
-    this.#handleDataChange(UserAction.DELETE_WAYPOINT, UpdateType.MINOR, {...this.#waypoint});
+    this.#handleDataChange(UserAction.DELETE_WAYPOINT, UpdateType.VIEW_CHANGE, {...this.#waypoint});
     this.#toggleStateWaypoint(false);
   };
 

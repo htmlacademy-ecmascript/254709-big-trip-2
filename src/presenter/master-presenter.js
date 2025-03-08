@@ -5,7 +5,7 @@ import NewWaypointPresenter from './new-waypoint-presenter.js';
 import WaypointEmptyView from '../view/waypoint-empty-view/waypoint-empty-view.js';
 
 import { getSortbyDefault, getSortbyTime, getSortbyPrice } from '../utils/sort.js';
-import { UserAction, UpdateType, SortType, EventsMsg } from '../const.js';
+import { UserAction, UpdateType, SortType, EventsMsg, FilterAction } from '../const.js';
 import FilterPresenter from './filter-presenter.js';
 import { render } from '../framework/render.js';
 
@@ -81,6 +81,7 @@ export default class MasterPresenter {
     this.#filterPresenter = new FilterPresenter({
       filtersListContainer: filtersListContainer,
       waypointsModel: this.#waypointsModel,
+      onFilterChange: this.#handleFilterChange,
     });
     this.#filterPresenter.init();
   };
@@ -140,6 +141,22 @@ export default class MasterPresenter {
     this.#waypointPresenters.set(waypoint.id, waypointPresenter);
   };
 
+  #handleFilterChange = (filterAction, filterType) => {
+    switch (filterAction) {
+      case FilterAction.SET_FILTER:
+        if (filterType === 'everything') {
+          this.#waypointsModel.resetToOriginal(UpdateType.VIEW_CHANGE);
+        } else {
+          const filteredWaypoints = this.#filterPresenter.getFilteredWaypoints(filterType.toUpperCase());
+          this.#waypointsModel.setWaypoints(UpdateType.VIEW_CHANGE, filteredWaypoints);
+        }
+        break;
+      case FilterAction.RESET_FILTER:
+        this.#waypointsModel.resetToOriginal(UpdateType.VIEW_CHANGE);
+        break;
+    }
+  };
+
   // Меняем модель тут, получая данные из waypoint-presenter. После изменения данных срабатывает handleModelEvent
   #handleViewAction = (userAction, updateType, updatedWaypoint) => {
     switch (userAction) {
@@ -162,22 +179,20 @@ export default class MasterPresenter {
         this.#waypointPresenters.get(updatedWaypoint.id).init(updatedWaypoint);
         break;
       }
-      case UpdateType.MINOR: {
-        // Применяем фильтр с типом уведомления NONE, чтоб не дергать модель и не запускать вечную рекурсию
+      case UpdateType.VIEW_CHANGE: {
         const currentFilter = this.#filterPresenter.getCurrentFilter();
         if (currentFilter !== 'everything') {
-          this.#filterPresenter.applyCurrentFilter(currentFilter, updateType = UpdateType.NONE);
+          const filteredWaypoints = this.#filterPresenter.getFilteredWaypoints(currentFilter.toUpperCase());
+
+          this.#waypointsModel.setFilteredWaypoints(filteredWaypoints);
         }
         this.#reload();
         break;
       }
-      case UpdateType.MAJOR: {
+      case UpdateType.RESET_ALL: {
         this.#filterPresenter.resetFilter();
         this.#sortPresenter.resetSortType();
         this.#reload();
-        break;
-      }
-      case UpdateType.NONE: {
         break;
       }
     }

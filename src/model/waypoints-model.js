@@ -1,6 +1,5 @@
 import Observable from '../framework/observable.js';
 import { getRandomWaypoint } from '../mocks/waypoints.js';
-import { UpdateType } from '../const.js';
 
 
 const WAYPOINT_QTY = 3;
@@ -77,9 +76,14 @@ export default class WaypointsModel extends Observable {
     } else {
       this.#waypoints = [...waypoints];
     }
+    this._notify(updateType);
+  }
 
-    if (updateType !== UpdateType.NONE) {
-      this._notify(updateType);
+  setFilteredWaypoints(waypoints) {
+    if (!waypoints) {
+      this.#waypoints = [];
+    } else {
+      this.#waypoints = [...waypoints];
     }
   }
 

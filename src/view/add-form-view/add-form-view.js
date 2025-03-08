@@ -118,15 +118,16 @@ export default class AddFormView extends AbstractStatefulView {
 
   #submitClickHandler = (evt) => {
     evt.preventDefault();
-
-    const destinationValid = this._state.destination.id !== null;
-    const priceValid = this._state.waypoint.basePrice > 0;
-
-    if (!destinationValid || !priceValid) {
+    if (!this.#validateWaypointData()) {
       return;
     }
-
     this.#onFormSubmit(AddFormView.parseStateToData(this._state));
+  };
+
+  #validateWaypointData = () => {
+    const destinationValid = this._state.destination.id !== null;
+    const priceValid = this._state.waypoint.basePrice > 0;
+    return destinationValid && priceValid;
   };
 
   #typeChangeHandler = (evt) => {

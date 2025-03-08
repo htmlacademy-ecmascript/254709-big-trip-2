@@ -58,7 +58,7 @@ export default class NewWaypointPresenter {
 
     this.#handleDataChange(
       UserAction.ADD_WAYPOINT,
-      UpdateType.MINOR,
+      UpdateType.VIEW_CHANGE,
       formData.waypoint
     );
     this.#destroyForm();

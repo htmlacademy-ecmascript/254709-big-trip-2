@@ -54,9 +54,8 @@ export const UserAction = {
 
 export const UpdateType = {
   PATCH: 'PATCH',
-  MINOR: 'MINOR',
-  MAJOR: 'MAJOR',
-  NONE: 'NONE'
+  VIEW_CHANGE: 'VIEW_CHANGE',
+  RESET_ALL: 'RESET_ALL',
 };
 
 export const FilterName = {
@@ -71,4 +70,9 @@ export const EventsMsg = {
   FUTURE: 'There are no future events now',
   PRESENT: 'There are no present events now',
   PAST: 'There are no past events now',
+};
+
+export const FilterAction = {
+  SET_FILTER: 'SET_FILTER',
+  RESET_FILTER: 'RESET_FILTER',
 };
