@@ -1,4 +1,4 @@
-import { render } from '../framework/render.js';
+import { render, remove } from '../framework/render.js';
 import FilterListView from '../view/filter-list-view/filter-list-view.js';
 import { FilterAction } from '../const.js';
 
@@ -23,6 +23,19 @@ export default class FilterPresenter {
     this.#updateFilterAvailability();
   }
 
+  addModel(model) {
+    if (this.#waypointsModel) {
+      this.#waypointsModel.removeObserver(this.#updateFilterAvailability);
+    }
+    this.#waypointsModel = model;
+    this.#waypointsModel.addObserver(this.#updateFilterAvailability);
+    this.#updateFilterAvailability();
+  }
+
+  addCallback(callback) {
+    this.#onFilterChange = callback;
+  }
+
   #renderFilterList = () => {
     this.#filterListComponent = new FilterListView();
     render(this.#filterListComponent, this.#filtersListContainer);
@@ -31,6 +44,7 @@ export default class FilterPresenter {
 
   getFilteredWaypoints = (type) => {
     this.#now = new Date();
+
 
     switch(type) {
       case 'EVERYTHING':
@@ -46,6 +60,10 @@ export default class FilterPresenter {
 
   #updateFilterAvailability = () => {
     this.#now = new Date();
+
+    if (!this.#waypointsModel || !this.#waypointsModel.originalWaypoints) {
+      return [];
+    }
 
     const filters = this.#filterListComponent.element.querySelectorAll('.trip-filters__filter-input');
     const everythingFiltersQty = this.#waypointsModel.originalWaypoints.length;

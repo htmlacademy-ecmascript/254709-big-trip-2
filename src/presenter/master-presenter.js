@@ -33,6 +33,7 @@ export default class MasterPresenter {
     waypointsModel,
     offersModel,
     destinationsModel,
+    filterPresenter,
   }) {
     this.#tripMainContainer = tripMainContainer;
     this.#tripEventsContainer = tripEventsContainer;
@@ -40,7 +41,7 @@ export default class MasterPresenter {
     this.#waypointsModel = waypointsModel;
     this.#offersModel = offersModel;
     this.#destinationsModel = destinationsModel;
-
+    this.#filterPresenter = filterPresenter;
     this.#waypointsModel.addObserver(this.#handleModelEvent);
   }
 
@@ -62,7 +63,8 @@ export default class MasterPresenter {
 
   #runApp = () => {
     this.#initBigTripPresenter();
-    this.#initFilterPresenter();
+    this.#filterPresenter.addCallback(this.#handleFilterChange);
+    this.#filterPresenter.addModel(this.#waypointsModel);
     this.#updateWaypointsUI();
     this.#initNewWaypointsPresenter();
   };
@@ -74,16 +76,6 @@ export default class MasterPresenter {
     });
 
     this.#bigTripPresenter.init();
-  };
-
-  #initFilterPresenter = () => {
-    const filtersListContainer = this.#tripMainContainer.querySelector('.trip-controls__filters');
-    this.#filterPresenter = new FilterPresenter({
-      filtersListContainer: filtersListContainer,
-      waypointsModel: this.#waypointsModel,
-      onFilterChange: this.#handleFilterChange,
-    });
-    this.#filterPresenter.init();
   };
 
   #initSortPresenter = () => {
