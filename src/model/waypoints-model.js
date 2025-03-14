@@ -1,20 +1,16 @@
 import Observable from '../framework/observable.js';
-import { getRandomWaypoint } from '../mocks/waypoints.js';
-
-
-const WAYPOINT_QTY = 3;
 
 export default class WaypointsModel extends Observable {
-  #waypoints = Array.from({ length: WAYPOINT_QTY }, getRandomWaypoint);
-  #waypointsApiService = null;
+  #waypoints = null;
   #originalWaypoints = null;
 
-  constructor({waypointsApiService}) {
+  constructor() {
     super();
-    this.#waypointsApiService = waypointsApiService;
-    this.#updateOriginalWaypoints();
+  }
 
-    this.#waypointsApiService.waypoints.then((waypoints) => console.log(waypoints));
+  init(waypoints) {
+    this.#waypoints = waypoints.map(this.#adaptToApp);
+    this.#updateOriginalWaypoints();
   }
 
   #updateOriginalWaypoints = () => {
@@ -95,4 +91,24 @@ export default class WaypointsModel extends Observable {
     this.#waypoints = [...this.#originalWaypoints];
     this._notify(updateType);
   }
+
+  #adaptToApp(waypoint) {
+    const adaptedWaypoint = {
+      ...waypoint,
+      basePrice: waypoint['base_price'],
+      dateFrom: waypoint['date_from'],
+      dateTo: waypoint['date_to'],
+      isFavorite: waypoint['is_favorite'],
+      offersId: waypoint.offers,
+    };
+
+    delete adaptedWaypoint['base_price'];
+    delete adaptedWaypoint['date_from'];
+    delete adaptedWaypoint['date_to'];
+    delete adaptedWaypoint['is_favorite'];
+    delete adaptedWaypoint['offers'];
+
+    return adaptedWaypoint;
+  }
 }
+

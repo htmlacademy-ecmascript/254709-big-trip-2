@@ -11,23 +11,32 @@ const END_POINT = 'https://22.objects.htmlacademy.pro/big-trip';
 const tripMainContainer = document.querySelector('.trip-main');
 const tripEventsContainer = document.querySelector('.trip-events');
 
-const waypointsModel = new WaypointsModel({
-  waypointsApiService: new WaypointsApiService(END_POINT, AUTHORIZATION)
-});
-const offersModel = new OffersModel({
-  waypointsApiService: new WaypointsApiService(END_POINT, AUTHORIZATION)
-});
-const destinationsModel = new DestinationsModel({
-  waypointsApiService: new WaypointsApiService(END_POINT, AUTHORIZATION)
-});
+const waypointsApiService = new WaypointsApiService(END_POINT, AUTHORIZATION);
 
+const waypointsModel = new WaypointsModel();
+const offersModel = new OffersModel();
+const destinationsModel = new DestinationsModel();
 
-const masterPresenter = new MasterPresenter({
-  tripMainContainer,
-  tripEventsContainer,
-  waypointsModel,
-  offersModel,
-  destinationsModel
-});
+async function runApp() {
+  try {
+    const destinations = await waypointsApiService.destinations;
+    destinationsModel.init(destinations);
+    const offers = await waypointsApiService.offers;
+    offersModel.init(offers);
+    const waypoints = await waypointsApiService.waypoints;
+    waypointsModel.init(waypoints);
+    const masterPresenter = new MasterPresenter({
+      tripMainContainer,
+      tripEventsContainer,
+      waypointsModel,
+      offersModel,
+      destinationsModel
+    });
+    masterPresenter.init();
 
-masterPresenter.init();
+  } catch (error) {
+    throw new Error(error);
+  }
+}
+
+runApp();

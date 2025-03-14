@@ -1,12 +1,8 @@
-import { mockDestinations } from '../mocks/waypoints.js';
-
 export default class DestinationsModel {
-  #allDestinations = mockDestinations;
-  #waypointsApiService = null;
+  #allDestinations = null;
 
-  constructor({waypointsApiService}) {
-    this.#waypointsApiService = waypointsApiService;
-    this.#waypointsApiService.destinations.then((destinations) => console.log(destinations));
+  init(destination) {
+    this.#allDestinations = destination;
   }
 
   get allDestinations() {
