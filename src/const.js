@@ -76,3 +76,10 @@ export const FilterAction = {
   SET_FILTER: 'SET_FILTER',
   RESET_FILTER: 'RESET_FILTER',
 };
+
+export const Method = {
+  GET: 'GET',
+  PUT: 'PUT',
+  POST: 'POST',
+  DELETE: 'DELETE',
+};

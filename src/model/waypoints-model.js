@@ -6,11 +6,15 @@ const WAYPOINT_QTY = 3;
 
 export default class WaypointsModel extends Observable {
   #waypoints = Array.from({ length: WAYPOINT_QTY }, getRandomWaypoint);
+  #waypointsApiService = null;
   #originalWaypoints = null;
 
-  constructor() {
+  constructor({waypointsApiService}) {
     super();
+    this.#waypointsApiService = waypointsApiService;
     this.#updateOriginalWaypoints();
+
+    this.#waypointsApiService.waypoints.then((waypoints) => console.log(waypoints));
   }
 
   #updateOriginalWaypoints = () => {
