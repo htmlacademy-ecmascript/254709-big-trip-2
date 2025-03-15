@@ -1,15 +1,17 @@
 import Observable from '../framework/observable.js';
 
 export default class WaypointsModel extends Observable {
-  #waypoints = null;
-  #originalWaypoints = null;
+  #waypoints = [];
+  #originalWaypoints = [];
+  #waypointsApiService = null;
 
-  constructor() {
+  constructor({waypointsApiService}) {
     super();
+    this.#waypointsApiService = waypointsApiService;
   }
 
   init(waypoints) {
-    this.#waypoints = waypoints.map(this.#adaptToApp);
+    this.#waypoints = waypoints.map(this.#adaptToClient);
     this.#updateOriginalWaypoints();
   }
 
@@ -33,18 +35,26 @@ export default class WaypointsModel extends Observable {
     return index;
   }
 
-  updateWaypoint(updateType, update) {
-    this.#waypoints = [...this.#originalWaypoints];
-    const index = this.#findWaypointIndex(update.id);
+  async updateWaypoint(updateType, update) {
+    try {
+      this.#waypoints = [...this.#originalWaypoints];
+      console.log(update);
+      const response = await this.#waypointsApiService.updateWaypoint(update);
+      console.log(response);
+      const updatedWaypoint = this.#adaptToClient(response);
+      const index = this.#findWaypointIndex(update.id);
 
-    this.#waypoints = [
-      ...this.#waypoints.slice(0, index),
-      update,
-      ...this.#waypoints.slice(index + 1),
-    ];
-    this.#updateOriginalWaypoints();
+      this.#waypoints = [
+        ...this.#waypoints.slice(0, index),
+        update,
+        ...this.#waypoints.slice(index + 1),
+      ];
+      this.#updateOriginalWaypoints();
 
-    this._notify(updateType, update);
+      this._notify(updateType, updatedWaypoint);
+    } catch(err) {
+      throw new Error('Can\'t update waypoint');
+    }
   }
 
   addWaypoint(updateType, update) {
@@ -71,20 +81,13 @@ export default class WaypointsModel extends Observable {
   }
 
   setWaypoints(updateType, waypoints) {
-    if (!waypoints) {
-      this.#waypoints = [];
-    } else {
-      this.#waypoints = [...waypoints];
-    }
+    this.#waypoints = [...waypoints];
+
     this._notify(updateType);
   }
 
   setFilteredWaypoints(waypoints) {
-    if (!waypoints) {
-      this.#waypoints = [];
-    } else {
-      this.#waypoints = [...waypoints];
-    }
+    this.#waypoints = [...waypoints];
   }
 
   resetToOriginal(updateType) {
@@ -92,7 +95,7 @@ export default class WaypointsModel extends Observable {
     this._notify(updateType);
   }
 
-  #adaptToApp(waypoint) {
+  #adaptToClient(waypoint) {
     const adaptedWaypoint = {
       ...waypoint,
       basePrice: waypoint['base_price'],

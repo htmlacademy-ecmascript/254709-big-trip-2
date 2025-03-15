@@ -21,7 +21,7 @@ export default class WaypointsApiService extends ApiService {
     const response = await this._load({
       url: `points/${waypoint.id}`,
       method: Method.PUT,
-      body: JSON.stringify(waypoint),
+      body: JSON.stringify(this.#adaptToServer(waypoint)),
       headers: new Headers({'Content-Type': 'application/json'}),
     });
 
@@ -29,4 +29,24 @@ export default class WaypointsApiService extends ApiService {
 
     return parsedResponse;
   }
+
+  #adaptToServer(waypoint) {
+    const adaptedWaypoint = {
+      ...waypoint,
+      'base_price': +waypoint['basePrice'],
+      'date_from': waypoint['dateFrom'],
+      'date_to': waypoint['dateTo'],
+      'is_favorite': waypoint['isFavorite'] || false,
+      offers: waypoint.offersId || [],
+    };
+
+    delete adaptedWaypoint['basePrice'];
+    delete adaptedWaypoint['dateFrom'];
+    delete adaptedWaypoint['dateTo'];
+    delete adaptedWaypoint['isFavorite'];
+    delete adaptedWaypoint['offersId'];
+
+    return adaptedWaypoint;
+  }
+
 }

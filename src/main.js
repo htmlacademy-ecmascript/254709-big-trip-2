@@ -19,7 +19,7 @@ const newWaypointBtn = document.querySelector('.trip-main__event-add-btn');
 
 const waypointsApiService = new WaypointsApiService(END_POINT, AUTHORIZATION);
 
-const waypointsModel = new WaypointsModel();
+const waypointsModel = new WaypointsModel({ waypointsApiService });
 const offersModel = new OffersModel();
 const destinationsModel = new DestinationsModel();
 
@@ -34,8 +34,10 @@ async function runApp() {
   try {
     newWaypointBtn.setAttribute('disabled', '');
     filterPresenter.init();
+
     const loadingMsgComponent = new WaypointEmptyView(EventsMsg.LOADING);
     render(loadingMsgComponent, tripEventsContainer);
+
     const destinations = await waypointsApiService.destinations;
     destinationsModel.init(destinations);
     const offers = await waypointsApiService.offers;
@@ -56,8 +58,11 @@ async function runApp() {
     });
     masterPresenter.init();
 
-  } catch (error) {
-    throw new Error(error);
+  } catch(error) {
+    tripEventsContainer.innerHTML = '';
+    newWaypointBtn.setAttribute('disabled', '');
+    const errorMsgComponent = new WaypointEmptyView(EventsMsg.ERROR);
+    render(errorMsgComponent, tripEventsContainer);
   }
 }
 

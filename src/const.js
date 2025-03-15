@@ -53,6 +53,7 @@ export const EventsMsg = {
   PRESENT: 'There are no present events now',
   PAST: 'There are no past events now',
   LOADING: 'Loading...',
+  ERROR: 'Failed to load latest route information',
 };
 
 export const FilterAction = {

@@ -5,7 +5,7 @@ import { editFormTemplate } from './edit-form-view-template.js';
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 
-const createClassName = (title) => title.toLowerCase().replace(/ /g, '-');
+const createClassName = (title) => title.toLowerCase().replace(/ /g, '-').replace(/'/g, "\'");
 
 const createOffersMap = (offers) => {
   const map = new Map();
