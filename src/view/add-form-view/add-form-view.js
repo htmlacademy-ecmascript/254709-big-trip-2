@@ -3,10 +3,8 @@ import { POINT_TYPES } from '../../const.js';
 import { humanizeEditFormDate, DATE_FORMAT_EDIT_FORM } from '../../utils/waypoints.js';
 import { addFormTemplate } from './add-form-view-template.js';
 import flatpickr from 'flatpickr';
-import { v4 as uuidv4 } from 'uuid';
 
 const BLANK_WAYPOINT = {
-  id: uuidv4(),
   type: 'flight',
   dateFrom: null,
   dateTo: null,

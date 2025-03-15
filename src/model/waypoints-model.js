@@ -55,12 +55,19 @@ export default class WaypointsModel extends Observable {
     }
   }
 
-  addWaypoint(updateType, update) {
-    this.#waypoints = [...this.#originalWaypoints];
-    this.#waypoints = [update, ...this.#waypoints];
-    this.#updateOriginalWaypoints();
+  async addWaypoint(updateType, update) {
+    try {
+      this.#waypoints = [...this.#originalWaypoints];
+      const response = await this.#waypointsApiService.addWaypoint(update);
+      const addedWaypoint = this.#adaptToClient(response);
+      this.#waypoints = [addedWaypoint, ...this.#waypoints];
+      this.#updateOriginalWaypoints();
 
-    this._notify(updateType, update);
+      this._notify(updateType, addedWaypoint);
+    } catch(err) {
+      throw new Error('Can\'t add waypoint');
+    }
+
   }
 
   deleteWaypoint(updateType, update) {

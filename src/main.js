@@ -44,7 +44,6 @@ async function runApp() {
     offersModel.init(offers);
     const waypoints = await waypointsApiService.waypoints;
     waypointsModel.init(waypoints);
-
     loadingMsgComponent.destroy();
     newWaypointBtn.removeAttribute('disabled', '');
 
