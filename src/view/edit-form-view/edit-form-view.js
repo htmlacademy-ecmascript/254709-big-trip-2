@@ -5,8 +5,6 @@ import { editFormTemplate } from './edit-form-view-template.js';
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 
-const createClassName = (title) => title.toLowerCase().replace(/ /g, '-').replace(/'/g, "\'");
-
 const createOffersMap = (offers) => {
   const map = new Map();
   offers.forEach((type) => {
@@ -34,7 +32,6 @@ const createEditFormTemplate = (waypoint, offers, destination, offerType, destin
     idWaypoints,
     offerType,
     destinationsAll,
-    createClassName,
     humanizeEditFormDate,
     DATE_FORMAT_EDIT_FORM
   });

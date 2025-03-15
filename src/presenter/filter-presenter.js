@@ -1,4 +1,4 @@
-import { render, remove } from '../framework/render.js';
+import { render } from '../framework/render.js';
 import FilterListView from '../view/filter-list-view/filter-list-view.js';
 import { FilterAction } from '../const.js';
 

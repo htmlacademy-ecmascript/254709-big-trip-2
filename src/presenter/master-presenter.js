@@ -6,7 +6,6 @@ import WaypointEmptyView from '../view/waypoint-empty-view/waypoint-empty-view.j
 
 import { getSortbyDefault, getSortbyTime, getSortbyPrice } from '../utils/sort.js';
 import { UserAction, UpdateType, SortType, EventsMsg, FilterAction } from '../const.js';
-import FilterPresenter from './filter-presenter.js';
 import { render } from '../framework/render.js';
 
 export default class MasterPresenter {
