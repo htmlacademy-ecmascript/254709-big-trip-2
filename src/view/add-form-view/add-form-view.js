@@ -3,10 +3,8 @@ import { POINT_TYPES } from '../../const.js';
 import { humanizeEditFormDate, DATE_FORMAT_EDIT_FORM } from '../../utils/waypoints.js';
 import { addFormTemplate } from './add-form-view-template.js';
 import flatpickr from 'flatpickr';
-import { v4 as uuidv4 } from 'uuid';
 
 const BLANK_WAYPOINT = {
-  id: uuidv4(),
   type: 'flight',
   dateFrom: null,
   dateTo: null,
@@ -35,7 +33,7 @@ const createOffersMap = (offers) => {
   return map;
 };
 
-const createAddFormTemplate = (waypoint, offers, destination, offerType, destinationsAll) => {
+const createAddFormTemplate = (waypoint, offers, destination, offerType, destinationsAll, isDisabled, isSaving) => {
   const idWaypoints = offers.map((item) => item.id);
   const { type, dateFrom, dateTo, basePrice, id } = waypoint;
   const { name: namePoint, description, pictures } = destination;
@@ -55,7 +53,9 @@ const createAddFormTemplate = (waypoint, offers, destination, offerType, destina
     destinationsAll,
     createClassName,
     humanizeEditFormDate,
-    DATE_FORMAT_EDIT_FORM
+    DATE_FORMAT_EDIT_FORM,
+    isDisabled,
+    isSaving,
   });
 };
 
@@ -107,8 +107,8 @@ export default class AddFormView extends AbstractStatefulView {
   }
 
   get template() {
-    const { waypoint, offers, destination, offerType, destinationsAll } = this._state;
-    return createAddFormTemplate(waypoint, offers, destination, offerType, destinationsAll);
+    const { waypoint, offers, destination, offerType, destinationsAll, isDisabled, isSaving } = this._state;
+    return createAddFormTemplate(waypoint, offers, destination, offerType, destinationsAll, isDisabled, isSaving);
   }
 
   #deleteClickHandler = (evt) => {
@@ -118,15 +118,16 @@ export default class AddFormView extends AbstractStatefulView {
 
   #submitClickHandler = (evt) => {
     evt.preventDefault();
-
-    const destinationValid = this._state.destination.id !== null;
-    const priceValid = this._state.waypoint.basePrice > 0;
-
-    if (!destinationValid || !priceValid) {
+    if (!this.#validateWaypointData()) {
       return;
     }
-
     this.#onFormSubmit(AddFormView.parseStateToData(this._state));
+  };
+
+  #validateWaypointData = () => {
+    const destinationValid = this._state.destination.id !== null;
+    const priceValid = this._state.waypoint.basePrice > 0;
+    return destinationValid && priceValid;
   };
 
   #typeChangeHandler = (evt) => {
@@ -278,18 +279,24 @@ export default class AddFormView extends AbstractStatefulView {
     offerType,
     offersAll,
     destination,
-    destinationsAll
+    destinationsAll,
+    isDisabled: false,
+    isSaving: false,
   });
 
-  static parseStateToData = (state) => ({
-    waypoint: {
-      ...state.waypoint,
-      offersId: state.offers.map((offer) => offer.id),
-      destination: state.destination.id
-    },
-    offers: state.offers,
-    destination: state.destination,
-    offerType: state.offerType,
-    destinationsAll: state.destinationsAll
-  });
+  static parseStateToData = (state) => {
+    delete state.isDisabled;
+    delete state.isSaving;
+    return {
+      waypoint: {
+        ...state.waypoint,
+        offersId: state.offers.map((offer) => offer.id),
+        destination: state.destination.id
+      },
+      offers: state.offers,
+      destination: state.destination,
+      offerType: state.offerType,
+      destinationsAll: state.destinationsAll
+    };
+  };
 }

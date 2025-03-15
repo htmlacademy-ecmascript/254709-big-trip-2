@@ -13,7 +13,9 @@ export const addFormTemplate = ({
   destinationsAll,
   createClassName,
   humanizeEditFormDate,
-  DATE_FORMAT_EDIT_FORM
+  DATE_FORMAT_EDIT_FORM,
+  isDisabled,
+  isSaving
 }) => (`<li class="trip-events__item"><form class="event event--edit" action="#" method="post">
     <header class="event__header">
       <div class="event__type-wrapper">
@@ -60,7 +62,7 @@ export const addFormTemplate = ({
         <input class="event__input  event__input--price" id="event-price-${id}" type="number" name="event-price" value="${basePrice}">
       </div>
 
-      <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
+      <button class="event__save-btn  btn  btn--blue" type="submit" ${isDisabled ? 'disabled' : ''}>${isSaving ? 'Saving...' : 'Save'}</button>
       <button class="event__reset-btn" type="reset">Cancel</button>
     </header>
     <section class="event__details">

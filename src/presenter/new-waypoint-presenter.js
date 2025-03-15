@@ -32,7 +32,9 @@ export default class NewWaypointPresenter {
   #onNewWaypointClick = () => {
     this.#newWaypointBtn.setAttribute('disabled', '');
     document.addEventListener('keydown', this.#escKeyDownHandler);
-    this.#sortPresenter.resetSortType();
+    if (this.#sortPresenter) {
+      this.#sortPresenter.resetSortType();
+    }
     this.#filterPresenter.resetFilter();
 
     this.#addFormComponent = new AddFormView({
@@ -58,7 +60,7 @@ export default class NewWaypointPresenter {
 
     this.#handleDataChange(
       UserAction.ADD_WAYPOINT,
-      UpdateType.MINOR,
+      UpdateType.VIEW_CHANGE,
       formData.waypoint
     );
     this.#destroyForm();

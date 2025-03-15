@@ -11,7 +11,6 @@ export const editFormTemplate = ({
   idWaypoints,
   offerType,
   destinationsAll,
-  createClassName,
   humanizeEditFormDate,
   DATE_FORMAT_EDIT_FORM
 }) => (`<li class="trip-events__item"><form class="event event--edit" action="#" method="post">
@@ -74,12 +73,12 @@ export const editFormTemplate = ({
             ${offerType.offers.map(({ title, id: offerId, price }) => `
               <div class="event__offer-selector">
                 <input class="event__offer-checkbox  visually-hidden"
-                  id="event-offer-${createClassName(title)}-${offerId}"
+                  id="event-offer-${offerId}"
                   data-offer-id="${offerId}"
                   type="checkbox"
-                  name="event-offer-${createClassName(title)}"
+                  name="event-offer-${offerId}"
                   ${idWaypoints.includes(offerId) && 'checked'}>
-                <label class="event__offer-label" for="event-offer-${createClassName(title)}-${offerId}">
+                <label class="event__offer-label" for="event-offer-${offerId}">
                   <span class="event__offer-title">${title}</span>
                   &plus;&euro;&nbsp;
                   <span class="event__offer-price">${price}</span>

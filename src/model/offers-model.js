@@ -1,7 +1,9 @@
-import { mockOffers } from '../mocks/waypoints.js';
-
 export default class OffersModel {
-  #allOffers = mockOffers;
+  #allOffers = null;
+
+  init(offers) {
+    this.#allOffers = offers;
+  }
 
   get allOffers() {
     return this.#allOffers;
