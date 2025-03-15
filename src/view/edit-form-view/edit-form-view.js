@@ -237,7 +237,10 @@ export default class EditFormView extends AbstractStatefulView {
     offerType,
     offersAll,
     destination,
-    destinationsAll
+    destinationsAll,
+    isDisabled: false,
+    isSaving: false,
+    isDeleting: false,
   });
 
   static parseStateToData = (state) => ({

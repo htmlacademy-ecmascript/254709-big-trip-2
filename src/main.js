@@ -9,7 +9,7 @@ import { EventsMsg } from './const.js';
 import { render } from './framework/render.js';
 import 'flatpickr/dist/flatpickr.min.css';
 
-const AUTHORIZATION = 'Basic es1d223a9a';
+const AUTHORIZATION = 'Basic es1d223a8a';
 const END_POINT = 'https://22.objects.htmlacademy.pro/big-trip';
 
 const tripMainContainer = document.querySelector('.trip-main');
