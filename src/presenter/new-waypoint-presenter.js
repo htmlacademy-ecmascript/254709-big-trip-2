@@ -55,15 +55,28 @@ export default class NewWaypointPresenter {
     }
   };
 
+  setSaving() {
+    this.#addFormComponent.updateElement({isDisabled: true, isSaving: true,});
+  }
+
+  setSaved() {
+    this.#destroyForm();
+  }
+
+  setFormError() {
+    const resetFormState = () => {
+      this.#addFormComponent.updateElement({isDisabled: false, isSaving: false,});
+    };
+    this.#addFormComponent.shake(resetFormState);
+  }
 
   #handleFormSubmit = (formData) => {
-
+    this.setSaving();
     this.#handleDataChange(
       UserAction.ADD_WAYPOINT,
       UpdateType.VIEW_CHANGE,
       formData.waypoint
     );
-    this.#destroyForm();
   };
 
   #handleCancelClick = () => {

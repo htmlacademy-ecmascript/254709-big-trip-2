@@ -115,18 +115,39 @@ export default class WaypointPresenter {
   #onFormSubmitChange = (updatedWaypoint) => {
     this.#waypoint = updatedWaypoint.waypoint;
     this.#handleDataChange(UserAction.UPDATE_WAYPOINT, UpdateType.PATCH, {...this.#waypoint});
-    this.#toggleStateWaypoint(false);
   };
 
   #deleteWaypoint = (deletedWaypoint) => {
     this.#waypoint = deletedWaypoint.waypoint;
     this.#handleDataChange(UserAction.DELETE_WAYPOINT, UpdateType.VIEW_CHANGE, {...this.#waypoint});
-    this.#toggleStateWaypoint(false);
   };
 
   #toggleStateFavorite = () => {
     this.#handleDataChange(UserAction.UPDATE_WAYPOINT, UpdateType.PATCH, {...this.#waypoint, isFavorite: !this.#waypoint.isFavorite});
   };
+
+  setSaving() {
+    if (this.#editFormComponent) {
+      this.#editFormComponent.updateElement({isDisabled: true, isSaving: true});
+    }
+  }
+
+  setDeleting() {
+    if (this.#editFormComponent) {
+      this.#editFormComponent.updateElement({isDisabled: true, isDeleting: true});
+    }
+  }
+
+  setSaved() {
+    this.#toggleStateWaypoint(false);
+  }
+
+  setFormError() {
+    const resetFormState = () => {
+      this.#editFormComponent.updateElement({isDisabled: false, isSaving: false, isDeleting: false});
+    };
+    this.#editFormComponent.shake(resetFormState);
+  }
 
   resetView() {
     if (this.#mode !== Mode.VIEW) {

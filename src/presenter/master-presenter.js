@@ -149,17 +149,35 @@ export default class MasterPresenter {
   };
 
   // Меняем модель тут, получая данные из waypoint-presenter. После изменения данных срабатывает handleModelEvent
-  #handleViewAction = (userAction, updateType, updatedWaypoint) => {
-    switch (userAction) {
-      case UserAction.UPDATE_WAYPOINT:
-        this.#waypointsModel.updateWaypoint(updateType, updatedWaypoint);
-        break;
-      case UserAction.ADD_WAYPOINT:
-        this.#waypointsModel.addWaypoint(updateType, updatedWaypoint);
-        break;
-      case UserAction.DELETE_WAYPOINT:
-        this.#waypointsModel.deleteWaypoint(updateType, updatedWaypoint);
-        break;
+  #handleViewAction = async (userAction, updateType, updatedWaypoint) => {
+    try {
+      switch (userAction) {
+        case UserAction.UPDATE_WAYPOINT:
+          this.#waypointPresenters.get(updatedWaypoint.id).setSaving();
+          await this.#waypointsModel.updateWaypoint(updateType, updatedWaypoint);
+          this.#waypointPresenters.get(updatedWaypoint.id).setSaved();
+          break;
+        case UserAction.ADD_WAYPOINT:
+          await this.#waypointsModel.addWaypoint(updateType, updatedWaypoint);
+          this.#newWaypointsPresenter.setSaved();
+          break;
+        case UserAction.DELETE_WAYPOINT:
+          this.#waypointPresenters.get(updatedWaypoint.id).setDeleting();
+          await this.#waypointsModel.deleteWaypoint(updateType, updatedWaypoint);
+          this.#waypointPresenters.get(updatedWaypoint.id).setSaved();
+          break;
+      }
+    } catch (error) {
+      // Обработка ошибки
+      if (userAction === UserAction.ADD_WAYPOINT) {
+        this.#newWaypointsPresenter.setFormError();
+      } else if (userAction === UserAction.UPDATE_WAYPOINT || userAction === UserAction.DELETE_WAYPOINT) {
+        // Возвращаем форму в исходное состояние в случае ошибки
+        const presenter = this.#waypointPresenters.get(updatedWaypoint.id);
+        if (presenter) {
+          presenter.setFormError();
+        }
+      }
     }
   };
 

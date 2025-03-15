@@ -15,7 +15,7 @@ const createOffersMap = (offers) => {
   return map;
 };
 
-const createEditFormTemplate = (waypoint, offers, destination, offerType, destinationsAll) => {
+const createEditFormTemplate = (waypoint, offers, destination, offerType, destinationsAll, isDeleting, isSaving, isDisabled) => {
   const idWaypoints = offers.map((item) => item.id);
   const { type, dateFrom, dateTo, basePrice, id } = waypoint;
   const { name: namePoint, description, pictures } = destination;
@@ -33,7 +33,10 @@ const createEditFormTemplate = (waypoint, offers, destination, offerType, destin
     offerType,
     destinationsAll,
     humanizeEditFormDate,
-    DATE_FORMAT_EDIT_FORM
+    DATE_FORMAT_EDIT_FORM,
+    isDeleting,
+    isSaving,
+    isDisabled
   });
 };
 export default class EditFormView extends AbstractStatefulView {
@@ -74,11 +77,12 @@ export default class EditFormView extends AbstractStatefulView {
   }
 
   get template() {
-    const {waypoint, offers, destination, offerType, destinationsAll} = this._state;
-    return createEditFormTemplate(waypoint, offers, destination, offerType, destinationsAll);
+    const {waypoint, offers, destination, offerType, destinationsAll, isDeleting, isSaving, isDisabled} = this._state;
+    return createEditFormTemplate(waypoint, offers, destination, offerType, destinationsAll, isDeleting, isSaving, isDisabled);
   }
 
-  #deleteClickHandler = () => {
+  #deleteClickHandler = (evt) => {
+    evt.preventDefault();
     this.#onDeleteClick(EditFormView.parseStateToData(this._state));
   };
 
@@ -243,15 +247,20 @@ export default class EditFormView extends AbstractStatefulView {
     isDeleting: false,
   });
 
-  static parseStateToData = (state) => ({
-    waypoint: {
-      ...state.waypoint,
-      offersId: state.offers.map((offer) => offer.id),
-      destination: state.destination.id
-    },
-    offers: state.offers,
-    destination: state.destination,
-    offerType: state.offerType,
-    destinationsAll: state.destinationsAll
-  });
+  static parseStateToData = (state) => {
+    delete state.isDisabled;
+    delete state.isSaving;
+    delete state.isDeleting;
+    return {
+      waypoint: {
+        ...state.waypoint,
+        offersId: state.offers.map((offer) => offer.id),
+        destination: state.destination.id
+      },
+      offers: state.offers,
+      destination: state.destination,
+      offerType: state.offerType,
+      destinationsAll: state.destinationsAll
+    };
+  };
 }
