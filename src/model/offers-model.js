@@ -18,10 +18,6 @@ export default class OffersModel {
     return offersType.offers.filter((item) => itemsId.includes(item.id));
   }
 
-  getOffersIdAndPrice() {
-    return this.#allOffers.flatMap((offerType) => offerType.offers.map((offer) => ({id: offer.id, price: offer.price})));
-  }
-
   getOfferPriceById(targetId) {
     for (const offerType of this.#allOffers) {
       const foundOffer = offerType.offers.find((offer) => offer.id === targetId);

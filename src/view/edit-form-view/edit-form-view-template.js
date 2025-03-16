@@ -12,7 +12,6 @@ export const editFormTemplate = ({
   offerType,
   destinationsAll,
   humanizeEditFormDate,
-  DATE_FORMAT_EDIT_FORM,
   isDeleting,
   isSaving,
   isDisabled
@@ -48,10 +47,10 @@ export const editFormTemplate = ({
 
       <div class="event__field-group  event__field-group--time">
         <label class="visually-hidden" for="event-start-time-${id}">From</label>
-        <input class="event__input  event__input--time" id="event-start-time-${id}" type="text" name="event-start-time" value="${humanizeEditFormDate(dateFrom, DATE_FORMAT_EDIT_FORM)}">
+        <input class="event__input  event__input--time" id="event-start-time-${id}" type="text" name="event-start-time" value="${humanizeEditFormDate(dateFrom)}">
         &mdash;
         <label class="visually-hidden" for="event-end-time-${id}">To</label>
-        <input class="event__input  event__input--time" id="event-end-time-${id}" type="text" name="event-end-time" value="${humanizeEditFormDate(dateTo, DATE_FORMAT_EDIT_FORM)}">
+        <input class="event__input  event__input--time" id="event-end-time-${id}" type="text" name="event-end-time" value="${humanizeEditFormDate(dateTo)}">
       </div>
 
       <div class="event__field-group  event__field-group--price">

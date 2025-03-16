@@ -74,6 +74,7 @@ export default class MasterPresenter {
       listContainer: this.#tripEventsContainer,
       waypointsModel: this.#waypointsModel,
       offersModel: this.#offersModel,
+      destinationsModel: this.#destinationsModel,
     });
 
     this.#bigTripPresenter.init();

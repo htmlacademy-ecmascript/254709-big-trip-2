@@ -1,6 +1,6 @@
 import AbstractStatefulView from '../../framework/view/abstract-stateful-view.js';
 import { POINT_TYPES } from '../../const.js';
-import { humanizeEditFormDate, DATE_FORMAT_EDIT_FORM } from '../../utils/waypoints.js';
+import { humanizeEditFormDate } from '../../utils/waypoints.js';
 import { editFormTemplate } from './edit-form-view-template.js';
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
@@ -33,7 +33,6 @@ const createEditFormTemplate = (waypoint, offers, destination, offerType, destin
     offerType,
     destinationsAll,
     humanizeEditFormDate,
-    DATE_FORMAT_EDIT_FORM,
     isDeleting,
     isSaving,
     isDisabled
