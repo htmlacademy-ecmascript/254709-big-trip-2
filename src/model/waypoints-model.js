@@ -11,6 +11,9 @@ export default class WaypointsModel extends Observable {
   }
 
   init(waypoints) {
+    if (!Array.isArray(waypoints)) {
+      waypoints = [];
+    }
     this.#waypoints = waypoints.map(this.#adaptToClient);
     this.#updateOriginalWaypoints();
   }
@@ -62,7 +65,6 @@ export default class WaypointsModel extends Observable {
       const addedWaypoint = this.#adaptToClient(response);
       this.#waypoints = [addedWaypoint, ...this.#waypoints];
       this.#updateOriginalWaypoints();
-
       this._notify(updateType, addedWaypoint);
     } catch(err) {
       throw new Error('Can\'t add waypoint');

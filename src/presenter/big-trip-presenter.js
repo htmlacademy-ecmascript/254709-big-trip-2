@@ -22,12 +22,14 @@ export default class BigTripPresenter {
   }
 
   init() {
-    this.#renderWaypointList();
+    if (!this.#renderWaypointList()) {
+      this.#renderWaypointList();
+    }
+
     this.#waypointsModel.addObserver(this.#handleModelEvent);
-    if (this.#waypointsModel.originalWaypoints.length > 0) {
+    if (this.#waypointsModel.originalWaypoints.length > 0 && !this.#tripInfoView) {
       this.#renderTripInfo();
     }
-    this.#getDestinationsDate(this.#waypointsModel.originalWaypoints);
   }
 
   #getDestinationsDate = (waypoints) => {
@@ -77,11 +79,13 @@ export default class BigTripPresenter {
   };
 
   #handleModelEvent = () => {
-    if (this.#waypointsModel.originalWaypoints.length > 0) {
+    if (this.#waypointsModel.originalWaypoints.length === 0) {
       this.#tripInfoView.destroy();
       this.#tripInfoView = null;
-      this.#renderTripInfo();
     }
+    this.#tripInfoView.destroy();
+    this.#tripInfoView = null;
+    this.#renderTripInfo();
   };
 
   #renderTripInfo = () => {

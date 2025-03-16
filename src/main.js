@@ -9,8 +9,8 @@ import { EventsMsg } from './const.js';
 import { render } from './framework/render.js';
 import 'flatpickr/dist/flatpickr.min.css';
 
-const AUTHORIZATION = 'Basic es1d223a7a';
-const END_POINT = 'https://22.objects.htmlacademy.pro/big-trip';
+const AUTHORIZATION = 'Basic es1d773a7a';
+const END_POINT = 'https://23.objects.htmlacademy.pro/big-trip';
 
 const tripMainContainer = document.querySelector('.trip-main');
 const filtersListContainer = tripMainContainer.querySelector('.trip-controls__filters');
@@ -33,7 +33,6 @@ const filterPresenter = new FilterPresenter({
 async function runApp() {
   try {
     newWaypointBtn.setAttribute('disabled', '');
-    filterPresenter.init();
 
     const loadingMsgComponent = new WaypointEmptyView(EventsMsg.LOADING);
     render(loadingMsgComponent, tripEventsContainer);
@@ -44,8 +43,11 @@ async function runApp() {
     offersModel.init(offers);
     const waypoints = await waypointsApiService.waypoints;
     waypointsModel.init(waypoints);
+
     loadingMsgComponent.destroy();
     newWaypointBtn.removeAttribute('disabled', '');
+
+    filterPresenter.init();
 
     const masterPresenter = new MasterPresenter({
       tripMainContainer,

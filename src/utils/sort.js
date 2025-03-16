@@ -6,6 +6,7 @@ export const getSortbyDefault = (a, b) => {
   return dateFromA - dateFromB;
 };
 
+
 export const getSortbyTime = (a, b) => {
   const durationA = (new Date(a.dateTo)) - (new Date(a.dateFrom));
   const durationB = (new Date(b.dateTo)) - (new Date(b.dateFrom));

@@ -14,7 +14,7 @@ export default class NewWaypointPresenter {
   #filterPresenter = null;
 
 
-  constructor({ listContainer, offersModel, destinationsModel, onDataChange, sortPresenter, filterPresenter }) {
+  constructor({ listContainer, offersModel, destinationsModel, onDataChange, sortPresenter, filterPresenter}) {
     this.#listContainer = listContainer;
     this.#offersModel = offersModel;
     this.#destinationsModel = destinationsModel;
@@ -34,16 +34,14 @@ export default class NewWaypointPresenter {
     document.addEventListener('keydown', this.#escKeyDownHandler);
     if (this.#sortPresenter) {
       this.#sortPresenter.resetSortType();
+      this.#filterPresenter.resetFilter();
     }
-    this.#filterPresenter.resetFilter();
-
     this.#addFormComponent = new AddFormView({
       offersModel: this.#offersModel,
       destinationsModel: this.#destinationsModel,
       onFormSubmit: this.#handleFormSubmit,
       onDeleteClick: this.#handleCancelClick
     });
-
     render(this.#addFormComponent, this.#formContainer, RenderPosition.AFTERBEGIN);
   };
 
