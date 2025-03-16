@@ -46,7 +46,7 @@ export default class BigTripPresenter {
   };
 
   #renderTripInfo = () => {
-    const totalPrice = this.#getFullPrice(this.#waypointsModel.waypoints);
+    const totalPrice = this.#getFullPrice(this.#waypointsModel.originalWaypoints);
     this.#tripInfoView = new TripInfoView({ price: totalPrice });
     render(this.#tripInfoView, this.#tripInfoContainer, RenderPosition.AFTERBEGIN);
   };
