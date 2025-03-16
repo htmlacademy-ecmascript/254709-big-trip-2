@@ -71,7 +71,9 @@ export default class MasterPresenter {
   #initBigTripPresenter = () => {
     this.#bigTripPresenter = new BigTripPresenter({
       tripInfoContainer: this.#tripMainContainer,
-      listContainer: this.#tripEventsContainer
+      listContainer: this.#tripEventsContainer,
+      waypointsModel: this.#waypointsModel,
+      offersModel: this.#offersModel,
     });
 
     this.#bigTripPresenter.init();
