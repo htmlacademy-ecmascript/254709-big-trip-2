@@ -1,9 +1,9 @@
-export const tripInfoTemplate = (price, destinationsString) => (`
+export const tripInfoTemplate = (price, destinationsString, destinationsDateString) => (`
           <section class="trip-main__trip-info  trip-info">
             <div class="trip-info__main">
               <h1 class="trip-info__title">${destinationsString}</h1>
 
-              <p class="trip-info__dates">18&nbsp;&mdash;&nbsp;20 Mar</p>
+              <p class="trip-info__dates">${destinationsDateString}</p>
             </div>
 
             <p class="trip-info__cost">

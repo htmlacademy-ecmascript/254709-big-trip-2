@@ -2,7 +2,7 @@ import { render, RenderPosition } from '../framework/render.js';
 import TripInfoView from '../view/trip-info-view/trip-info-view.js';
 import WaypointListView from '../view/waypoint-list-view/waypoint-list-view.js';
 import { getSortbyDefault } from '../utils/sort.js';
-// import { humanizeTaskHeadDate } from '../utils/waypoints.js';
+import { humanizeTaskHeadDate } from '../utils/waypoints.js';
 
 export default class BigTripPresenter {
   #tripInfoContainer = null;
@@ -27,7 +27,16 @@ export default class BigTripPresenter {
     if (this.#waypointsModel.originalWaypoints.length > 0) {
       this.#renderTripInfo();
     }
+    this.#getDestinationsDate(this.#waypointsModel.originalWaypoints);
   }
+
+  #getDestinationsDate = (waypoints) => {
+    const sortedWaypoints = [...waypoints].sort(getSortbyDefault);
+    const dateFrom = humanizeTaskHeadDate(sortedWaypoints[0].dateFrom);
+    const dateTo = humanizeTaskHeadDate(sortedWaypoints[sortedWaypoints.length - 1].dateTo);
+    const destinationsDateString = `${dateFrom} — ${dateTo}`;
+    return destinationsDateString.toLowerCase();
+  };
 
   #getDestinationsInfo = (waypoints) => {
     const sortedWaypoints = [...waypoints].sort(getSortbyDefault);
@@ -78,7 +87,8 @@ export default class BigTripPresenter {
   #renderTripInfo = () => {
     const totalPrice = this.#getFullPrice(this.#waypointsModel.originalWaypoints);
     const destinationsString = this.#getDestinationsInfo(this.#waypointsModel.originalWaypoints);
-    this.#tripInfoView = new TripInfoView({ price: totalPrice, destinationsString: destinationsString });
+    const destinationsDateString = this.#getDestinationsDate(this.#waypointsModel.originalWaypoints);
+    this.#tripInfoView = new TripInfoView({ price: totalPrice, destinationsString: destinationsString, destinationsDateString: destinationsDateString });
     render(this.#tripInfoView, this.#tripInfoContainer, RenderPosition.AFTERBEGIN);
   };
 
