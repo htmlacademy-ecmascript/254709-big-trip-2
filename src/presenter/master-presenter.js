@@ -75,6 +75,7 @@ export default class MasterPresenter {
       waypointsModel: this.#waypointsModel,
       offersModel: this.#offersModel,
       destinationsModel: this.#destinationsModel,
+      waypointEmptyComponent: this.#waypointEmptyComponent
     });
 
     this.#bigTripPresenter.init();
@@ -167,6 +168,7 @@ export default class MasterPresenter {
           this.#waypointPresenters.get(updatedWaypoint.id).setSaved();
           break;
         case UserAction.ADD_WAYPOINT:
+          this.#newWaypointsPresenter.setSaving();
           await this.#waypointsModel.addWaypoint(updateType, updatedWaypoint);
           this.#newWaypointsPresenter.setSaved();
           this.#reload();

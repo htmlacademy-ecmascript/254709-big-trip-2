@@ -133,6 +133,8 @@ export default class FilterPresenter {
     });
     this.#updateFilterAvailability();
 
-    this.#onFilterChange(FilterAction.RESET_FILTER);
+    if (this.#onFilterChange) {
+      this.#onFilterChange(FilterAction.RESET_FILTER);
+    }
   }
 }

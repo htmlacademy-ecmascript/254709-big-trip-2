@@ -1,4 +1,4 @@
-import { render, remove, RenderPosition } from '../framework/render.js';
+import { render, remove, replace, RenderPosition } from '../framework/render.js';
 import AddFormView from '../view/add-form-view/add-form-view.js';
 import { UserAction, UpdateType } from '../const.js';
 
@@ -12,9 +12,10 @@ export default class NewWaypointPresenter {
   #newWaypointBtn = null;
   #sortPresenter = null;
   #filterPresenter = null;
+  #waypointEmptyComponent = null;
 
 
-  constructor({ listContainer, offersModel, destinationsModel, onDataChange, sortPresenter, filterPresenter}) {
+  constructor({ listContainer, offersModel, destinationsModel, onDataChange, sortPresenter, filterPresenter, waypointEmptyComponent}) {
     this.#listContainer = listContainer;
     this.#offersModel = offersModel;
     this.#destinationsModel = destinationsModel;
@@ -22,6 +23,7 @@ export default class NewWaypointPresenter {
     this.#handleDataChange = onDataChange;
     this.#sortPresenter = sortPresenter;
     this.#filterPresenter = filterPresenter;
+    this.#waypointEmptyComponent = waypointEmptyComponent;
   }
 
   init() {
@@ -32,7 +34,7 @@ export default class NewWaypointPresenter {
   #onNewWaypointClick = () => {
     this.#newWaypointBtn.setAttribute('disabled', '');
     document.addEventListener('keydown', this.#escKeyDownHandler);
-    if (this.#sortPresenter) {
+    if (this.#sortPresenter && typeof this.#sortPresenter.resetSortType === 'function') {
       this.#sortPresenter.resetSortType();
       this.#filterPresenter.resetFilter();
     }
@@ -42,12 +44,18 @@ export default class NewWaypointPresenter {
       onFormSubmit: this.#handleFormSubmit,
       onDeleteClick: this.#handleCancelClick
     });
+    if (this.#waypointEmptyComponent) {
+      remove(this.#waypointEmptyComponent);
+    }
     render(this.#addFormComponent, this.#formContainer, RenderPosition.AFTERBEGIN);
   };
 
   #escKeyDownHandler = (evt) => {
     if (evt.key === 'Escape') {
       evt.preventDefault();
+      if (this.#waypointEmptyComponent) {
+        replace(this.#waypointEmptyComponent, this.#addFormComponent);
+      }
       this.#destroyForm();
       document.removeEventListener('keydown', this.#escKeyDownHandler);
     }
@@ -78,6 +86,9 @@ export default class NewWaypointPresenter {
   };
 
   #handleCancelClick = () => {
+    if (this.#waypointEmptyComponent) {
+      replace(this.#waypointEmptyComponent, this.#addFormComponent);
+    }
     this.#destroyForm();
   };
 
