@@ -2,7 +2,7 @@ import { render, RenderPosition } from '../framework/render.js';
 import TripInfoView from '../view/trip-info-view/trip-info-view.js';
 import WaypointListView from '../view/waypoint-list-view/waypoint-list-view.js';
 import { getSortbyDefault } from '../utils/sort.js';
-import { humanizeTaskHeadDate } from '../utils/waypoints.js';
+// import { humanizeTaskHeadDate } from '../utils/waypoints.js';
 
 export default class BigTripPresenter {
   #tripInfoContainer = null;
@@ -24,7 +24,9 @@ export default class BigTripPresenter {
   init() {
     this.#renderWaypointList();
     this.#waypointsModel.addObserver(this.#handleModelEvent);
-    this.#renderTripInfo();
+    if (this.#waypointsModel.originalWaypoints.length > 0) {
+      this.#renderTripInfo();
+    }
   }
 
   #getDestinationsInfo = (waypoints) => {
@@ -66,9 +68,11 @@ export default class BigTripPresenter {
   };
 
   #handleModelEvent = () => {
-    this.#tripInfoView.destroy();
-    this.#tripInfoView = null;
-    this.#renderTripInfo();
+    if (this.#waypointsModel.originalWaypoints.length > 0) {
+      this.#tripInfoView.destroy();
+      this.#tripInfoView = null;
+      this.#renderTripInfo();
+    }
   };
 
   #renderTripInfo = () => {

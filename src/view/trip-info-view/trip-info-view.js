@@ -15,7 +15,6 @@ export default class TripInfoView extends AbstractView {
   }
 
   get template() {
-    console.log(this.#destinationsString);
     return createTripInfoTemplate(this.#price, this.#destinationsString);
   }
 
