@@ -8,7 +8,7 @@ export default class FilterPresenter {
   #onFilterChange = null;
   #filterListComponent = null;
   #currentFilter = 'everything';
-  #now = null;
+  #currentDate = null;
 
   constructor({ filtersListContainer, waypointsModel, onFilterChange }) {
     this.#filtersListContainer = filtersListContainer;
@@ -36,34 +36,52 @@ export default class FilterPresenter {
     this.#onFilterChange = callback;
   }
 
-  #renderFilterList = () => {
-    this.#filterListComponent = new FilterListView();
-    render(this.#filterListComponent, this.#filtersListContainer);
-    this.#filterListComponent.element.addEventListener('click', this.#handleFilterClick);
-  };
+  applyCurrentFilter(currentFilter) {
+    this.#currentFilter = currentFilter;
+    this.#onFilterChange(FilterAction.SET_FILTER, currentFilter);
+  }
+
+  getCurrentFilter() {
+    return this.#currentFilter;
+  }
+
+  resetFilter() {
+    this.#currentFilter = 'everything';
+    const filters = this.#filterListComponent.element.querySelectorAll('.trip-filters__filter-input');
+    filters.forEach((filter) => {
+      filter.checked = filter.value === 'everything';
+    });
+    this.#updateFilterAvailability();
+
+    if (this.#onFilterChange) {
+      this.#onFilterChange(FilterAction.RESET_FILTER);
+    }
+  }
 
   getFilteredWaypoints = (type) => {
-    this.#now = new Date();
+    this.#currentDate = new Date();
 
 
     switch(type) {
       case 'EVERYTHING':
         return this.#waypointsModel.originalWaypoints;
       case 'FUTURE':
-        return this.#waypointsModel.originalWaypoints.filter((waypoint) => new Date(waypoint.dateFrom) > this.#now);
+        return this.#waypointsModel.originalWaypoints.filter((waypoint) => new Date(waypoint.dateFrom) > this.#currentDate);
       case 'PRESENT':
-        return this.#waypointsModel.originalWaypoints.filter((waypoint) => (new Date(waypoint.dateFrom) <= this.#now) && (new Date(waypoint.dateTo) >= this.#now));
+        return this.#waypointsModel.originalWaypoints.filter((waypoint) => (new Date(waypoint.dateFrom) <= this.#currentDate) && (new Date(waypoint.dateTo) >= this.#currentDate));
       case 'PAST':
-        return this.#waypointsModel.originalWaypoints.filter((waypoint) => new Date(waypoint.dateTo) < this.#now);
+        return this.#waypointsModel.originalWaypoints.filter((waypoint) => new Date(waypoint.dateTo) < this.#currentDate);
     }
   };
 
-  #updateFilterAvailability = () => {
-    this.#now = new Date();
+  #renderFilterList = () => {
+    this.#filterListComponent = new FilterListView();
+    render(this.#filterListComponent, this.#filtersListContainer);
+    this.#filterListComponent.element.addEventListener('click', this.#handleFilterClick);
+  };
 
-    if (!this.#waypointsModel || !this.#waypointsModel.originalWaypoints) {
-      return [];
-    }
+  #updateFilterAvailability = () => {
+    this.#currentDate = new Date();
 
     const filters = this.#filterListComponent.element.querySelectorAll('.trip-filters__filter-input');
     const everythingFiltersQty = this.#waypointsModel.originalWaypoints.length;
@@ -115,26 +133,4 @@ export default class FilterPresenter {
     this.#currentFilter = filterValue;
     this.applyCurrentFilter(this.#currentFilter);
   };
-
-  applyCurrentFilter(currentFilter) {
-    this.#currentFilter = currentFilter;
-    this.#onFilterChange(FilterAction.SET_FILTER, currentFilter);
-  }
-
-  getCurrentFilter() {
-    return this.#currentFilter;
-  }
-
-  resetFilter() {
-    this.#currentFilter = 'everything';
-    const filters = this.#filterListComponent.element.querySelectorAll('.trip-filters__filter-input');
-    filters.forEach((filter) => {
-      filter.checked = filter.value === 'everything';
-    });
-    this.#updateFilterAvailability();
-
-    if (this.#onFilterChange) {
-      this.#onFilterChange(FilterAction.RESET_FILTER);
-    }
-  }
 }

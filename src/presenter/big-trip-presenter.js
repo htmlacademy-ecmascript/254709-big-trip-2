@@ -1,7 +1,7 @@
 import { render, RenderPosition } from '../framework/render.js';
 import TripInfoView from '../view/trip-info-view/trip-info-view.js';
 import WaypointListView from '../view/waypoint-list-view/waypoint-list-view.js';
-import { getSortbyDefault } from '../utils/sort.js';
+import { getSortByDefault } from '../utils/sort.js';
 import { humanizeTaskHeadDate } from '../utils/waypoints.js';
 
 export default class BigTripPresenter {
@@ -33,7 +33,7 @@ export default class BigTripPresenter {
   }
 
   #getDestinationsDate = (waypoints) => {
-    const sortedWaypoints = [...waypoints].sort(getSortbyDefault);
+    const sortedWaypoints = [...waypoints].sort(getSortByDefault);
     const dateFrom = humanizeTaskHeadDate(sortedWaypoints[0].dateFrom);
     const dateTo = humanizeTaskHeadDate(sortedWaypoints[sortedWaypoints.length - 1].dateTo);
     const destinationsDateString = `${dateFrom} — ${dateTo}`;
@@ -41,7 +41,7 @@ export default class BigTripPresenter {
   };
 
   #getDestinationsInfo = (waypoints) => {
-    const sortedWaypoints = [...waypoints].sort(getSortbyDefault);
+    const sortedWaypoints = [...waypoints].sort(getSortByDefault);
     const allUniqueDestination = [...new Set(sortedWaypoints.map((item) => this.#destinationsModel.getDestinationById(item.destination).name))];
     let destinationsString = null;
     if (allUniqueDestination.length === 1) {

@@ -1,4 +1,4 @@
-import { FilterName } from '../../const.js';
+import { FilterType } from '../../const.js';
 
 const createFiltersTemplate = (filterList) => Object.values(filterList).map((filterItem) => `<div class="trip-filters__filter">
                   <input id="filter-${filterItem.toLowerCase()}" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter" value="${filterItem.toLowerCase()}" ${filterItem === 'EVERYTHING' ? 'checked' : ''}>
@@ -6,6 +6,6 @@ const createFiltersTemplate = (filterList) => Object.values(filterList).map((fil
                 </div>`).join('');
 
 export const filterListTemplate = `<form class="trip-filters" action="#" method="get">
-                ${createFiltersTemplate(FilterName)}
+                ${createFiltersTemplate(FilterType)}
                 <button class="visually-hidden" type="submit">Accept filter</button>
               </form>`;

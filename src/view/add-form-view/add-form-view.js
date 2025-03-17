@@ -90,6 +90,11 @@ export default class AddFormView extends AbstractStatefulView {
     this._restoreHandlers();
   }
 
+  get template() {
+    const { waypoint, offers, destination, offerType, destinationsAll, isDisabled, isSaving } = this._state;
+    return createAddFormTemplate(waypoint, offers, destination, offerType, destinationsAll, isDisabled, isSaving);
+  }
+
   _restoreHandlers() {
     this.element.querySelector('.event--edit').addEventListener('submit', this.#submitClickHandler);
     this.element.querySelector('.event__reset-btn').addEventListener('click', this.#deleteClickHandler);
@@ -106,10 +111,41 @@ export default class AddFormView extends AbstractStatefulView {
     this.#setDatepickers();
   }
 
-  get template() {
-    const { waypoint, offers, destination, offerType, destinationsAll, isDisabled, isSaving } = this._state;
-    return createAddFormTemplate(waypoint, offers, destination, offerType, destinationsAll, isDisabled, isSaving);
-  }
+  #validateWaypointData = () => {
+    const destinationValid = this._state.destination.id !== null;
+    const priceValid = this._state.waypoint.basePrice > 0;
+    return destinationValid && priceValid;
+  };
+
+  #setDatepickers = () => {
+    const [dateFromElement, dateToElement] = this.element.querySelectorAll('.event__input--time');
+    const commonConfig = {
+      enableTime: true,
+      'time_24hr': true,
+      dateFormat: 'd/m/y H:i',
+      locale: {firstDayOfWeek: 1},
+    };
+
+    this.#datepickerFrom = flatpickr(
+      dateFromElement,
+      {
+        ...commonConfig,
+        defaultDate: this._state.waypoint.dateFrom,
+        maxDate: this._state.waypoint.dateTo,
+        onClose: this.#onDateFromChangeHandler,
+      }
+    );
+
+    this.#datepickerTo = flatpickr(
+      dateToElement,
+      {
+        ...commonConfig,
+        defaultDate: this._state.waypoint.dateTo,
+        minDate: this._state.waypoint.dateFrom,
+        onClose: this.#onDateToChangeHandler,
+      }
+    );
+  };
 
   #deleteClickHandler = (evt) => {
     evt.preventDefault();
@@ -123,12 +159,6 @@ export default class AddFormView extends AbstractStatefulView {
       return;
     }
     this.#onFormSubmit(AddFormView.parseStateToData(this._state));
-  };
-
-  #validateWaypointData = () => {
-    const destinationValid = this._state.destination.id !== null;
-    const priceValid = this._state.waypoint.basePrice > 0;
-    return destinationValid && priceValid;
   };
 
   #typeChangeHandler = (evt) => {
@@ -210,36 +240,6 @@ export default class AddFormView extends AbstractStatefulView {
         basePrice: price
       }
     });
-  };
-
-  #setDatepickers = () => {
-    const [dateFromElement, dateToElement] = this.element.querySelectorAll('.event__input--time');
-    const commonConfig = {
-      enableTime: true,
-      'time_24hr': true,
-      dateFormat: 'd/m/y H:i',
-      locale: {firstDayOfWeek: 1},
-    };
-
-    this.#datepickerFrom = flatpickr(
-      dateFromElement,
-      {
-        ...commonConfig,
-        defaultDate: this._state.waypoint.dateFrom,
-        maxDate: this._state.waypoint.dateTo,
-        onClose: this.#onDateFromChangeHandler,
-      }
-    );
-
-    this.#datepickerTo = flatpickr(
-      dateToElement,
-      {
-        ...commonConfig,
-        defaultDate: this._state.waypoint.dateTo,
-        minDate: this._state.waypoint.dateFrom,
-        onClose: this.#onDateToChangeHandler,
-      }
-    );
   };
 
   #onDateFromChangeHandler = ([userDate]) => {

@@ -59,6 +59,27 @@ export default class EditFormView extends AbstractStatefulView {
     this._restoreHandlers();
   }
 
+  get template() {
+    const {waypoint, offers, destination, offerType, destinationsAll, isDeleting, isSaving, isDisabled} = this._state;
+    return createEditFormTemplate(waypoint, offers, destination, offerType, destinationsAll, isDeleting, isSaving, isDisabled);
+  }
+
+  removeElement() {
+    super.removeElement();
+    if (this.#datepickerFrom) {
+      this.#datepickerFrom.destroy();
+      this.#datepickerFrom = null;
+    }
+    if (this.#datepickerTo) {
+      this.#datepickerTo.destroy();
+      this.#datepickerTo = null;
+    }
+  }
+
+  reset() {
+    this.updateElement(this.#initialState);
+  }
+
   _restoreHandlers() {
     this.element.querySelector('.event--edit').addEventListener('submit', this.#submitClickHandler);
     this.element.querySelector('.event__reset-btn').addEventListener('click', this.#deleteClickHandler);
@@ -73,11 +94,6 @@ export default class EditFormView extends AbstractStatefulView {
     this.element.querySelector('.event__input--price').addEventListener('input', this.#priceChangeHandler);
 
     this.#setDatepickers();
-  }
-
-  get template() {
-    const {waypoint, offers, destination, offerType, destinationsAll, isDeleting, isSaving, isDisabled} = this._state;
-    return createEditFormTemplate(waypoint, offers, destination, offerType, destinationsAll, isDeleting, isSaving, isDisabled);
   }
 
   #deleteClickHandler = (evt) => {
@@ -218,22 +234,6 @@ export default class EditFormView extends AbstractStatefulView {
       }
     });
   };
-
-  removeElement() {
-    super.removeElement();
-    if (this.#datepickerFrom) {
-      this.#datepickerFrom.destroy();
-      this.#datepickerFrom = null;
-    }
-    if (this.#datepickerTo) {
-      this.#datepickerTo.destroy();
-      this.#datepickerTo = null;
-    }
-  }
-
-  reset() {
-    this.updateElement(this.#initialState);
-  }
 
   static parseDataToState = (waypoint, offers, offerType, offersAll, destination, destinationsAll) => ({
     waypoint: {...waypoint},

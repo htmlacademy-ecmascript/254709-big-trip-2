@@ -32,6 +32,59 @@ export default class WaypointPresenter {
     this.#renderWaypoint(this.#waypoint, destinationsAll);
   }
 
+  setSaving() {
+    if (this.#editFormComponent) {
+      this.#editFormComponent.updateElement({isDisabled: true, isSaving: true});
+    }
+  }
+
+  setDeleting() {
+    if (this.#editFormComponent) {
+      this.#editFormComponent.updateElement({isDisabled: true, isDeleting: true});
+    }
+  }
+
+  setSaved() {
+    if (this.#mode === Mode.EDITING) {
+      this.#toggleStateWaypoint(false);
+    } else {
+      this.init(this.#waypoint);
+    }
+  }
+
+  setFormError() {
+    if (this.#mode === Mode.VIEW) {
+      this.#waypointComponent.shake();
+      return;
+    }
+
+    const resetFormState = () => {
+      this.#editFormComponent.updateElement({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false,
+      });
+    };
+
+    this.#editFormComponent.shake(resetFormState);
+  }
+
+  resetView() {
+    if (this.#mode !== Mode.VIEW) {
+      this.#editFormComponent.reset();
+      this.#toggleStateWaypoint(false);
+    }
+  }
+
+  clear() {
+    if (this.#waypointComponent) {
+      remove(this.#waypointComponent);
+    }
+    if (this.#editFormComponent) {
+      remove(this.#editFormComponent);
+    }
+  }
+
   #renderWaypoint = (waypoint, destinationsAll) => {
     const offers = this.#offersModel.getOffersById(waypoint.type, waypoint.offersId);
     const offersAll = this.#offersModel.allOffers;
@@ -126,56 +179,4 @@ export default class WaypointPresenter {
     this.#handleDataChange(UserAction.UPDATE_WAYPOINT, UpdateType.PATCH, {...this.#waypoint});
   };
 
-  setSaving() {
-    if (this.#editFormComponent) {
-      this.#editFormComponent.updateElement({isDisabled: true, isSaving: true});
-    }
-  }
-
-  setDeleting() {
-    if (this.#editFormComponent) {
-      this.#editFormComponent.updateElement({isDisabled: true, isDeleting: true});
-    }
-  }
-
-  setSaved() {
-    if (this.#mode === Mode.EDITING) {
-      this.#toggleStateWaypoint(false);
-    } else {
-      this.init(this.#waypoint);
-    }
-  }
-
-  setFormError() {
-    if (this.#mode === Mode.VIEW) {
-      this.#waypointComponent.shake();
-      return;
-    }
-
-    const resetFormState = () => {
-      this.#editFormComponent.updateElement({
-        isDisabled: false,
-        isSaving: false,
-        isDeleting: false,
-      });
-    };
-
-    this.#editFormComponent.shake(resetFormState);
-  }
-
-  resetView() {
-    if (this.#mode !== Mode.VIEW) {
-      this.#editFormComponent.reset();
-      this.#toggleStateWaypoint(false);
-    }
-  }
-
-  clear() {
-    if (this.#waypointComponent) {
-      remove(this.#waypointComponent);
-    }
-    if (this.#editFormComponent) {
-      remove(this.#editFormComponent);
-    }
-  }
 }

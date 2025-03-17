@@ -5,7 +5,7 @@ import DestinationsModel from './model/destinations-model.js';
 import WaypointsApiService from './waypoints-api-service.js';
 import WaypointEmptyView from './view/waypoint-empty-view/waypoint-empty-view.js';
 import FilterPresenter from './presenter/filter-presenter.js';
-import { EventsMsg } from './const.js';
+import { EventMsg } from './const.js';
 import { render } from './framework/render.js';
 import 'flatpickr/dist/flatpickr.min.css';
 
@@ -26,15 +26,14 @@ const destinationsModel = new DestinationsModel();
 const filterPresenter = new FilterPresenter({
   filtersListContainer,
   waypointsModel,
-  onFilterChange: () => {
-  }
+  onFilterChange: null,
 });
 
-async function runApp() {
+const runApp = async () => {
   try {
     newWaypointBtn.setAttribute('disabled', '');
 
-    const loadingMsgComponent = new WaypointEmptyView(EventsMsg.LOADING);
+    const loadingMsgComponent = new WaypointEmptyView(EventMsg.LOADING);
     render(loadingMsgComponent, tripEventsContainer);
 
     const destinations = await waypointsApiService.destinations;
@@ -61,9 +60,9 @@ async function runApp() {
   } catch(error) {
     tripEventsContainer.innerHTML = '';
     newWaypointBtn.setAttribute('disabled', '');
-    const errorMsgComponent = new WaypointEmptyView(EventsMsg.ERROR);
+    const errorMsgComponent = new WaypointEmptyView(EventMsg.ERROR);
     render(errorMsgComponent, tripEventsContainer);
   }
-}
+};
 
 runApp();

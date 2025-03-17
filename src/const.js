@@ -40,14 +40,14 @@ export const UpdateType = {
   RESET_ALL: 'RESET_ALL',
 };
 
-export const FilterName = {
+export const FilterType = {
   EVERYTHING: 'EVERYTHING',
   FUTURE: 'FUTURE',
   PRESENT: 'PRESENT',
   PAST: 'PAST',
 };
 
-export const EventsMsg = {
+export const EventMsg = {
   EVERYTHING: 'Click New Event to create your first point',
   FUTURE: 'There are no future events now',
   PRESENT: 'There are no present events now',
