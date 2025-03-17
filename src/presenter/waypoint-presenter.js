@@ -75,7 +75,6 @@ export default class WaypointPresenter {
       destinationsAll,
       onFormSubmit: (updatedWaypoint) => {
         this.#onFormSubmitChange(updatedWaypoint);
-        document.removeEventListener('keydown', escKeyDownHandler);
       },
       onEditClick: () => {
         this.#toggleStateWaypoint(false);
@@ -114,7 +113,7 @@ export default class WaypointPresenter {
 
   #onFormSubmitChange = (updatedWaypoint) => {
     this.#waypoint = updatedWaypoint.waypoint;
-    this.#handleDataChange(UserAction.UPDATE_WAYPOINT, UpdateType.PATCH, {...this.#waypoint});
+    this.#handleDataChange(UserAction.UPDATE_WAYPOINT, UpdateType.VIEW_CHANGE, {...this.#waypoint});
   };
 
   #deleteWaypoint = (deletedWaypoint) => {
@@ -123,7 +122,8 @@ export default class WaypointPresenter {
   };
 
   #toggleStateFavorite = () => {
-    this.#handleDataChange(UserAction.UPDATE_WAYPOINT, UpdateType.PATCH, {...this.#waypoint, isFavorite: !this.#waypoint.isFavorite});
+    this.#waypoint = {...this.#waypoint, isFavorite: !this.#waypoint.isFavorite};
+    this.#handleDataChange(UserAction.UPDATE_WAYPOINT, UpdateType.PATCH, {...this.#waypoint});
   };
 
   setSaving() {
@@ -139,7 +139,11 @@ export default class WaypointPresenter {
   }
 
   setSaved() {
-    this.#toggleStateWaypoint(false);
+    if (this.#mode === Mode.EDITING) {
+      this.#toggleStateWaypoint(false);
+    } else {
+      this.init(this.#waypoint);
+    }
   }
 
   setFormError() {

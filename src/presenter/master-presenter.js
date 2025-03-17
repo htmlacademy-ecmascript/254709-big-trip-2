@@ -225,6 +225,7 @@ export default class MasterPresenter {
 
   // Дергается при изменении модели
   #handleModelEvent = (updateType, updatedWaypoint) => {
+
     switch (updateType) {
       case UpdateType.PATCH: {
         this.#waypointPresenters.get(updatedWaypoint.id).init(updatedWaypoint);
@@ -235,14 +236,6 @@ export default class MasterPresenter {
         if (currentFilter !== 'everything') {
           const filteredWaypoints = this.#filterPresenter.getFilteredWaypoints(currentFilter.toUpperCase());
           this.#waypointsModel.setFilteredWaypoints(filteredWaypoints);
-        }
-        this.#reload();
-        break;
-      }
-      case UpdateType.RESET_ALL: {
-        this.#filterPresenter.resetFilter();
-        if (this.#sortPresenter && typeof this.#sortPresenter.resetSortType === 'function') {
-          this.#sortPresenter.resetSortType();
         }
         this.#reload();
         break;

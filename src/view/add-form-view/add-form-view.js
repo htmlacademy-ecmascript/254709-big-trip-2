@@ -93,6 +93,7 @@ export default class AddFormView extends AbstractStatefulView {
   _restoreHandlers() {
     this.element.querySelector('.event--edit').addEventListener('submit', this.#submitClickHandler);
     this.element.querySelector('.event__reset-btn').addEventListener('click', this.#deleteClickHandler);
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#deleteClickHandler);
     this.element.querySelector('.event__type-group').addEventListener('click', this.#typeChangeHandler);
 
     if (this.element.querySelector('.event__available-offers')) {

@@ -44,10 +44,9 @@ export default class WaypointsModel extends Observable {
       const response = await this.#waypointsApiService.updateWaypoint(update);
       const updatedWaypoint = this.#adaptToClient(response);
       const index = this.#findWaypointIndex(update.id);
-
       this.#waypoints = [
         ...this.#waypoints.slice(0, index),
-        update,
+        updatedWaypoint,
         ...this.#waypoints.slice(index + 1),
       ];
       this.#updateOriginalWaypoints();

@@ -113,6 +113,7 @@ export default class EditFormView extends AbstractStatefulView {
         type: newType,
       },
       offerType: newOfferType,
+      offers: [],
     });
   };
 
