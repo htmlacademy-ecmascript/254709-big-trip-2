@@ -143,9 +143,19 @@ export default class WaypointPresenter {
   }
 
   setFormError() {
+    if (this.#mode === Mode.VIEW) {
+      this.#waypointComponent.shake();
+      return;
+    }
+
     const resetFormState = () => {
-      this.#editFormComponent.updateElement({isDisabled: false, isSaving: false, isDeleting: false});
+      this.#editFormComponent.updateElement({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false,
+      });
     };
+
     this.#editFormComponent.shake(resetFormState);
   }
 

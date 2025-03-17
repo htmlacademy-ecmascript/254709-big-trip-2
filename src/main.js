@@ -48,7 +48,6 @@ async function runApp() {
     newWaypointBtn.removeAttribute('disabled', '');
 
     filterPresenter.init();
-
     const masterPresenter = new MasterPresenter({
       tripMainContainer,
       tripEventsContainer,

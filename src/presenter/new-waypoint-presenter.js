@@ -1,4 +1,4 @@
-import { render, remove, replace, RenderPosition } from '../framework/render.js';
+import { render, remove, RenderPosition } from '../framework/render.js';
 import AddFormView from '../view/add-form-view/add-form-view.js';
 import { UserAction, UpdateType } from '../const.js';
 
@@ -13,9 +13,9 @@ export default class NewWaypointPresenter {
   #sortPresenter = null;
   #filterPresenter = null;
   #waypointEmptyComponent = null;
+  #onCreateEmptyComponent = null;
 
-
-  constructor({ listContainer, offersModel, destinationsModel, onDataChange, sortPresenter, filterPresenter, waypointEmptyComponent}) {
+  constructor({ listContainer, offersModel, destinationsModel, onDataChange, sortPresenter, filterPresenter, waypointEmptyComponent, onCreateEmptyComponent}) {
     this.#listContainer = listContainer;
     this.#offersModel = offersModel;
     this.#destinationsModel = destinationsModel;
@@ -24,6 +24,7 @@ export default class NewWaypointPresenter {
     this.#sortPresenter = sortPresenter;
     this.#filterPresenter = filterPresenter;
     this.#waypointEmptyComponent = waypointEmptyComponent;
+    this.#onCreateEmptyComponent = onCreateEmptyComponent;
   }
 
   init() {
@@ -38,25 +39,26 @@ export default class NewWaypointPresenter {
       this.#sortPresenter.resetSortType();
       this.#filterPresenter.resetFilter();
     }
+    if (this.#waypointEmptyComponent) {
+      remove(this.#waypointEmptyComponent);
+      this.#waypointEmptyComponent = null;
+    }
     this.#addFormComponent = new AddFormView({
       offersModel: this.#offersModel,
       destinationsModel: this.#destinationsModel,
       onFormSubmit: this.#handleFormSubmit,
       onDeleteClick: this.#handleCancelClick
     });
-    if (this.#waypointEmptyComponent) {
-      remove(this.#waypointEmptyComponent);
-    }
     render(this.#addFormComponent, this.#formContainer, RenderPosition.AFTERBEGIN);
   };
 
   #escKeyDownHandler = (evt) => {
     if (evt.key === 'Escape') {
       evt.preventDefault();
-      if (this.#waypointEmptyComponent) {
-        replace(this.#waypointEmptyComponent, this.#addFormComponent);
-      }
       this.#destroyForm();
+      if (this.#formContainer.children.length === 0 && this.#onCreateEmptyComponent) {
+        this.#waypointEmptyComponent = this.#onCreateEmptyComponent();
+      }
       document.removeEventListener('keydown', this.#escKeyDownHandler);
     }
   };
@@ -70,10 +72,16 @@ export default class NewWaypointPresenter {
   }
 
   setFormError() {
-    const resetFormState = () => {
-      this.#addFormComponent.updateElement({isDisabled: false, isSaving: false,});
-    };
-    this.#addFormComponent.shake(resetFormState);
+    if (this.#addFormComponent) {
+      const resetFormState = () => {
+        this.#addFormComponent.updateElement({isDisabled: false, isSaving: false,});
+      };
+      this.#addFormComponent.shake(resetFormState);
+    }
+  }
+
+  updateEmptyComponent(emptyComponent) {
+    this.#waypointEmptyComponent = emptyComponent;
   }
 
   #handleFormSubmit = (formData) => {
@@ -86,10 +94,11 @@ export default class NewWaypointPresenter {
   };
 
   #handleCancelClick = () => {
-    if (this.#waypointEmptyComponent) {
-      replace(this.#waypointEmptyComponent, this.#addFormComponent);
-    }
     this.#destroyForm();
+
+    if (this.#formContainer.children.length === 0 && this.#onCreateEmptyComponent) {
+      this.#waypointEmptyComponent = this.#onCreateEmptyComponent();
+    }
   };
 
   #destroyForm = () => {

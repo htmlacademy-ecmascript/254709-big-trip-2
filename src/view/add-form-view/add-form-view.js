@@ -21,7 +21,7 @@ const BLANK_DESTINATION = {
   pictures: []
 };
 
-const createClassName = (title) => title.toLowerCase().replace(/ /g, '-');
+const createClassName = (title) => title.toLowerCase().replace(/ /g, '-').replace(/[#.[\]]/g, '');
 
 const createOffersMap = (offers) => {
   const map = new Map();
@@ -53,7 +53,6 @@ const createAddFormTemplate = (waypoint, offers, destination, offerType, destina
     destinationsAll,
     createClassName,
     humanizeEditFormDate,
-
     isDisabled,
     isSaving,
   });
@@ -114,6 +113,7 @@ export default class AddFormView extends AbstractStatefulView {
   #deleteClickHandler = (evt) => {
     evt.preventDefault();
     this.#onDeleteClick();
+
   };
 
   #submitClickHandler = (evt) => {

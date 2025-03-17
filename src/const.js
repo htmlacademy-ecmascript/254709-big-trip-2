@@ -67,3 +67,8 @@ export const Method = {
   POST: 'POST',
   DELETE: 'DELETE',
 };
+
+export const TimeLimit = {
+  LOWER: 100,
+  UPPER: 1000,
+};

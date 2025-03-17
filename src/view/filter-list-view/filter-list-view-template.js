@@ -6,6 +6,6 @@ const createFiltersTemplate = (filterList) => Object.values(filterList).map((fil
                 </div>`).join('');
 
 export const filterListTemplate = `<form class="trip-filters" action="#" method="get">
-                <button class="visually-hidden" type="submit">Accept filter</button>
                 ${createFiltersTemplate(FilterName)}
+                <button class="visually-hidden" type="submit">Accept filter</button>
               </form>`;

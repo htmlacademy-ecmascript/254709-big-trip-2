@@ -14,6 +14,12 @@ const humanizeEditFormDate = (formDate) => formDate ? dayjs(formDate).format(DAT
 
 const getDuration = (start, end) => {
   const duration = dayjs.duration(dayjs(end).diff(dayjs(start)));
+  if (duration.years()) {
+    const totalDays = Math.floor(duration.asDays());
+    const hours = duration.hours();
+    const minutes = duration.minutes();
+    return `${String(totalDays).padStart(2, '0')}d ${String(hours).padStart(2, '0')}h ${String(minutes).padStart(2, '0')}m`;
+  }
   if (duration.days()) {
     return duration.format('DD[d] HH[h] mm[m]');
   }

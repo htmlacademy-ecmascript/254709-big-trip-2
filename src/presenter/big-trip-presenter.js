@@ -80,11 +80,17 @@ export default class BigTripPresenter {
 
   #handleModelEvent = () => {
     if (this.#waypointsModel.originalWaypoints.length === 0) {
+      if (this.#tripInfoView) {
+        this.#tripInfoView.destroy();
+        this.#tripInfoView = null;
+      }
+      return;
+    }
+
+    if (this.#tripInfoView) {
       this.#tripInfoView.destroy();
       this.#tripInfoView = null;
     }
-    this.#tripInfoView.destroy();
-    this.#tripInfoView = null;
     this.#renderTripInfo();
   };
 
