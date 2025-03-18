@@ -2,15 +2,12 @@ import MasterPresenter from './presenter/master-presenter.js';
 import WaypointsModel from './model/waypoints-model.js';
 import OffersModel from './model/offers-model.js';
 import DestinationsModel from './model/destinations-model.js';
-import WaypointsApiService from './waypoints-api-service.js';
+import WaypointsApiService from './api/waypoints-api-service.js';
 import WaypointEmptyView from './view/waypoint-empty-view/waypoint-empty-view.js';
 import FilterPresenter from './presenter/filter-presenter.js';
-import { EventMsg } from './const.js';
+import { END_POINT, AUTHORIZATION, EventMsg } from './const.js';
 import { render } from './framework/render.js';
 import 'flatpickr/dist/flatpickr.min.css';
-
-const AUTHORIZATION = 'Basic es1d773a7a';
-const END_POINT = 'https://23.objects.htmlacademy.pro/big-trip';
 
 const tripMainContainer = document.querySelector('.trip-main');
 const filtersListContainer = tripMainContainer.querySelector('.trip-controls__filters');
@@ -29,6 +26,24 @@ const filterPresenter = new FilterPresenter({
   onFilterChange: null,
 });
 
+const masterPresenter = new MasterPresenter({
+  tripMainContainer,
+  tripEventsContainer,
+  waypointsModel,
+  offersModel,
+  destinationsModel,
+  filterPresenter
+});
+
+const getModelsByServer = async () => {
+  const destinations = await waypointsApiService.destinations;
+  destinationsModel.init(destinations);
+  const offers = await waypointsApiService.offers;
+  offersModel.init(offers);
+  const waypoints = await waypointsApiService.waypoints;
+  waypointsModel.init(waypoints);
+};
+
 const runApp = async () => {
   try {
     newWaypointBtn.setAttribute('disabled', '');
@@ -36,25 +51,12 @@ const runApp = async () => {
     const loadingMsgComponent = new WaypointEmptyView(EventMsg.LOADING);
     render(loadingMsgComponent, tripEventsContainer);
 
-    const destinations = await waypointsApiService.destinations;
-    destinationsModel.init(destinations);
-    const offers = await waypointsApiService.offers;
-    offersModel.init(offers);
-    const waypoints = await waypointsApiService.waypoints;
-    waypointsModel.init(waypoints);
+    await getModelsByServer();
 
     loadingMsgComponent.destroy();
     newWaypointBtn.removeAttribute('disabled', '');
 
     filterPresenter.init();
-    const masterPresenter = new MasterPresenter({
-      tripMainContainer,
-      tripEventsContainer,
-      waypointsModel,
-      offersModel,
-      destinationsModel,
-      filterPresenter
-    });
     masterPresenter.init();
 
   } catch(error) {

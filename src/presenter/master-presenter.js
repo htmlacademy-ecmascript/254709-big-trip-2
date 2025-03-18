@@ -5,7 +5,7 @@ import NewWaypointPresenter from './new-waypoint-presenter.js';
 import WaypointEmptyView from '../view/waypoint-empty-view/waypoint-empty-view.js';
 import UiBlocker from '../framework/ui-blocker/ui-blocker.js';
 import { getSortByDefault, getSortByTime, getSortByPrice } from '../utils/sort.js';
-import { UserAction, UpdateType, SortType, EventMsg, FilterAction, TimeLimit } from '../const.js';
+import { UserAction, UpdateType, SortType, EventMsg, FilterAction, StatusAction, TimeLimit } from '../const.js';
 import { render } from '../framework/render.js';
 
 export default class MasterPresenter {
@@ -196,20 +196,20 @@ export default class MasterPresenter {
     try {
       switch (userAction) {
         case UserAction.UPDATE_WAYPOINT:
-          this.#waypointPresenters.get(updatedWaypoint.id).setSaving();
+          this.#waypointPresenters.get(updatedWaypoint.id).setStatus(StatusAction.SAVING);
           await this.#waypointsModel.updateWaypoint(updateType, updatedWaypoint);
-          this.#waypointPresenters.get(updatedWaypoint.id).setSaved();
+          this.#waypointPresenters.get(updatedWaypoint.id).setStatus(StatusAction.SAVED);
           break;
         case UserAction.ADD_WAYPOINT:
-          this.#newWaypointsPresenter.setSaving();
+          this.#newWaypointsPresenter.setStatus(StatusAction.SAVING);
           await this.#waypointsModel.addWaypoint(updateType, updatedWaypoint);
-          this.#newWaypointsPresenter.setSaved();
+          this.#newWaypointsPresenter.setStatus(StatusAction.SAVED);
           this.#reload();
           break;
         case UserAction.DELETE_WAYPOINT:
-          this.#waypointPresenters.get(updatedWaypoint.id).setDeleting();
+          this.#waypointPresenters.get(updatedWaypoint.id).setStatus(StatusAction.DELETING);
           await this.#waypointsModel.deleteWaypoint(updateType, updatedWaypoint);
-          this.#waypointPresenters.get(updatedWaypoint.id).setSaved();
+          this.#waypointPresenters.get(updatedWaypoint.id).setStatus(StatusAction.SAVED);
           break;
       }
     } catch (error) {
@@ -220,7 +220,7 @@ export default class MasterPresenter {
         // Возвращаем форму в исходное состояние в случае ошибки
         const presenter = this.#waypointPresenters.get(updatedWaypoint.id);
         if (presenter) {
-          presenter.setFormError();
+          presenter.setStatus(StatusAction.ERROR);
         }
       }
     }

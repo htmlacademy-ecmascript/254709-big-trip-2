@@ -32,41 +32,34 @@ export default class WaypointPresenter {
     this.#renderWaypoint(this.#waypoint, destinationsAll);
   }
 
-  setSaving() {
-    if (this.#editFormComponent) {
-      this.#editFormComponent.updateElement({isDisabled: true, isSaving: true});
+  setStatus(statusAction) {
+    switch(statusAction) {
+      case 'SAVING':
+        if (this.#editFormComponent) {
+          this.#editFormComponent.updateElement({isDisabled: true, isSaving: true});
+        }
+        break;
+      case 'DELETING':
+        if (this.#editFormComponent) {
+          this.#editFormComponent.updateElement({isDisabled: true, isDeleting: true});
+        }
+        break;
+      case 'SAVED':
+        if (this.#mode === Mode.EDITING) {
+          this.#toggleStateWaypoint(false);
+        } else {
+          this.init(this.#waypoint);
+        }
+        break;
+      case 'ERROR':
+        if (this.#mode === Mode.VIEW) {
+          this.#waypointComponent.shake();
+          return;
+        }
+        this.#editFormComponent.shake();
+        this.#editFormComponent.updateElement({isDisabled: false, isSaving: false, isDeleting: false});
+        break;
     }
-  }
-
-  setDeleting() {
-    if (this.#editFormComponent) {
-      this.#editFormComponent.updateElement({isDisabled: true, isDeleting: true});
-    }
-  }
-
-  setSaved() {
-    if (this.#mode === Mode.EDITING) {
-      this.#toggleStateWaypoint(false);
-    } else {
-      this.init(this.#waypoint);
-    }
-  }
-
-  setFormError() {
-    if (this.#mode === Mode.VIEW) {
-      this.#waypointComponent.shake();
-      return;
-    }
-
-    const resetFormState = () => {
-      this.#editFormComponent.updateElement({
-        isDisabled: false,
-        isSaving: false,
-        isDeleting: false,
-      });
-    };
-
-    this.#editFormComponent.shake(resetFormState);
   }
 
   resetView() {

@@ -108,6 +108,7 @@ export default class EditFormView extends AbstractStatefulView {
 
   #editClickHandler = (evt) => {
     evt.preventDefault();
+    this.reset();
     this.#onEditClick();
   };
 

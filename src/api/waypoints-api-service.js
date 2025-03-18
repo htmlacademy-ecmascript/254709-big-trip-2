@@ -1,5 +1,5 @@
-import ApiService from './framework/api-service';
-import { Method } from './const';
+import ApiService from '../framework/api-service';
+import { Method } from '../const';
 
 export default class WaypointsApiService extends ApiService {
   get waypoints() {

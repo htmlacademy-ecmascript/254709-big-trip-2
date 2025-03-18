@@ -1,3 +1,6 @@
+export const AUTHORIZATION = 'Basic es1d773a7a';
+export const END_POINT = 'https://23.objects.htmlacademy.pro/big-trip';
+
 export const POINT_TYPES = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
 
 export const SortType = {
@@ -54,6 +57,13 @@ export const EventMsg = {
   PAST: 'There are no past events now',
   LOADING: 'Loading...',
   ERROR: 'Failed to load latest route information',
+};
+
+export const StatusAction = {
+  SAVING: 'SAVING',
+  DELETING: 'DELETE',
+  SAVED: 'SAVED',
+  ERROR: 'ERROR',
 };
 
 export const FilterAction = {

@@ -1,6 +1,6 @@
 import { render, remove, RenderPosition } from '../framework/render.js';
 import AddFormView from '../view/add-form-view/add-form-view.js';
-import { UserAction, UpdateType } from '../const.js';
+import { UserAction, StatusAction, UpdateType } from '../const.js';
 
 export default class NewWaypointPresenter {
   #listContainer = null;
@@ -32,6 +32,33 @@ export default class NewWaypointPresenter {
     this.#newWaypointBtn.addEventListener('click', this.#onNewWaypointClick);
   }
 
+  setStatus(statusAction) {
+    switch(statusAction) {
+      case 'SAVING':
+        this.#addFormComponent.updateElement({isDisabled: true, isSaving: true});
+        break;
+      case 'SAVED':
+        this.#destroyForm();
+        break;
+      case 'ERROR':
+        if (this.#addFormComponent) {
+          const resetFormState = () => {
+            this.#addFormComponent.updateElement({isDisabled: false, isSaving: false,});
+          };
+          this.#addFormComponent.shake(resetFormState);
+        }
+        break;
+    }
+  }
+
+  updateEmptyComponent(emptyComponent) {
+    this.#waypointEmptyComponent = emptyComponent;
+  }
+
+  destroyPresenter() {
+    this.#destroyForm();
+  }
+
   #onNewWaypointClick = () => {
     this.#newWaypointBtn.setAttribute('disabled', '');
     document.addEventListener('keydown', this.#escKeyDownHandler);
@@ -47,9 +74,18 @@ export default class NewWaypointPresenter {
       offersModel: this.#offersModel,
       destinationsModel: this.#destinationsModel,
       onFormSubmit: this.#handleFormSubmit,
-      onDeleteClick: this.#handleCancelClick
+      onCancelClick: this.#handleCancelClick
     });
     render(this.#addFormComponent, this.#formContainer, RenderPosition.AFTERBEGIN);
+  };
+
+  #handleFormSubmit = (formData) => {
+    this.setStatus(StatusAction.SAVING);
+    this.#handleDataChange(
+      UserAction.ADD_WAYPOINT,
+      UpdateType.VIEW_CHANGE,
+      formData.waypoint
+    );
   };
 
   #escKeyDownHandler = (evt) => {
@@ -61,36 +97,6 @@ export default class NewWaypointPresenter {
       }
       document.removeEventListener('keydown', this.#escKeyDownHandler);
     }
-  };
-
-  setSaving() {
-    this.#addFormComponent.updateElement({isDisabled: true, isSaving: true,});
-  }
-
-  setSaved() {
-    this.#destroyForm();
-  }
-
-  setFormError() {
-    if (this.#addFormComponent) {
-      const resetFormState = () => {
-        this.#addFormComponent.updateElement({isDisabled: false, isSaving: false,});
-      };
-      this.#addFormComponent.shake(resetFormState);
-    }
-  }
-
-  updateEmptyComponent(emptyComponent) {
-    this.#waypointEmptyComponent = emptyComponent;
-  }
-
-  #handleFormSubmit = (formData) => {
-    this.setSaving();
-    this.#handleDataChange(
-      UserAction.ADD_WAYPOINT,
-      UpdateType.VIEW_CHANGE,
-      formData.waypoint
-    );
   };
 
   #handleCancelClick = () => {
@@ -109,8 +115,4 @@ export default class NewWaypointPresenter {
 
     this.#newWaypointBtn.removeAttribute('disabled');
   };
-
-  destroyPresenter() {
-    this.#destroyForm();
-  }
 }

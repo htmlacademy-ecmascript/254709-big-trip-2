@@ -60,18 +60,18 @@ const createAddFormTemplate = (waypoint, offers, destination, offerType, destina
 
 export default class AddFormView extends AbstractStatefulView {
   #onFormSubmit = null;
-  #onDeleteClick = null;
+  #onCancelClick = null;
   #datepickerFrom = null;
   #datepickerTo = null;
   #offersModel = null;
   #destinationsModel = null;
 
-  constructor({ offersModel, destinationsModel, onFormSubmit, onDeleteClick }) {
+  constructor({ offersModel, destinationsModel, onFormSubmit, onCancelClick }) {
     super();
     this.#offersModel = offersModel;
     this.#destinationsModel = destinationsModel;
     this.#onFormSubmit = onFormSubmit;
-    this.#onDeleteClick = onDeleteClick;
+    this.#onCancelClick = onCancelClick;
 
     const offersAll = this.#offersModel.allOffers;
     const destinationsAll = this.#destinationsModel.allDestinations;
@@ -97,8 +97,8 @@ export default class AddFormView extends AbstractStatefulView {
 
   _restoreHandlers() {
     this.element.querySelector('.event--edit').addEventListener('submit', this.#submitClickHandler);
-    this.element.querySelector('.event__reset-btn').addEventListener('click', this.#deleteClickHandler);
-    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#deleteClickHandler);
+    this.element.querySelector('.event__reset-btn').addEventListener('click', this.#cancelClickHandler);
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#cancelClickHandler);
     this.element.querySelector('.event__type-group').addEventListener('click', this.#typeChangeHandler);
 
     if (this.element.querySelector('.event__available-offers')) {
@@ -147,9 +147,9 @@ export default class AddFormView extends AbstractStatefulView {
     );
   };
 
-  #deleteClickHandler = (evt) => {
+  #cancelClickHandler = (evt) => {
     evt.preventDefault();
-    this.#onDeleteClick();
+    this.#onCancelClick();
 
   };
 
