@@ -61,7 +61,7 @@ export const EventMsg = {
 
 export const StatusAction = {
   SAVING: 'SAVING',
-  DELETING: 'DELETE',
+  DELETING: 'DELETING',
   SAVED: 'SAVED',
   ERROR: 'ERROR',
 };
@@ -79,6 +79,6 @@ export const Method = {
 };
 
 export const TimeLimit = {
-  LOWER: 100,
-  UPPER: 1000,
+  LOWER: 500,
+  UPPER: 500,
 };

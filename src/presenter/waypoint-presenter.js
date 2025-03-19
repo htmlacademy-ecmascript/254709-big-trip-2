@@ -56,8 +56,7 @@ export default class WaypointPresenter {
           this.#waypointComponent.shake();
           return;
         }
-        this.#editFormComponent.shake();
-        this.#editFormComponent.updateElement({isDisabled: false, isSaving: false, isDeleting: false});
+        this.#editFormComponent.shake(this.#resetFormState);
         break;
     }
   }
@@ -160,6 +159,14 @@ export default class WaypointPresenter {
   #onFormSubmitChange = (updatedWaypoint) => {
     this.#waypoint = updatedWaypoint.waypoint;
     this.#handleDataChange(UserAction.UPDATE_WAYPOINT, UpdateType.VIEW_CHANGE, {...this.#waypoint});
+  };
+
+  #resetFormState = () => {
+    this.#editFormComponent.updateElement({
+      isDisabled: false,
+      isSaving: false,
+      isDeleting: false,
+    });
   };
 
   #deleteWaypoint = (deletedWaypoint) => {

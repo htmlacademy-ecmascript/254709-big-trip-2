@@ -1,6 +1,5 @@
 import dayjs from 'dayjs';
 import durationPlugin from 'dayjs/plugin/duration';
-import { StatusAction } from '../const';
 dayjs.extend(durationPlugin);
 
 const DATE_FORMAT = 'MMM D';

@@ -42,10 +42,7 @@ export default class NewWaypointPresenter {
         break;
       case 'ERROR':
         if (this.#addFormComponent) {
-          const resetFormState = () => {
-            this.#addFormComponent.updateElement({isDisabled: false, isSaving: false,});
-          };
-          this.#addFormComponent.shake(resetFormState);
+          this.#addFormComponent.shake(this.#resetFormState);
         }
         break;
     }
@@ -105,6 +102,10 @@ export default class NewWaypointPresenter {
     if (this.#formContainer.children.length === 0 && this.#onCreateEmptyComponent) {
       this.#waypointEmptyComponent = this.#onCreateEmptyComponent();
     }
+  };
+
+  #resetFormState = () => {
+    this.#addFormComponent.updateElement({isDisabled: false, isSaving: false,});
   };
 
   #destroyForm = () => {

@@ -215,7 +215,7 @@ export default class MasterPresenter {
     } catch (error) {
       // Обработка ошибки
       if (userAction === UserAction.ADD_WAYPOINT) {
-        this.#newWaypointsPresenter.setFormError();
+        this.#newWaypointsPresenter.setStatus(StatusAction.ERROR);
       } else if (userAction === UserAction.UPDATE_WAYPOINT || userAction === UserAction.DELETE_WAYPOINT) {
         // Возвращаем форму в исходное состояние в случае ошибки
         const presenter = this.#waypointPresenters.get(updatedWaypoint.id);
