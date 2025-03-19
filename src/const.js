@@ -79,6 +79,6 @@ export const Method = {
 };
 
 export const TimeLimit = {
-  LOWER: 500,
-  UPPER: 500,
+  LOWER: 200,
+  UPPER: 1000,
 };
