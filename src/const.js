@@ -40,7 +40,6 @@ export const UserAction = {
 export const UpdateType = {
   PATCH: 'PATCH',
   VIEW_CHANGE: 'VIEW_CHANGE',
-  RESET_ALL: 'RESET_ALL',
 };
 
 export const FilterType = {
