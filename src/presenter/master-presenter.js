@@ -150,7 +150,6 @@ export default class MasterPresenter {
       this.#waypointEmptyComponent = new WaypointEmptyView(EventMsg[`${currentFilter.toUpperCase()}`]);
       render(this.#waypointEmptyComponent, this.#tripEventsContainer);
 
-      // Обновляем ссылку на компонент в NewWaypointPresenter, если он уже был создан
       if (this.#newWaypointsPresenter) {
         this.#newWaypointsPresenter.updateEmptyComponent(this.#waypointEmptyComponent);
       }
@@ -190,7 +189,6 @@ export default class MasterPresenter {
     }
   };
 
-  // Меняем модель тут, получая данные из waypoint-presenter. После изменения данных срабатывает handleModelEvent
   #handleViewAction = async (userAction, updateType, updatedWaypoint) => {
     this.#uiBlocker.block();
     try {
@@ -213,11 +211,9 @@ export default class MasterPresenter {
           break;
       }
     } catch (error) {
-      // Обработка ошибки
       if (userAction === UserAction.ADD_WAYPOINT) {
         this.#newWaypointsPresenter.setStatus(StatusAction.ERROR);
       } else if (userAction === UserAction.UPDATE_WAYPOINT || userAction === UserAction.DELETE_WAYPOINT) {
-        // Возвращаем форму в исходное состояние в случае ошибки
         const presenter = this.#waypointPresenters.get(updatedWaypoint.id);
         if (presenter) {
           presenter.setStatus(StatusAction.ERROR);
@@ -227,9 +223,7 @@ export default class MasterPresenter {
     this.#uiBlocker.unblock();
   };
 
-  // Дергается при изменении модели
   #handleModelEvent = (updateType, updatedWaypoint) => {
-
     switch (updateType) {
       case UpdateType.PATCH: {
         this.#waypointPresenters.get(updatedWaypoint.id).init(updatedWaypoint);

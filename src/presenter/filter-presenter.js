@@ -89,7 +89,6 @@ export default class FilterPresenter {
     const presentFiltersQty = this.getFilteredWaypoints('PRESENT').length;
     const pastFiltersQty = this.getFilteredWaypoints('PAST').length;
 
-    // Установка состояний для фильтров на основе количества элементов
     filters.forEach((filter) => {
       switch(filter.value) {
         case 'everything':
