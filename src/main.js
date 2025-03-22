@@ -1,10 +1,10 @@
-import MasterPresenter from './presenter/master-presenter.js';
+import WaypointsApiService from './api/waypoints-api-service.js';
 import WaypointsModel from './model/waypoints-model.js';
 import OffersModel from './model/offers-model.js';
 import DestinationsModel from './model/destinations-model.js';
-import WaypointsApiService from './api/waypoints-api-service.js';
-import WaypointEmptyView from './view/waypoint-empty-view/waypoint-empty-view.js';
+import MasterPresenter from './presenter/master-presenter.js';
 import FilterPresenter from './presenter/filter-presenter.js';
+import WaypointEmptyView from './view/waypoint-empty-view/waypoint-empty-view.js';
 import { END_POINT, AUTHORIZATION, EventMsg } from './const.js';
 import { render } from './framework/render.js';
 import 'flatpickr/dist/flatpickr.min.css';
@@ -32,15 +32,15 @@ const masterPresenter = new MasterPresenter({
   waypointsModel,
   offersModel,
   destinationsModel,
-  filterPresenter
+  filterPresenter,
 });
 
 const getModelsByServer = async () => {
   const destinations = await waypointsApiService.destinations;
-  destinationsModel.init(destinations);
   const offers = await waypointsApiService.offers;
-  offersModel.init(offers);
   const waypoints = await waypointsApiService.waypoints;
+  destinationsModel.init(destinations);
+  offersModel.init(offers);
   waypointsModel.init(waypoints);
 };
 

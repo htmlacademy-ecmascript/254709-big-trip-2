@@ -6,29 +6,31 @@ export default class NewWaypointPresenter {
   #listContainer = null;
   #offersModel = null;
   #destinationsModel = null;
-  #addFormComponent = null;
   #formContainer = null;
   #handleDataChange = null;
-  #newWaypointBtn = null;
   #sortPresenter = null;
   #filterPresenter = null;
   #waypointEmptyComponent = null;
   #onCreateEmptyComponent = null;
 
+  #addFormComponent = null;
+  #newWaypointBtn = null;
+
   constructor({ listContainer, offersModel, destinationsModel, onDataChange, sortPresenter, filterPresenter, waypointEmptyComponent, onCreateEmptyComponent}) {
     this.#listContainer = listContainer;
     this.#offersModel = offersModel;
     this.#destinationsModel = destinationsModel;
-    this.#formContainer = this.#listContainer.querySelector('.trip-events__list');
     this.#handleDataChange = onDataChange;
     this.#sortPresenter = sortPresenter;
     this.#filterPresenter = filterPresenter;
     this.#waypointEmptyComponent = waypointEmptyComponent;
     this.#onCreateEmptyComponent = onCreateEmptyComponent;
+
+    this.#formContainer = this.#listContainer.querySelector('.trip-events__list');
+    this.#newWaypointBtn = document.querySelector('.trip-main__event-add-btn');
   }
 
   init() {
-    this.#newWaypointBtn = document.querySelector('.trip-main__event-add-btn');
     this.#newWaypointBtn.addEventListener('click', this.#onNewWaypointClick);
   }
 

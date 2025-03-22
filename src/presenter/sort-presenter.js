@@ -15,6 +15,15 @@ export default class SortListPresenter {
     this.#renderSortList();
   }
 
+  resetSortType() {
+    this.#handleSortTypeChange({ sortType: `${SortType.DAY.NAME}` });
+    this.#sortListComponent.reset();
+  }
+
+  destroy() {
+    remove(this.#sortListComponent);
+  }
+
   #renderSortList = () => {
     render(this.#sortListComponent, this.#listContainer, RenderPosition.AFTERBEGIN);
   };
@@ -25,12 +34,5 @@ export default class SortListPresenter {
     },
   });
 
-  resetSortType() {
-    this.#handleSortTypeChange({ sortType: `${SortType.DAY.NAME}` });
-    this.#sortListComponent.reset();
-  }
 
-  destroy() {
-    remove(this.#sortListComponent);
-  }
 }

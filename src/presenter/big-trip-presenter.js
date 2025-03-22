@@ -1,17 +1,17 @@
 import { render, RenderPosition } from '../framework/render.js';
+import { humanizeTaskHeadDate } from '../utils/waypoints.js';
+import { getSortByDefault } from '../utils/sort.js';
 import TripInfoView from '../view/trip-info-view/trip-info-view.js';
 import WaypointListView from '../view/waypoint-list-view/waypoint-list-view.js';
-import { getSortByDefault } from '../utils/sort.js';
-import { humanizeTaskHeadDate } from '../utils/waypoints.js';
 
 export default class BigTripPresenter {
   #tripInfoContainer = null;
-  #tripInfoView = null;
   #listContainer = null;
-  #waypointListView = null;
   #waypointsModel = null;
   #offersModel = null;
   #destinationsModel = null;
+  #tripInfoView = null;
+  #waypointListView = null;
 
   constructor({ tripInfoContainer, listContainer, waypointsModel, offersModel, destinationsModel }) {
     this.#tripInfoContainer = tripInfoContainer;
