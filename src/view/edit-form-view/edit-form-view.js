@@ -1,11 +1,9 @@
 import AbstractStatefulView from '../../framework/view/abstract-stateful-view.js';
 import { POINT_TYPES } from '../../const.js';
-import { humanizeEditFormDate, DATE_FORMAT_EDIT_FORM } from '../../utils/waypoints.js';
+import { humanizeEditFormDate } from '../../utils/waypoints.js';
 import { editFormTemplate } from './edit-form-view-template.js';
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
-
-const createClassName = (title) => title.toLowerCase().replace(/ /g, '-');
 
 const createOffersMap = (offers) => {
   const map = new Map();
@@ -17,7 +15,7 @@ const createOffersMap = (offers) => {
   return map;
 };
 
-const createEditFormTemplate = (waypoint, offers, destination, offerType, destinationsAll) => {
+const createEditFormTemplate = (waypoint, offers, destination, offerType, destinationsAll, isDeleting, isSaving, isDisabled) => {
   const idWaypoints = offers.map((item) => item.id);
   const { type, dateFrom, dateTo, basePrice, id } = waypoint;
   const { name: namePoint, description, pictures } = destination;
@@ -34,9 +32,10 @@ const createEditFormTemplate = (waypoint, offers, destination, offerType, destin
     idWaypoints,
     offerType,
     destinationsAll,
-    createClassName,
     humanizeEditFormDate,
-    DATE_FORMAT_EDIT_FORM
+    isDeleting,
+    isSaving,
+    isDisabled
   });
 };
 export default class EditFormView extends AbstractStatefulView {
@@ -60,6 +59,27 @@ export default class EditFormView extends AbstractStatefulView {
     this._restoreHandlers();
   }
 
+  get template() {
+    const {waypoint, offers, destination, offerType, destinationsAll, isDeleting, isSaving, isDisabled} = this._state;
+    return createEditFormTemplate(waypoint, offers, destination, offerType, destinationsAll, isDeleting, isSaving, isDisabled);
+  }
+
+  removeElement() {
+    super.removeElement();
+    if (this.#datepickerFrom) {
+      this.#datepickerFrom.destroy();
+      this.#datepickerFrom = null;
+    }
+    if (this.#datepickerTo) {
+      this.#datepickerTo.destroy();
+      this.#datepickerTo = null;
+    }
+  }
+
+  reset() {
+    this.updateElement(this.#initialState);
+  }
+
   _restoreHandlers() {
     this.element.querySelector('.event--edit').addEventListener('submit', this.#submitClickHandler);
     this.element.querySelector('.event__reset-btn').addEventListener('click', this.#deleteClickHandler);
@@ -76,12 +96,8 @@ export default class EditFormView extends AbstractStatefulView {
     this.#setDatepickers();
   }
 
-  get template() {
-    const {waypoint, offers, destination, offerType, destinationsAll} = this._state;
-    return createEditFormTemplate(waypoint, offers, destination, offerType, destinationsAll);
-  }
-
-  #deleteClickHandler = () => {
+  #deleteClickHandler = (evt) => {
+    evt.preventDefault();
     this.#onDeleteClick(EditFormView.parseStateToData(this._state));
   };
 
@@ -92,6 +108,7 @@ export default class EditFormView extends AbstractStatefulView {
 
   #editClickHandler = (evt) => {
     evt.preventDefault();
+    this.reset();
     this.#onEditClick();
   };
 
@@ -113,6 +130,7 @@ export default class EditFormView extends AbstractStatefulView {
         type: newType,
       },
       offerType: newOfferType,
+      offers: [],
     });
   };
 
@@ -218,40 +236,32 @@ export default class EditFormView extends AbstractStatefulView {
     });
   };
 
-  removeElement() {
-    super.removeElement();
-    if (this.#datepickerFrom) {
-      this.#datepickerFrom.destroy();
-      this.#datepickerFrom = null;
-    }
-    if (this.#datepickerTo) {
-      this.#datepickerTo.destroy();
-      this.#datepickerTo = null;
-    }
-  }
-
-  reset() {
-    this.updateElement(this.#initialState);
-  }
-
   static parseDataToState = (waypoint, offers, offerType, offersAll, destination, destinationsAll) => ({
     waypoint: {...waypoint},
     offers,
     offerType,
     offersAll,
     destination,
-    destinationsAll
+    destinationsAll,
+    isDisabled: false,
+    isSaving: false,
+    isDeleting: false,
   });
 
-  static parseStateToData = (state) => ({
-    waypoint: {
-      ...state.waypoint,
-      offersId: state.offers.map((offer) => offer.id),
-      destination: state.destination.id
-    },
-    offers: state.offers,
-    destination: state.destination,
-    offerType: state.offerType,
-    destinationsAll: state.destinationsAll
-  });
+  static parseStateToData = (state) => {
+    delete state.isDisabled;
+    delete state.isSaving;
+    delete state.isDeleting;
+    return {
+      waypoint: {
+        ...state.waypoint,
+        offersId: state.offers.map((offer) => offer.id),
+        destination: state.destination.id
+      },
+      offers: state.offers,
+      destination: state.destination,
+      offerType: state.offerType,
+      destinationsAll: state.destinationsAll
+    };
+  };
 }

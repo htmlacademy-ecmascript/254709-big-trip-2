@@ -1,16 +1,20 @@
 import Observable from '../framework/observable.js';
-import { getRandomWaypoint } from '../mocks/waypoints.js';
-import { UpdateType } from '../const.js';
-
-
-const WAYPOINT_QTY = 3;
 
 export default class WaypointsModel extends Observable {
-  #waypoints = Array.from({ length: WAYPOINT_QTY }, getRandomWaypoint);
-  #originalWaypoints = null;
+  #waypoints = [];
+  #originalWaypoints = [];
+  #waypointsApiService = null;
 
-  constructor() {
+  constructor({waypointsApiService}) {
     super();
+    this.#waypointsApiService = waypointsApiService;
+  }
+
+  init(waypoints) {
+    if (!Array.isArray(waypoints)) {
+      waypoints = [];
+    }
+    this.#waypoints = waypoints.map(this.#adaptToClient);
     this.#updateOriginalWaypoints();
   }
 
@@ -34,57 +38,93 @@ export default class WaypointsModel extends Observable {
     return index;
   }
 
-  updateWaypoint(updateType, update) {
-    this.#waypoints = [...this.#originalWaypoints];
-    const index = this.#findWaypointIndex(update.id);
-
-    this.#waypoints = [
-      ...this.#waypoints.slice(0, index),
-      update,
-      ...this.#waypoints.slice(index + 1),
-    ];
-    this.#updateOriginalWaypoints();
-
-    this._notify(updateType, update);
-  }
-
-  addWaypoint(updateType, update) {
-    this.#waypoints = [...this.#originalWaypoints];
-    this.#waypoints = [update, ...this.#waypoints];
-    this.#updateOriginalWaypoints();
-
-    this._notify(updateType, update);
-  }
-
-  deleteWaypoint(updateType, update) {
-    const originalIndex = this.#originalWaypoints.findIndex((waypoint) => waypoint.id === update.id);
-
-    if (originalIndex !== -1) {
-      this.#originalWaypoints = [
-        ...this.#originalWaypoints.slice(0, originalIndex),
-        ...this.#originalWaypoints.slice(originalIndex + 1),
+  async updateWaypoint(updateType, update) {
+    try {
+      this.#waypoints = [...this.#originalWaypoints];
+      const response = await this.#waypointsApiService.updateWaypoint(update);
+      const updatedWaypoint = this.#adaptToClient(response);
+      const index = this.#findWaypointIndex(update.id);
+      this.#waypoints = [
+        ...this.#waypoints.slice(0, index),
+        updatedWaypoint,
+        ...this.#waypoints.slice(index + 1),
       ];
+      this.#updateOriginalWaypoints();
+
+      this._notify(updateType, updatedWaypoint);
+    } catch(err) {
+      throw new Error('Can\'t update waypoint');
+    }
+  }
+
+  async addWaypoint(updateType, update) {
+    try {
+      this.#waypoints = [...this.#originalWaypoints];
+      const response = await this.#waypointsApiService.addWaypoint(update);
+      const addedWaypoint = this.#adaptToClient(response);
+      this.#waypoints = [addedWaypoint, ...this.#waypoints];
+      this.#updateOriginalWaypoints();
+      this._notify(updateType, addedWaypoint);
+    } catch(err) {
+      throw new Error('Can\'t add waypoint');
     }
 
-    this.#waypoints = [...this.#originalWaypoints];
+  }
 
-    this._notify(updateType, update);
+  async deleteWaypoint(updateType, update) {
+    try {
+      const originalIndex = this.#originalWaypoints.findIndex((waypoint) => waypoint.id === update.id);
+
+      if (originalIndex !== -1) {
+        this.#originalWaypoints = [
+          ...this.#originalWaypoints.slice(0, originalIndex),
+          ...this.#originalWaypoints.slice(originalIndex + 1),
+        ];
+      }
+
+      this.#waypoints = [...this.#originalWaypoints];
+      const response = await this.#waypointsApiService.deleteWaypoint(update);
+      const deletedWaypoint = this.#adaptToClient(response);
+      this.#updateOriginalWaypoints();
+      this._notify(updateType, deletedWaypoint);
+    } catch(err) {
+      throw new Error('Can\'t delete waypoint');
+    }
+
   }
 
   setWaypoints(updateType, waypoints) {
-    if (!waypoints) {
-      this.#waypoints = [];
-    } else {
-      this.#waypoints = [...waypoints];
-    }
+    this.#waypoints = [...waypoints];
 
-    if (updateType !== UpdateType.NONE) {
-      this._notify(updateType);
-    }
+    this._notify(updateType);
+  }
+
+  setFilteredWaypoints(waypoints) {
+    this.#waypoints = [...waypoints];
   }
 
   resetToOriginal(updateType) {
     this.#waypoints = [...this.#originalWaypoints];
     this._notify(updateType);
   }
+
+  #adaptToClient(waypoint) {
+    const adaptedWaypoint = {
+      ...waypoint,
+      basePrice: waypoint['base_price'],
+      dateFrom: waypoint['date_from'],
+      dateTo: waypoint['date_to'],
+      isFavorite: waypoint['is_favorite'],
+      offersId: waypoint.offers,
+    };
+
+    delete adaptedWaypoint['base_price'];
+    delete adaptedWaypoint['date_from'];
+    delete adaptedWaypoint['date_to'];
+    delete adaptedWaypoint['is_favorite'];
+    delete adaptedWaypoint['offers'];
+
+    return adaptedWaypoint;
+  }
 }
+

@@ -1,7 +1,9 @@
-import { mockOffers } from '../mocks/waypoints.js';
-
 export default class OffersModel {
-  #allOffers = mockOffers;
+  #allOffers = null;
+
+  init(offers) {
+    this.#allOffers = offers;
+  }
 
   get allOffers() {
     return this.#allOffers;
@@ -15,4 +17,15 @@ export default class OffersModel {
     const offersType = this.getOfferByType(type);
     return offersType.offers.filter((item) => itemsId.includes(item.id));
   }
+
+  getOfferPriceById(targetId) {
+    for (const offerType of this.#allOffers) {
+      const foundOffer = offerType.offers.find((offer) => offer.id === targetId);
+      if (foundOffer) {
+        return foundOffer.price;
+      }
+    }
+    return null;
+  }
+
 }

@@ -13,7 +13,8 @@ export const addFormTemplate = ({
   destinationsAll,
   createClassName,
   humanizeEditFormDate,
-  DATE_FORMAT_EDIT_FORM
+  isDisabled,
+  isSaving
 }) => (`<li class="trip-events__item"><form class="event event--edit" action="#" method="post">
     <header class="event__header">
       <div class="event__type-wrapper">
@@ -46,10 +47,10 @@ export const addFormTemplate = ({
 
       <div class="event__field-group  event__field-group--time">
         <label class="visually-hidden" for="event-start-time-${id}">From</label>
-        <input class="event__input  event__input--time" id="event-start-time-${id}" type="text" name="event-start-time" value="${humanizeEditFormDate(dateFrom, DATE_FORMAT_EDIT_FORM)}">
+        <input class="event__input  event__input--time" id="event-start-time-${id}" type="text" name="event-start-time" value="${humanizeEditFormDate(dateFrom)}">
         &mdash;
         <label class="visually-hidden" for="event-end-time-${id}">To</label>
-        <input class="event__input  event__input--time" id="event-end-time-${id}" type="text" name="event-end-time" value="${humanizeEditFormDate(dateTo, DATE_FORMAT_EDIT_FORM)}">
+        <input class="event__input  event__input--time" id="event-end-time-${id}" type="text" name="event-end-time" value="${humanizeEditFormDate(dateTo)}">
       </div>
 
       <div class="event__field-group  event__field-group--price">
@@ -60,8 +61,11 @@ export const addFormTemplate = ({
         <input class="event__input  event__input--price" id="event-price-${id}" type="number" name="event-price" value="${basePrice}">
       </div>
 
-      <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
+      <button class="event__save-btn  btn  btn--blue" type="submit" ${isDisabled ? 'disabled' : ''}>${isSaving ? 'Saving...' : 'Save'}</button>
       <button class="event__reset-btn" type="reset">Cancel</button>
+      <button class="event__rollup-btn" type="button">
+        <span class="visually-hidden">Open event</span>
+      </button>
     </header>
     <section class="event__details">
       ${offerType.offers.length > 0 ? `
@@ -84,17 +88,17 @@ export const addFormTemplate = ({
               </div>`).join('')}
           </div>
         </section>` : ''}
-
-      <section class="event__section  event__section--destination">
-        <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-        <p class="event__destination-description">${description}</p>
-        ${pictures.length > 0 ? `
-          <div class="event__photos-container">
-            <div class="event__photos-tape">
-            ${pictures.map(({ src, description: photoDescription }) => `
-              <img class="event__photo" src="${src}" alt="${photoDescription}">`).join('')}
-            </div>
-          </div>` : ''}
-      </section>
+        ${description.length > 0 ? `
+          <section class="event__section event__section--destination">
+            <h3 class="event__section-title event__section-title--destination">Destination</h3>
+            <p class="event__destination-description">${description}</p>
+            ${pictures.length > 0 ? `
+              <div class="event__photos-container">
+                <div class="event__photos-tape">
+                ${pictures.map(({ src, description: photoDescription }) => `
+                  <img class="event__photo" src="${src}" alt="${photoDescription}">`).join('')}
+                </div>
+              </div>` : ''}
+          </section>` : ''}
     </section>
   </form></li>`);

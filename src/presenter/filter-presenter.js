@@ -1,17 +1,19 @@
 import { render } from '../framework/render.js';
 import FilterListView from '../view/filter-list-view/filter-list-view.js';
-import { UpdateType } from '../const.js';
+import { FilterAction } from '../const.js';
 
 export default class FilterPresenter {
   #filtersListContainer = null;
   #waypointsModel = null;
+  #onFilterChange = null;
   #filterListComponent = null;
   #currentFilter = 'everything';
-  #now = null;
+  #currentDate = null;
 
-  constructor({ filtersListContainer, waypointsModel }) {
+  constructor({ filtersListContainer, waypointsModel, onFilterChange }) {
     this.#filtersListContainer = filtersListContainer;
     this.#waypointsModel = waypointsModel;
+    this.#onFilterChange = onFilterChange;
 
     this.#waypointsModel.addObserver(this.#updateFilterAvailability);
   }
@@ -21,37 +23,72 @@ export default class FilterPresenter {
     this.#updateFilterAvailability();
   }
 
+  addModel(model) {
+    if (this.#waypointsModel) {
+      this.#waypointsModel.removeObserver(this.#updateFilterAvailability);
+    }
+    this.#waypointsModel = model;
+    this.#waypointsModel.addObserver(this.#updateFilterAvailability);
+    this.#updateFilterAvailability();
+  }
+
+  addCallback(callback) {
+    this.#onFilterChange = callback;
+  }
+
+  applyCurrentFilter(currentFilter) {
+    this.#currentFilter = currentFilter;
+    this.#onFilterChange(FilterAction.SET_FILTER, currentFilter);
+  }
+
+  getCurrentFilter() {
+    return this.#currentFilter;
+  }
+
+  resetFilter() {
+    this.#currentFilter = 'everything';
+    const filters = this.#filterListComponent.element.querySelectorAll('.trip-filters__filter-input');
+    filters.forEach((filter) => {
+      filter.checked = filter.value === 'everything';
+    });
+    this.#updateFilterAvailability();
+
+    if (this.#onFilterChange) {
+      this.#onFilterChange(FilterAction.RESET_FILTER);
+    }
+  }
+
+  getFilteredWaypoints = (type) => {
+    this.#currentDate = new Date();
+
+
+    switch(type) {
+      case 'EVERYTHING':
+        return this.#waypointsModel.originalWaypoints;
+      case 'FUTURE':
+        return this.#waypointsModel.originalWaypoints.filter((waypoint) => new Date(waypoint.dateFrom) > this.#currentDate);
+      case 'PRESENT':
+        return this.#waypointsModel.originalWaypoints.filter((waypoint) => (new Date(waypoint.dateFrom) <= this.#currentDate) && (new Date(waypoint.dateTo) >= this.#currentDate));
+      case 'PAST':
+        return this.#waypointsModel.originalWaypoints.filter((waypoint) => new Date(waypoint.dateTo) < this.#currentDate);
+    }
+  };
+
   #renderFilterList = () => {
     this.#filterListComponent = new FilterListView();
     render(this.#filterListComponent, this.#filtersListContainer);
     this.#filterListComponent.element.addEventListener('click', this.#handleFilterClick);
   };
 
-  #getFilteredWaypoints = (type) => {
-    this.#now = new Date();
-
-    switch(type) {
-      case 'EVERYTHING':
-        return this.#waypointsModel.originalWaypoints;
-      case 'FUTURE':
-        return this.#waypointsModel.originalWaypoints.filter((waypoint) => new Date(waypoint.dateFrom) > this.#now);
-      case 'PRESENT':
-        return this.#waypointsModel.originalWaypoints.filter((waypoint) => (new Date(waypoint.dateFrom) <= this.#now) && (new Date(waypoint.dateTo) >= this.#now));
-      case 'PAST':
-        return this.#waypointsModel.originalWaypoints.filter((waypoint) => new Date(waypoint.dateTo) < this.#now);
-    }
-  };
-
   #updateFilterAvailability = () => {
-    this.#now = new Date();
+    this.#currentDate = new Date();
 
     const filters = this.#filterListComponent.element.querySelectorAll('.trip-filters__filter-input');
     const everythingFiltersQty = this.#waypointsModel.originalWaypoints.length;
-    const futureFiltersQty = this.#getFilteredWaypoints('FUTURE').length;
-    const presentFiltersQty = this.#getFilteredWaypoints('PRESENT').length;
-    const pastFiltersQty = this.#getFilteredWaypoints('PAST').length;
+    const futureFiltersQty = this.getFilteredWaypoints('FUTURE').length;
+    const presentFiltersQty = this.getFilteredWaypoints('PRESENT').length;
+    const pastFiltersQty = this.getFilteredWaypoints('PAST').length;
 
-    // Установка состояний для фильтров на основе количества элементов
     filters.forEach((filter) => {
       switch(filter.value) {
         case 'everything':
@@ -95,39 +132,4 @@ export default class FilterPresenter {
     this.#currentFilter = filterValue;
     this.applyCurrentFilter(this.#currentFilter);
   };
-
-  applyCurrentFilter(currentFilter, updateType = UpdateType.MINOR) {
-    let filteredWaypoints = null;
-
-    switch(currentFilter) {
-      case 'everything':
-        return this.#waypointsModel.resetToOriginal(updateType);
-      case 'future':
-        filteredWaypoints = this.#getFilteredWaypoints('FUTURE');
-        break;
-      case 'present':
-        filteredWaypoints = this.#getFilteredWaypoints('PRESENT');
-        break;
-      case 'past':
-        filteredWaypoints = this.#getFilteredWaypoints('PAST');
-        break;
-    }
-    this.#waypointsModel.setWaypoints(updateType, filteredWaypoints);
-  }
-
-  getCurrentFilter() {
-    return this.#currentFilter;
-  }
-
-  resetFilter() {
-    this.#currentFilter = 'everything';
-
-    // Сброс выбранного фильтра
-    const filters = this.#filterListComponent.element.querySelectorAll('.trip-filters__filter-input');
-    filters.forEach((filter) => {
-      filter.checked = filter.value === 'everything';
-    });
-    this.#updateFilterAvailability();
-    this.#waypointsModel.resetToOriginal(UpdateType.MINOR);
-  }
 }
