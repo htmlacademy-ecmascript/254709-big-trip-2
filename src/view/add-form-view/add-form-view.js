@@ -18,7 +18,7 @@ const BLANK_DESTINATION = {
   id: null,
   name: '',
   description: '',
-  pictures: []
+  pictures: [],
 };
 
 const createClassName = (title) => title.toLowerCase().replace(/ /g, '-').replace(/[#.[\]]/g, '');
@@ -93,6 +93,18 @@ export default class AddFormView extends AbstractStatefulView {
   get template() {
     const { waypoint, offers, destination, offerType, destinationsAll, isDisabled, isSaving } = this._state;
     return createAddFormTemplate(waypoint, offers, destination, offerType, destinationsAll, isDisabled, isSaving);
+  }
+
+  removeElement() {
+    super.removeElement();
+    if (this.#datepickerFrom) {
+      this.#datepickerFrom.destroy();
+      this.#datepickerFrom = null;
+    }
+    if (this.#datepickerTo) {
+      this.#datepickerTo.destroy();
+      this.#datepickerTo = null;
+    }
   }
 
   _restoreHandlers() {
@@ -261,18 +273,6 @@ export default class AddFormView extends AbstractStatefulView {
       }
     });
   };
-
-  removeElement() {
-    super.removeElement();
-    if (this.#datepickerFrom) {
-      this.#datepickerFrom.destroy();
-      this.#datepickerFrom = null;
-    }
-    if (this.#datepickerTo) {
-      this.#datepickerTo.destroy();
-      this.#datepickerTo = null;
-    }
-  }
 
   static parseDataToState = (waypoint, offers, offerType, offersAll, destination, destinationsAll) => ({
     waypoint: {...waypoint},

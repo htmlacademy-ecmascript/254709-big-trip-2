@@ -1,6 +1,6 @@
 import { render } from '../framework/render.js';
-import FilterListView from '../view/filter-list-view/filter-list-view.js';
 import { FilterAction } from '../const.js';
+import FilterListView from '../view/filter-list-view/filter-list-view.js';
 
 export default class FilterPresenter {
   #filtersListContainer = null;
@@ -45,19 +45,6 @@ export default class FilterPresenter {
     return this.#currentFilter;
   }
 
-  resetFilter() {
-    this.#currentFilter = 'everything';
-    const filters = this.#filterListComponent.element.querySelectorAll('.trip-filters__filter-input');
-    filters.forEach((filter) => {
-      filter.checked = filter.value === 'everything';
-    });
-    this.#updateFilterAvailability();
-
-    if (this.#onFilterChange) {
-      this.#onFilterChange(FilterAction.RESET_FILTER);
-    }
-  }
-
   getFilteredWaypoints = (type) => {
     this.#currentDate = new Date();
 
@@ -73,6 +60,19 @@ export default class FilterPresenter {
         return this.#waypointsModel.originalWaypoints.filter((waypoint) => new Date(waypoint.dateTo) < this.#currentDate);
     }
   };
+
+  resetFilter() {
+    this.#currentFilter = 'everything';
+    const filters = this.#filterListComponent.element.querySelectorAll('.trip-filters__filter-input');
+    filters.forEach((filter) => {
+      filter.checked = filter.value === 'everything';
+    });
+    this.#updateFilterAvailability();
+
+    if (this.#onFilterChange) {
+      this.#onFilterChange(FilterAction.RESET_FILTER);
+    }
+  }
 
   #renderFilterList = () => {
     this.#filterListComponent = new FilterListView();

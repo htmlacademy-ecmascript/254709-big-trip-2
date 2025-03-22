@@ -7,23 +7,24 @@ export default class WaypointPresenter {
   #listContainer = null;
   #offersModel = null;
   #destinationsModel = null;
-  #waypoint = null;
-  #waypointComponent = null;
-  #editFormComponent = null;
-  #waypointListElement = null;
   #handleDataChange = null;
   #handleModeChange = null;
   #newWaypointsPresenter = null;
+  #waypointListElement = null;
+  #waypoint = null;
+  #waypointComponent = null;
+  #editFormComponent = null;
   #mode = Mode.VIEW;
 
   constructor({ listContainer, offersModel, destinationsModel, onDataChange, onModeChange, newWaypointPresenter }) {
     this.#listContainer = listContainer;
     this.#offersModel = offersModel;
     this.#destinationsModel = destinationsModel;
-    this.#waypointListElement = this.#listContainer.querySelector('.trip-events__list');
     this.#handleDataChange = onDataChange;
     this.#handleModeChange = onModeChange;
     this.#newWaypointsPresenter = newWaypointPresenter;
+
+    this.#waypointListElement = this.#listContainer.querySelector('.trip-events__list');
   }
 
   init(waypoint) {
