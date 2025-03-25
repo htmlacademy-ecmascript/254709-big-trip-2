@@ -1,13 +1,13 @@
-export const getSortByPrice = (a, b) => b.basePrice - a.basePrice;
+export const getSortByPrice = (waypointA, waypointB) => waypointB.basePrice - waypointA.basePrice;
 
-export const getSortByDefault = (a, b) => {
-  const dateFromA = new Date(a.dateFrom);
-  const dateFromB = new Date(b.dateFrom);
+export const getSortByDefault = (waypointA, waypointB) => {
+  const dateFromA = new Date(waypointA.dateFrom);
+  const dateFromB = new Date(waypointB.dateFrom);
   return dateFromA - dateFromB;
 };
 
-export const getSortByTime = (a, b) => {
-  const durationA = (new Date(a.dateTo)) - (new Date(a.dateFrom));
-  const durationB = (new Date(b.dateTo)) - (new Date(b.dateFrom));
+export const getSortByTime = (waypointA, waypointB) => {
+  const durationA = (new Date(waypointA.dateTo)) - (new Date(waypointA.dateFrom));
+  const durationB = (new Date(waypointB.dateTo)) - (new Date(waypointB.dateFrom));
   return durationB - durationA;
 };

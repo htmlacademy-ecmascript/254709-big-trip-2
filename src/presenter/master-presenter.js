@@ -1,6 +1,6 @@
 import BigTripPresenter from './big-trip-presenter.js';
 import WaypointPresenter from './waypoint-presenter.js';
-import SortListPresenter from './sort-presenter.js';
+import SortListPresenter from './sort-list-presenter.js';
 import NewWaypointPresenter from './new-waypoint-presenter.js';
 import WaypointEmptyView from '../view/waypoint-empty-view/waypoint-empty-view.js';
 import UiBlocker from '../framework/ui-blocker/ui-blocker.js';

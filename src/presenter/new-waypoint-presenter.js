@@ -31,7 +31,7 @@ export default class NewWaypointPresenter {
   }
 
   init() {
-    this.#newWaypointBtn.addEventListener('click', this.#onNewWaypointClick);
+    this.#newWaypointBtn.addEventListener('click', this.#newWaypointClickHandler);
   }
 
   setStatus(statusAction) {
@@ -58,7 +58,7 @@ export default class NewWaypointPresenter {
     this.#destroyForm();
   }
 
-  #onNewWaypointClick = () => {
+  #newWaypointClickHandler = () => {
     this.#newWaypointBtn.setAttribute('disabled', '');
     document.addEventListener('keydown', this.#escKeyDownHandler);
     if (this.#sortPresenter && typeof this.#sortPresenter.resetSortType === 'function') {

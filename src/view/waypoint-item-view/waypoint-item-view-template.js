@@ -1,4 +1,4 @@
-const createOffersTemplate = (offersArray) => offersArray.map((offer) =>
+const createOffersTemplate = (offers) => offers.map((offer) =>
   `
     <li class="event__offer">
       <span class="event__offer-title">${offer.title}</span>
