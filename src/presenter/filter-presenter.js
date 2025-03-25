@@ -48,7 +48,6 @@ export default class FilterPresenter {
   getFilteredWaypoints = (type) => {
     this.#currentDate = new Date();
 
-
     switch(type) {
       case 'EVERYTHING':
         return this.#waypointsModel.originalWaypoints;

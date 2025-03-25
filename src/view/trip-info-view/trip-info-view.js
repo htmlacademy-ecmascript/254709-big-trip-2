@@ -2,22 +2,22 @@ import AbstractView from '../../framework/view/abstract-view.js';
 import { tripInfoTemplate } from './trip-info-view-template.js';
 import { remove } from '../../framework/render.js';
 
-const createTripInfoTemplate = (price, destinationsString, destinationsDateString) => tripInfoTemplate(price, destinationsString, destinationsDateString);
+const createTripInfoTemplate = (totalPrice, tripRoute, tripDuration) => tripInfoTemplate(totalPrice, tripRoute, tripDuration);
 
 export default class TripInfoView extends AbstractView {
-  #price = null;
-  #destinationsString = null;
-  #destinationsDateString = null;
+  #totalPrice = null;
+  #tripRoute = null;
+  #tripDuration = null;
 
-  constructor({ price, destinationsString, destinationsDateString }) {
+  constructor({ totalPrice, tripRoute, tripDuration }) {
     super();
-    this.#price = price;
-    this.#destinationsString = destinationsString;
-    this.#destinationsDateString = destinationsDateString;
+    this.#totalPrice = totalPrice;
+    this.#tripRoute = tripRoute;
+    this.#tripDuration = tripDuration;
   }
 
   get template() {
-    return createTripInfoTemplate(this.#price, this.#destinationsString, this.#destinationsDateString);
+    return createTripInfoTemplate(this.#totalPrice, this.#tripRoute, this.#tripDuration);
   }
 
   destroy() {

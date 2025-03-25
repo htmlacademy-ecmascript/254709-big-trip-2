@@ -36,29 +36,29 @@ export default class BigTripPresenter {
     const sortedWaypoints = [...waypoints].sort(getSortByDefault);
     const dateFrom = humanizeTaskHeadDate(sortedWaypoints[0].dateFrom);
     const dateTo = humanizeTaskHeadDate(sortedWaypoints[sortedWaypoints.length - 1].dateTo);
-    const destinationsDateString = `${dateFrom} — ${dateTo}`;
-    return destinationsDateString.toLowerCase();
+    const tripDuration = `${dateFrom} — ${dateTo}`;
+    return tripDuration.toLowerCase();
   };
 
   #getDestinationsInfo = (waypoints) => {
     const sortedWaypoints = [...waypoints].sort(getSortByDefault);
     const allUniqueDestination = [...new Set(sortedWaypoints.map((item) => this.#destinationsModel.getDestinationById(item.destination).name))];
-    let destinationsString = null;
+    let tripRoute = null;
     if (allUniqueDestination.length === 1) {
-      destinationsString = allUniqueDestination[0];
-      return destinationsString;
+      tripRoute = allUniqueDestination[0];
+      return tripRoute;
     }
     if (allUniqueDestination.length === 2) {
-      destinationsString = `${allUniqueDestination[0]} — ${allUniqueDestination[1]}`;
-      return destinationsString;
+      tripRoute = `${allUniqueDestination[0]} — ${allUniqueDestination[1]}`;
+      return tripRoute;
     }
     if (allUniqueDestination.length === 3) {
-      destinationsString = `${allUniqueDestination[0]} — ${allUniqueDestination[1]} — ${allUniqueDestination[2]}`;
-      return destinationsString;
+      tripRoute = `${allUniqueDestination[0]} — ${allUniqueDestination[1]} — ${allUniqueDestination[2]}`;
+      return tripRoute;
     }
     if (allUniqueDestination.length > 3) {
-      destinationsString = `${allUniqueDestination[0]} — ... — ${allUniqueDestination[allUniqueDestination.length - 1]}`;
-      return destinationsString;
+      tripRoute = `${allUniqueDestination[0]} — ... — ${allUniqueDestination[allUniqueDestination.length - 1]}`;
+      return tripRoute;
     }
   };
 
@@ -96,9 +96,9 @@ export default class BigTripPresenter {
 
   #renderTripInfo = () => {
     const totalPrice = this.#getFullPrice(this.#waypointsModel.originalWaypoints);
-    const destinationsString = this.#getDestinationsInfo(this.#waypointsModel.originalWaypoints);
-    const destinationsDateString = this.#getDestinationsDate(this.#waypointsModel.originalWaypoints);
-    this.#tripInfoView = new TripInfoView({ price: totalPrice, destinationsString: destinationsString, destinationsDateString: destinationsDateString });
+    const tripRoute = this.#getDestinationsInfo(this.#waypointsModel.originalWaypoints);
+    const tripDuration = this.#getDestinationsDate(this.#waypointsModel.originalWaypoints);
+    this.#tripInfoView = new TripInfoView({ totalPrice, tripRoute, tripDuration });
     render(this.#tripInfoView, this.#tripInfoContainer, RenderPosition.AFTERBEGIN);
   };
 
